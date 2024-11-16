@@ -3,6 +3,15 @@ main = "src/index.ts"
 compatibility_date = "2024-10-19"
 compatibility_flags = [ "nodejs_compat" ]
 
+[dev]
+port = 1234
+
+[vars]
+PORT = "3123"
+APIKEY = "asdfasdfasdasdfasdfasdff"
+APP_ENV = 'development'
+DATABASE_URL = 'https://github.com/hokageCV?tab=repositories'
+
 # [vars]
 # MY_VAR = "my-variable"
 

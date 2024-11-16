@@ -1,21 +1,7 @@
-import { OpenAPIHono } from '@hono/zod-openapi';
-import { PinoLogger } from 'hono-pino';
 import { notFound } from 'stoker/middlewares';
-import { EnvType } from './env';
-import pinoLogger from './middlewares/logger';
-import ValidateEnv from './middlewares/validate-env';
+import createApp from '@/lib/create-app';
 
-type AppBindings = {
-  Bindings: EnvType,
-  Variables: {
-    logger: PinoLogger;
-  }
-};
-
-const app = new OpenAPIHono<AppBindings>()
-
-app.use('*', ValidateEnv)
-app.use(pinoLogger)
+const app = createApp()
 
 app.get('/', (c) => {
   return c.text(`test key: ${c.env.APIKEY}`);

@@ -5,6 +5,9 @@ const envSchema = z.object({
     .string()
     .url("DATABASE_URL must be a valid URL")
     .min(1, "DATABASE_URL is required"),
+  DATABASE_AUTH_TOKEN: z
+    .string()
+    .url(),
   JWT_SECRET: z
     .string()
     .min(1, "JWT_SECRET is required")
@@ -20,7 +23,11 @@ const envSchema = z.object({
     .string()
     .min(1, "APIKEY is required"),
   APP_ENV: z
-    .enum(['production', 'development'])
+    .enum(['production', 'development']),
+  DB_SEEDING: z
+    .string(),
+  DB_MIGRATING: z
+    .string(),
 });
 
 

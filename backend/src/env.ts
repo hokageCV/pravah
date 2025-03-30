@@ -6,8 +6,7 @@ const envSchema = z.object({
     .url("DATABASE_URL must be a valid URL")
     .min(1, "DATABASE_URL is required"),
   DATABASE_AUTH_TOKEN: z
-    .string()
-    .url(),
+    .string(),
   JWT_SECRET: z
     .string()
     .min(1, "JWT_SECRET is required")

@@ -21,11 +21,9 @@ export const habits = sqliteTable('habits', {
   isActive: integer({ mode: 'boolean' }).default(true),
   description: text(),
   ...timestamps
-}, (table) => {
-  return {
-    userIdIdx: index('user_id_idx').on(table.userId),
-  }
-});
+}, (table) => [
+    index('user_id_idx').on(table.userId),
+]);
 
 export const goals = sqliteTable('goals', {
   id: integer({ mode: 'number' }).primaryKey({ autoIncrement: true }),
@@ -35,11 +33,9 @@ export const goals = sqliteTable('goals', {
   unit: text().notNull(),
   description: text(),
   ...timestamps
-}, (table) => {
-  return {
-    habitIdIdx: index('habit_id_idx').on(table.habitId),
-  }
-});
+}, (table) => [
+    index('habit_id_idx').on(table.habitId),
+]);
 
 export const habitProgress = sqliteTable('habit_progress', {
   id: integer({ mode: 'number' }).primaryKey({ autoIncrement: true }),
@@ -48,10 +44,8 @@ export const habitProgress = sqliteTable('habit_progress', {
   goalLevel: text(),
   actualValue: integer({ mode: 'number' }).notNull(),
   ...timestamps
-}, (table) => {
-  return {
-    dateIdx: index('date_idx').on(table.date),
-  }
-});
+}, (table) => [
+    index('date_idx').on(table.date),
+]);
 
 

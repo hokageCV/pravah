@@ -5,8 +5,8 @@ CREATE TABLE `goals` (
 	`target_value` integer NOT NULL,
 	`unit` text NOT NULL,
 	`description` text,
-	`created_at` integer,
-	`updated_at` integer,
+	`created_at` text DEFAULT CURRENT_TIMESTAMP,
+	`updated_at` text DEFAULT CURRENT_TIMESTAMP,
 	FOREIGN KEY (`habit_id`) REFERENCES `habits`(`id`) ON UPDATE no action ON DELETE cascade
 );
 --> statement-breakpoint
@@ -17,8 +17,8 @@ CREATE TABLE `habit_progress` (
 	`date` integer,
 	`goal_level` text,
 	`actual_value` integer NOT NULL,
-	`created_at` integer,
-	`updated_at` integer,
+	`created_at` text DEFAULT CURRENT_TIMESTAMP,
+	`updated_at` text DEFAULT CURRENT_TIMESTAMP,
 	FOREIGN KEY (`habit_id`) REFERENCES `habits`(`id`) ON UPDATE no action ON DELETE cascade
 );
 --> statement-breakpoint
@@ -29,8 +29,8 @@ CREATE TABLE `habits` (
 	`name` text NOT NULL,
 	`is_active` integer DEFAULT true,
 	`description` text,
-	`created_at` integer,
-	`updated_at` integer,
+	`created_at` text DEFAULT CURRENT_TIMESTAMP,
+	`updated_at` text DEFAULT CURRENT_TIMESTAMP,
 	FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE cascade
 );
 --> statement-breakpoint
@@ -41,8 +41,8 @@ CREATE TABLE `users` (
 	`email` text NOT NULL,
 	`password` text NOT NULL,
 	`email_verified` integer DEFAULT false,
-	`created_at` integer,
-	`updated_at` integer
+	`created_at` text DEFAULT CURRENT_TIMESTAMP,
+	`updated_at` text DEFAULT CURRENT_TIMESTAMP
 );
 --> statement-breakpoint
 CREATE UNIQUE INDEX `users_email_unique` ON `users` (`email`);

@@ -14,6 +14,9 @@ importers:
       '@libsql/client':
         specifier: ^0.15.1
         version: 0.15.1
+      bcryptjs:
+        specifier: ^3.0.2
+        version: 3.0.2
       drizzle-orm:
         specifier: ^0.41.0
         version: 0.41.0(@cloudflare/workers-types@4.20250327.0)(@libsql/client@0.15.1)(gel@2.0.1)
@@ -29,6 +32,9 @@ importers:
       stoker:
         specifier: ^1.4.2
         version: 1.4.2(@asteasolutions/zod-to-openapi@7.3.0(zod@3.24.2))(@hono/zod-openapi@0.19.2(hono@4.7.5)(zod@3.24.2))(hono@4.7.5)(openapi3-ts@4.4.0)
+      validator:
+        specifier: ^13.15.0
+        version: 13.15.0
       zod:
         specifier: ^3.24.2
         version: 3.24.2
@@ -39,6 +45,9 @@ importers:
       drizzle-kit:
         specifier: ^0.30.6
         version: 0.30.6
+      drizzle-zod:
+        specifier: ^0.7.1
+        version: 0.7.1(drizzle-orm@0.41.0(@cloudflare/workers-types@4.20250327.0)(@libsql/client@0.15.1)(gel@2.0.1))(zod@3.24.2)
       wrangler:
         specifier: ^4.6.0
         version: 4.6.0(@cloudflare/workers-types@4.20250327.0)
@@ -745,6 +754,10 @@ packages:
     resolution: {integrity: sha512-kNOjDqAh7px0XWNI+4QbzoiR/nTkHAWNud2uvnJquD1/x5a7EQZMJT0AczqK0Qn67oY/TTQ1LbUKajZpp3I9tQ==}
     engines: {node: '>=8.0.0'}
 
+  bcryptjs@3.0.2:
+    resolution: {integrity: sha512-k38b3XOZKv60C4E2hVsXTolJWfkGRMbILBIe2IBITXciy5bOsTKot5kDrf3ZfufQtQOUN5mXceUEpU1rTl9Uog==}
+    hasBin: true
+
   blake3-wasm@2.1.5:
     resolution: {integrity: sha512-F1+K8EbfOZE49dtoPtmxUQrpXaBIl3ICvasLh+nJta0xkz+9kF/7uet9fLnwKqhDrmj6g+6K3Tw9yQPUg2ka5g==}
 
@@ -889,6 +902,12 @@ packages:
       sqlite3:
         optional: true
 
+  drizzle-zod@0.7.1:
+    resolution: {integrity: sha512-nZzALOdz44/AL2U005UlmMqaQ1qe5JfanvLujiTHiiT8+vZJTBFhj3pY4Vk+L6UWyKFfNmLhk602Hn4kCTynKQ==}
+    peerDependencies:
+      drizzle-orm: '>=0.36.0'
+      zod: '>=3.0.0'
+
   env-paths@3.0.0:
     resolution: {integrity: sha512-dtJUTepzMW3Lm/NPxRf3wP4642UWhjL2sQxc+ym2YMj1m/H2zDNQOlezafzkHwn6sMstjHTwG6iQQsctDW/b1A==}
     engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
@@ -974,7 +993,6 @@ packages:
 
   libsql@0.5.3:
     resolution: {integrity: sha512-S3WR8WNCJV1VXraBFUKjDA6+8LcNDJMLm+83qohm1O3YM1iVqV2+/XN3SXOxpxVjuL4g/rLrjO5kzygkPefCFQ==}
-    cpu: [x64, arm64, wasm32]
     os: [darwin, linux, win32]
 
   mime@3.0.0:
@@ -1117,6 +1135,10 @@ packages:
 
   unenv@2.0.0-rc.15:
     resolution: {integrity: sha512-J/rEIZU8w6FOfLNz/hNKsnY+fFHWnu9MH4yRbSZF3xbbGHovcetXPs7sD+9p8L6CeNC//I9bhRYAOsBt2u7/OA==}
+
+  validator@13.15.0:
+    resolution: {integrity: sha512-36B2ryl4+oL5QxZ3AzD0t5SsMNGvTtQHpjgFO5tbNxfXbMFkY822ktCDe1MnlqV3301QQI9SLHDNJokDI+Z9pA==}
+    engines: {node: '>= 0.10'}
 
   web-streams-polyfill@3.3.3:
     resolution: {integrity: sha512-d2JWLCivmZYTSIoge9MsgFCZrt571BikcWGYkjC1khllbTeDlGqZ2D8vD8E/lJa8WGWbb7Plm8/XJYV7IJHZZw==}
@@ -1621,6 +1643,8 @@ snapshots:
 
   atomic-sleep@1.0.0: {}
 
+  bcryptjs@3.0.2: {}
+
   blake3-wasm@2.1.5: {}
 
   buffer-from@1.1.2: {}
@@ -1677,6 +1701,11 @@ snapshots:
       '@cloudflare/workers-types': 4.20250327.0
       '@libsql/client': 0.15.1
       gel: 2.0.1
+
+  drizzle-zod@0.7.1(drizzle-orm@0.41.0(@cloudflare/workers-types@4.20250327.0)(@libsql/client@0.15.1)(gel@2.0.1))(zod@3.24.2):
+    dependencies:
+      drizzle-orm: 0.41.0(@cloudflare/workers-types@4.20250327.0)(@libsql/client@0.15.1)(gel@2.0.1)
+      zod: 3.24.2
 
   env-paths@3.0.0: {}
 
@@ -1997,6 +2026,8 @@ snapshots:
       ohash: 2.0.11
       pathe: 2.0.3
       ufo: 1.5.4
+
+  validator@13.15.0: {}
 
   web-streams-polyfill@3.3.3: {}
 

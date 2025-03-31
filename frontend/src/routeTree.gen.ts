@@ -11,22 +11,10 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as ShoyoImport } from './routes/shoyo'
-import { Route as KageyamaImport } from './routes/kageyama'
 import { Route as AboutImport } from './routes/about'
 import { Route as IndexImport } from './routes/index'
 
 // Create/Update Routes
-
-const ShoyoRoute = ShoyoImport.update({
-  path: '/shoyo',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const KageyamaRoute = KageyamaImport.update({
-  path: '/kageyama',
-  getParentRoute: () => rootRoute,
-} as any)
 
 const AboutRoute = AboutImport.update({
   path: '/about',
@@ -56,20 +44,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutImport
       parentRoute: typeof rootRoute
     }
-    '/kageyama': {
-      id: '/kageyama'
-      path: '/kageyama'
-      fullPath: '/kageyama'
-      preLoaderRoute: typeof KageyamaImport
-      parentRoute: typeof rootRoute
-    }
-    '/shoyo': {
-      id: '/shoyo'
-      path: '/shoyo'
-      fullPath: '/shoyo'
-      preLoaderRoute: typeof ShoyoImport
-      parentRoute: typeof rootRoute
-    }
   }
 }
 
@@ -78,46 +52,36 @@ declare module '@tanstack/react-router' {
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/kageyama': typeof KageyamaRoute
-  '/shoyo': typeof ShoyoRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/kageyama': typeof KageyamaRoute
-  '/shoyo': typeof ShoyoRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/kageyama': typeof KageyamaRoute
-  '/shoyo': typeof ShoyoRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/kageyama' | '/shoyo'
+  fullPaths: '/' | '/about'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/kageyama' | '/shoyo'
-  id: '__root__' | '/' | '/about' | '/kageyama' | '/shoyo'
+  to: '/' | '/about'
+  id: '__root__' | '/' | '/about'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
-  KageyamaRoute: typeof KageyamaRoute
-  ShoyoRoute: typeof ShoyoRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
-  KageyamaRoute: KageyamaRoute,
-  ShoyoRoute: ShoyoRoute,
 }
 
 export const routeTree = rootRoute
@@ -133,9 +97,7 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/about",
-        "/kageyama",
-        "/shoyo"
+        "/about"
       ]
     },
     "/": {
@@ -143,12 +105,6 @@ export const routeTree = rootRoute
     },
     "/about": {
       "filePath": "about.tsx"
-    },
-    "/kageyama": {
-      "filePath": "kageyama.tsx"
-    },
-    "/shoyo": {
-      "filePath": "shoyo.tsx"
     }
   }
 }

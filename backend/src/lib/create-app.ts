@@ -1,4 +1,5 @@
 import { AppBindings } from '@/lib/types';
+import handleCors from '@/middlewares/cors';
 import pinoLogger from '@/middlewares/logger';
 import ValidateEnv from '@/middlewares/validate-env';
 import { OpenAPIHono } from '@hono/zod-openapi';
@@ -15,7 +16,10 @@ export function createRouter() {
 export default function createApp() {
   const app = createRouter()
 
+
   app.use('*', ValidateEnv)
+  app.use('*', handleCors)
+
   app.use(serveEmojiFavicon('🍀'))
   app.use(pinoLogger)
 

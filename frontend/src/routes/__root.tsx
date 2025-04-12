@@ -1,5 +1,4 @@
 import { Link, Outlet, createRootRoute, useNavigate } from '@tanstack/react-router'
-import { TanStackRouterDevtools } from '@tanstack/router-devtools'
 import { useAuthStore } from '../components/auth/auth.store'
 
 export const Route = createRootRoute({
@@ -29,7 +28,6 @@ function RootComponent() {
       </div>
       <hr />
       <Outlet />
-      <TanStackRouterDevtools position='bottom-right' />
     </>
   )
 }

@@ -17,16 +17,20 @@ function RootComponent() {
 
   return (
     <>
-      <div className='p-2 flex gap-2 text-lg'>
-        <Link to='/' activeProps={{ className: 'font-bold' }} activeOptions={{ exact: true }}>
-          Home
-        </Link>
-        <Link to='/about' activeProps={{ className: 'font-bold' }}>
-          About
-        </Link>
-        {user && <button onClick={handleLogout}>log out</button>}
-      </div>
-      <hr />
+      {user && (
+        <>
+          <div className='p-2 flex gap-2 text-lg'>
+            <Link to='/' activeProps={{ className: 'font-bold' }} activeOptions={{ exact: true }}>
+              Home
+            </Link>
+            <Link to='/about' activeProps={{ className: 'font-bold' }}>
+              About
+            </Link>
+            <button onClick={handleLogout}>log out</button>
+          </div>
+          <hr />
+        </>
+      )}
       <Outlet />
     </>
   )

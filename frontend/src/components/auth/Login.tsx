@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query'
-import { useRouter } from '@tanstack/react-router'
+import { Link, useRouter } from '@tanstack/react-router'
 import { FormEvent, useState } from 'react'
 import { BASE_URL } from '../../constants'
 import { useAuthStore } from './auth.store'
@@ -69,6 +69,12 @@ export function Login() {
 
         <button type='submit'>login</button>
       </form>
+      <p className='mt-4'>
+        Don't have an account?
+        <Link to='/auth/signup' className='underline'>
+          Sign up
+        </Link>
+      </p>
     </div>
   )
 }

@@ -1,0 +1,327 @@
+{
+	"info": {
+		"_postman_id": "4ba04821-5bbf-4631-9670-d319f19163e7",
+		"name": "pravah",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24253654"
+	},
+	"item": [
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "signup",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"const userId = response.user.id;\r",
+									"pm.collectionVariables.set('user_id', userId);\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									" let email = pm.collectionVariables.get('user_email');\r",
+									" let name = email.split('@')[0];\r",
+									" pm.collectionVariables.set('user_name', name);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "uid",
+								"value": "",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"shoyo\",\n    \"email\": \"{{user_email}}\",\n    \"password\": \"{{password}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/signup",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"signup"
+							]
+						},
+						"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+					},
+					"response": []
+				},
+				{
+					"name": "login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"const userId = response.user.id;\r",
+									"pm.collectionVariables.set('user_id', userId);\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									" let email = pm.collectionVariables.get('user_email');\r",
+									" let name = email.split('@')[0];\r",
+									" pm.collectionVariables.set('user_name', name);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"{{user_email}}\",\n    \"password\": \"{{password}}\"   \n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						},
+						"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+					},
+					"response": []
+				},
+				{
+					"name": "logout",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/auth/sign_out",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"sign_out"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "habits",
+			"item": [
+				{
+					"name": "habit",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"read\",\r\n    \"description\": \"upskilled raho\",\r\n    \"userId\": {{user_id}}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/habits/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"habits",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "habit",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"exercise regularly\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/habits/2",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"habits",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "habit",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"exercise\",\r\n    \"userId\": {{user_id}},\r\n    \"description\": \"swasth raho\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/habits/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"habits",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "habits",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/habits?user_id={{user_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"habits"
+							],
+							"query": [
+								{
+									"key": "user_id",
+									"value": "{{user_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "habit",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/habits/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"habits",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"let initialUid = pm.collectionVariables.get('uid');\r",
+					"let initialClient = pm.collectionVariables.get('client');\r",
+					"let initialAccessToken = pm.collectionVariables.get('access-token');\r",
+					"\r",
+					"pm.request.headers.add({key: 'uid', value: initialUid });\r",
+					"pm.request.headers.add({key: 'client', value: initialClient });\r",
+					"pm.request.headers.add({key: 'access-token', value: initialAccessToken });"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://127.0.0.1:8787"
+		},
+		{
+			"key": "user_email",
+			"value": "shoyo@gmail.com",
+			"type": "string"
+		},
+		{
+			"key": "password",
+			"value": "abcd12345",
+			"type": "string"
+		},
+		{
+			"key": "user_name",
+			"value": ""
+		},
+		{
+			"key": "user_id",
+			"value": "",
+			"type": "string"
+		}
+	]
+}

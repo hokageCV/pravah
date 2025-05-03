@@ -36,7 +36,7 @@ export const insertUserSchema = createInsertSchema(
   updatedAt: true,
 });
 
-export const patchTasksSchema = insertUserSchema.partial();
+export const patchUserSchema = insertUserSchema.partial();
 
 // ===========================================================
 
@@ -50,6 +50,17 @@ export const habits = sqliteTable('habits', {
 }, (table) => [
   index('user_id_idx').on(table.userId),
 ]);
+
+export const selectHabitSchema = createSelectSchema(habits);
+
+export const insertHabitSchema = createInsertSchema(
+  habits, { name: schema => schema.min(1).max(500) }
+).required({ name: true, userId: true, })
+  .omit({ createdAt: true, updatedAt: true, });
+
+export const patchHabitSchema = insertHabitSchema.partial();
+
+// ===========================================================
 
 export const goals = sqliteTable('goals', {
   id: integer({ mode: 'number' }).primaryKey({ autoIncrement: true }),

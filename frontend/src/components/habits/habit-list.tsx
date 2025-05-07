@@ -1,15 +1,16 @@
 import { useQuery } from '@tanstack/react-query'
+import { Link } from '@tanstack/react-router'
 import { useEffect } from 'react'
 import { useAuthStore } from '../auth/auth.store'
 import { useHabitStore } from './habit.store'
 import { fetchHabits } from './habits.api'
 
 export function HabitList() {
-  const habits = useHabitStore((state) => state.habits)
-  const setHabits = useHabitStore((state) => state.setHabits)
-  const user = useAuthStore((state) => state.user)
+  let habits = useHabitStore((state) => state.habits)
+  let setHabits = useHabitStore((state) => state.setHabits)
+  let user = useAuthStore((state) => state.user)
 
-  const { data, isLoading, isError, error } = useQuery({
+  let { data, isLoading, isError, error } = useQuery({
     queryKey: ['habits', user?.id],
     queryFn: () => {
       if (user?.id) return fetchHabits(user.id)
@@ -30,7 +31,9 @@ export function HabitList() {
     <ul>
       {habits.map((habit) => (
         <li key={habit.id}>
-          <strong>{habit.name}</strong>
+          <Link to='/habits/$habitId' params={{ habitId: habit.id.toString() }}>
+            <strong>{habit.name}</strong>
+          </Link>
           {habit.description && <span> — {habit.description}</span>}
         </li>
       ))}

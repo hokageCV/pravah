@@ -16,6 +16,7 @@ import { Route as IndexImport } from './routes/index'
 import { Route as HabitsCreateImport } from './routes/habits/create'
 import { Route as AuthSignupImport } from './routes/auth/signup'
 import { Route as AuthLoginImport } from './routes/auth/login'
+import { Route as HabitsHabitIdIndexImport } from './routes/habits/$habitId/index'
 import { Route as HabitsHabitIdEditImport } from './routes/habits/$habitId/edit'
 
 // Create/Update Routes
@@ -47,6 +48,12 @@ const AuthSignupRoute = AuthSignupImport.update({
 const AuthLoginRoute = AuthLoginImport.update({
   id: '/auth/login',
   path: '/auth/login',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const HabitsHabitIdIndexRoute = HabitsHabitIdIndexImport.update({
+  id: '/habits/$habitId/',
+  path: '/habits/$habitId/',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -102,6 +109,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HabitsHabitIdEditImport
       parentRoute: typeof rootRoute
     }
+    '/habits/$habitId/': {
+      id: '/habits/$habitId/'
+      path: '/habits/$habitId'
+      fullPath: '/habits/$habitId'
+      preLoaderRoute: typeof HabitsHabitIdIndexImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -114,6 +128,7 @@ export interface FileRoutesByFullPath {
   '/auth/signup': typeof AuthSignupRoute
   '/habits/create': typeof HabitsCreateRoute
   '/habits/$habitId/edit': typeof HabitsHabitIdEditRoute
+  '/habits/$habitId': typeof HabitsHabitIdIndexRoute
 }
 
 export interface FileRoutesByTo {
@@ -123,6 +138,7 @@ export interface FileRoutesByTo {
   '/auth/signup': typeof AuthSignupRoute
   '/habits/create': typeof HabitsCreateRoute
   '/habits/$habitId/edit': typeof HabitsHabitIdEditRoute
+  '/habits/$habitId': typeof HabitsHabitIdIndexRoute
 }
 
 export interface FileRoutesById {
@@ -133,6 +149,7 @@ export interface FileRoutesById {
   '/auth/signup': typeof AuthSignupRoute
   '/habits/create': typeof HabitsCreateRoute
   '/habits/$habitId/edit': typeof HabitsHabitIdEditRoute
+  '/habits/$habitId/': typeof HabitsHabitIdIndexRoute
 }
 
 export interface FileRouteTypes {
@@ -144,6 +161,7 @@ export interface FileRouteTypes {
     | '/auth/signup'
     | '/habits/create'
     | '/habits/$habitId/edit'
+    | '/habits/$habitId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -152,6 +170,7 @@ export interface FileRouteTypes {
     | '/auth/signup'
     | '/habits/create'
     | '/habits/$habitId/edit'
+    | '/habits/$habitId'
   id:
     | '__root__'
     | '/'
@@ -160,6 +179,7 @@ export interface FileRouteTypes {
     | '/auth/signup'
     | '/habits/create'
     | '/habits/$habitId/edit'
+    | '/habits/$habitId/'
   fileRoutesById: FileRoutesById
 }
 
@@ -170,6 +190,7 @@ export interface RootRouteChildren {
   AuthSignupRoute: typeof AuthSignupRoute
   HabitsCreateRoute: typeof HabitsCreateRoute
   HabitsHabitIdEditRoute: typeof HabitsHabitIdEditRoute
+  HabitsHabitIdIndexRoute: typeof HabitsHabitIdIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
@@ -179,6 +200,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthSignupRoute: AuthSignupRoute,
   HabitsCreateRoute: HabitsCreateRoute,
   HabitsHabitIdEditRoute: HabitsHabitIdEditRoute,
+  HabitsHabitIdIndexRoute: HabitsHabitIdIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -196,7 +218,8 @@ export const routeTree = rootRoute
         "/auth/login",
         "/auth/signup",
         "/habits/create",
-        "/habits/$habitId/edit"
+        "/habits/$habitId/edit",
+        "/habits/$habitId/"
       ]
     },
     "/": {
@@ -216,6 +239,9 @@ export const routeTree = rootRoute
     },
     "/habits/$habitId/edit": {
       "filePath": "habits/$habitId/edit.tsx"
+    },
+    "/habits/$habitId/": {
+      "filePath": "habits/$habitId/index.tsx"
     }
   }
 }

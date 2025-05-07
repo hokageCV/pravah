@@ -1,8 +1,52 @@
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useParams } from '@tanstack/react-router'
+import type { Habit } from '../../types'
+import { useAuthStore } from '../auth/auth.store'
+import { HabitForm } from './habit-form'
+import { fetchHabit, updateHabit } from './habits.api'
+
 export function EditHabit() {
+  let userId = useAuthStore((state) => state.user!.id)
+  let queryClient = useQueryClient()
+
+  let { habitId: id } = useParams({ strict: false }) as { habitId: string }
+
+  let {
+    data: habit,
+    isPending,
+    error,
+  } = useQuery({
+    queryKey: ['habit', id],
+    queryFn: () => fetchHabit(Number(id)),
+  })
+
+  let {
+    mutate,
+    status: updateStatus,
+    error: updateError,
+  } = useMutation({
+    mutationFn: updateHabit,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['habits'] })
+    },
+  })
+
+  let handleSubmit = (data: Partial<Habit>) => {
+    if (!habit) return
+    mutate({ ...habit, ...data, userId })
+  }
+
+  if (isPending) return <p>Loading habit...</p>
+  if (error) return <p>Error: {(error as Error).message}</p>
+  if (!habit) return <p>Habit not found</p>
+
   return (
     <>
-      <div>edit habit</div>
-      {/* <HabitForm /> */}
+      <h2>Edit Habit</h2>
+      <HabitForm initialValue={habit} onSubmit={handleSubmit} />
+      {updateStatus === 'pending' && <p>Updating habit...</p>}
+      {updateStatus === 'error' && <p>Error: {(updateError as Error).message}</p>}
+      {updateStatus === 'success' && <p>Habit updated!</p>}
     </>
   )
 }

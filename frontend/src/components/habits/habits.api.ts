@@ -1,5 +1,5 @@
-import { BASE_URL } from '../../constants'
-import type { Habit } from '../../types'
+import { BASE_URL } from '../../constants';
+import type { Habit } from '../../types';
 
 export async function fetchHabits(userId: number): Promise<Habit[]> {
   const res = await fetch(`${BASE_URL}/habits?user_id=${userId}`, {
@@ -14,3 +14,17 @@ export async function fetchHabits(userId: number): Promise<Habit[]> {
 
   return result.habits
 }
+
+export async function createHabit(data: Partial<Habit>): Promise<Habit> {
+  const res = await fetch(`${BASE_URL}/habits`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', },
+    body: JSON.stringify(data),
+  })
+
+  if (!res.ok) throw new Error('Failed to create habit')
+  const result = await res.json()
+
+  return result.habit
+}
+

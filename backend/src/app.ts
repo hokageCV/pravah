@@ -1,5 +1,6 @@
-import { notFound } from 'stoker/middlewares';
 import createApp from '@/lib/create-app';
+import { notFound } from 'stoker/middlewares';
+import { secureRoute } from './middlewares/auth';
 import authRoutes from './modules/auth/auth.routes';
 import habitRoutes from './modules/habits/habit.routes';
 
@@ -10,7 +11,7 @@ app.get('/', (c) => {
 })
 
 app.route('/auth', authRoutes);
-app.route('/habits', habitRoutes);
+secureRoute(app, '/habits', habitRoutes);
 
 app.notFound(notFound)
 

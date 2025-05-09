@@ -1,29 +1,34 @@
 import { BASE_URL } from '../../constants';
 import type { Habit } from '../../types';
+import { getAuthToken } from '../../utils/auth';
 
 export async function fetchHabits(userId: number): Promise<Habit[]> {
-  const res = await fetch(`${BASE_URL}/habits?user_id=${userId}`, {
+  let res = await fetch(`${BASE_URL}/habits?user_id=${userId}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
+      Authorization: `Bearer ${getAuthToken()}`,
     },
   })
 
   if (!res.ok) throw new Error('Failed to fetch habits')
-  const result = await res.json();
+  let result = await res.json();
 
   return result.habits
 }
 
 export async function createHabit(data: Partial<Habit>): Promise<Habit> {
-  const res = await fetch(`${BASE_URL}/habits`, {
+  let res = await fetch(`${BASE_URL}/habits`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', },
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${getAuthToken()}`,
+    },
     body: JSON.stringify(data),
   })
 
   if (!res.ok) throw new Error('Failed to create habit')
-  const result = await res.json()
+  let result = await res.json()
 
   return result.habit
 }
@@ -33,6 +38,7 @@ export async function fetchHabit(id: number): Promise<Habit> {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
+      Authorization: `Bearer ${getAuthToken()}`,
     },
   });
   if (!res.ok) throw new Error('Failed to fetch habit');
@@ -44,7 +50,10 @@ export async function fetchHabit(id: number): Promise<Habit> {
 export async function updateHabit(habit: Habit): Promise<Habit> {
   let res = await fetch(`${BASE_URL}/habits/${habit.id}`, {
     method: 'PATCH',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${getAuthToken()}`,
+     },
     body: JSON.stringify(habit),
   })
   if (!res.ok) throw new Error('Failed to update habit')
@@ -55,7 +64,10 @@ export async function updateHabit(habit: Habit): Promise<Habit> {
 export async function deleteHabit(id: number): Promise<Habit> {
   let res = await fetch(`${BASE_URL}/habits/${id}`, {
     method: 'DELETE',
-    headers: { 'Content-Type': 'application/json' }
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${getAuthToken()}`,
+     }
   })
   if (!res.ok) throw new Error('Failed to delete habit')
 

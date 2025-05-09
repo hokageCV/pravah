@@ -23,7 +23,9 @@ export const signup = async (c: Context) => {
       password: hashedPassword,
     }).returning();
 
-    return c.json({ message: 'User registered', user: newUser });
+    const token = await sign({ userId: newUser.id }, c.env.JWT_SECRET);
+
+    return c.json({ message: 'User registered', token, user: sanitizeUser(newUser) });
   } catch (error) {
     return c.json({ error: 'User already exists or database error' }, 500);
   }
@@ -42,7 +44,7 @@ export const login = async (c: Context) => {
 
   const token = await sign({ userId: user.id }, JWT_SECRET);
 
-  return c.json({ token, user });
+  return c.json({ message: 'User logged in', token, user: sanitizeUser(user) });
 };
 
 export const profile = async (c: Context) => {
@@ -64,3 +66,8 @@ export const profile = async (c: Context) => {
     return c.json({ error: 'Invalid token' }, 401);
   }
 };
+
+function sanitizeUser(user: any) {
+  const { id, username, email, createdAt, updatedAt } = user;
+  return { id, username, email, createdAt, updatedAt };
+}

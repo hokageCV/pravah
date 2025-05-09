@@ -5,13 +5,14 @@ import { BASE_URL } from '../../constants'
 import { useAuthStore } from './auth.store'
 
 export function Signup() {
-  const [formData, setFormData] = useState({ username: '', email: '', password: '' })
-  const { setUser } = useAuthStore()
-  const router = useRouter()
+  let [formData, setFormData] = useState({ username: '', email: '', password: '' })
+  let setUser = useAuthStore((state) => state.setUser)
+  let setToken = useAuthStore((state) => state.setToken)
+  let router = useRouter()
 
-  const mutation = useMutation({
+  let mutation = useMutation({
     mutationFn: async (formData: { username: string; email: string; password: string }) => {
-      const res = await fetch(`${BASE_URL}/auth/signup`, {
+      let res = await fetch(`${BASE_URL}/auth/signup`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
@@ -19,23 +20,26 @@ export function Signup() {
 
       if (!res.ok) throw new Error('Signup failed')
 
-      const headers = res.headers
-      const client = headers.get('client') || ''
-      const accessToken = headers.get('access-token') || ''
-      const uid = headers.get('uid') || ''
-      const data = await res.json()
+      let headers = res.headers
+      let client = headers.get('client') || ''
+      let accessToken = headers.get('access-token') || ''
+      let uid = headers.get('uid') || ''
+      let data = await res.json()
 
       return { data, client, accessToken, uid }
     },
+
     onSuccess: ({ data }) => {
       setUser({
         id: data.user.id,
         username: data.user.username,
       })
+      setToken(data.token)
       router.navigate({ to: '/' })
     },
   })
-  const handleSubmit = async (e: FormEvent) => {
+
+  let handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
     mutation.mutate(formData)
   }

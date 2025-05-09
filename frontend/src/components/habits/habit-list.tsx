@@ -28,15 +28,25 @@ export function HabitList() {
   if (!habits || habits.length === 0) return <div>No habits found.</div>
 
   return (
-    <ul>
-      {habits.map((habit) => (
-        <li key={habit.id}>
-          <Link to='/habits/$habitId' params={{ habitId: habit.id.toString() }}>
-            <strong>{habit.name}</strong>
-          </Link>
-          {habit.description && <span> — {habit.description}</span>}
-        </li>
-      ))}
-    </ul>
+    <>
+      <div className='mb-4'>
+        <Link
+          to='/habits/create'
+          className='inline-block px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700'
+        >
+          Create Habit
+        </Link>
+      </div>
+      <ul>
+        {habits.map((habit) => (
+          <li key={habit.id}>
+            <Link to='/habits/$habitId' params={{ habitId: habit.id.toString() }}>
+              <strong>{habit.name}</strong>
+            </Link>
+            {habit.description && <span> — {habit.description}</span>}
+          </li>
+        ))}
+      </ul>
+    </>
   )
 }

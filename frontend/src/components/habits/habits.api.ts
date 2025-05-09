@@ -51,3 +51,13 @@ export async function updateHabit(habit: Habit): Promise<Habit> {
 
   return res.json()
 }
+
+export async function deleteHabit(id: number): Promise<Habit> {
+  let res = await fetch(`${BASE_URL}/habits/${id}`, {
+    method: 'DELETE',
+    headers: { 'Content-Type': 'application/json' }
+  })
+  if (!res.ok) throw new Error('Failed to delete habit')
+
+  return res.json()
+}

@@ -1,6 +1,6 @@
 import { createFileRoute, redirect } from '@tanstack/react-router'
-import { isAuthenticated } from '../utils/auth'
 import { HabitList } from '../components/habits/habit-list'
+import { isAuthenticated } from '../utils/auth'
 
 export const Route = createFileRoute('/')({
   beforeLoad: () => {
@@ -12,7 +12,6 @@ export const Route = createFileRoute('/')({
 function HomeComponent() {
   return (
     <div className='p-2'>
-      <h3>Welcome Home!</h3>
       <HabitList />
     </div>
   )

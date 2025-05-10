@@ -74,6 +74,16 @@ export const goals = sqliteTable('goals', {
   index('habit_id_idx').on(table.habitId),
 ]);
 
+export const selectGoalSchema = createSelectSchema(goals);
+
+export const insertGoalSchema = createInsertSchema(goals)
+  .required({ level: true, habitId: true, targetValue: true })
+  .omit({ createdAt: true, updatedAt: true, });
+
+export const patchGoalSchema = insertGoalSchema.partial();
+
+// ===========================================================
+
 export const habitProgress = sqliteTable('habit_progress', {
   id: integer({ mode: 'number' }).primaryKey({ autoIncrement: true }),
   habitId: integer({ mode: 'number' }).references(() => habits.id, { onDelete: 'cascade' }).notNull(),

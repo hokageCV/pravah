@@ -2,12 +2,10 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import type { Habit } from '../../types'
 import { HabitForm } from './habit-form'
 import { createHabit } from './habits.api'
-import { useAuthStore } from '../auth/auth.store'
 
 let initialHabitValue: Partial<Habit> = { name: '', description: '' }
 
 export function CreateHabit() {
-  let userId = useAuthStore(state=> state.user!.id)
   let queryClient = useQueryClient()
 
   let { mutate, status, error } = useMutation({
@@ -17,9 +15,7 @@ export function CreateHabit() {
     },
   })
 
-  let handleSubmit = (data: Partial<Habit>) => {
-    mutate({ ...data, userId })
-  }
+  let handleSubmit = (data: Partial<Habit>) => mutate(data)
 
   return (
     <>

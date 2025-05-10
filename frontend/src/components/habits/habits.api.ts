@@ -2,8 +2,8 @@ import { BASE_URL } from '../../constants';
 import type { Habit } from '../../types';
 import { getAuthToken } from '../../utils/auth';
 
-export async function fetchHabits(userId: number): Promise<Habit[]> {
-  let res = await fetch(`${BASE_URL}/habits?user_id=${userId}`, {
+export async function fetchHabits(): Promise<Habit[]> {
+  let res = await fetch(`${BASE_URL}/habits`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -11,8 +11,8 @@ export async function fetchHabits(userId: number): Promise<Habit[]> {
     },
   })
 
-  if (!res.ok) throw new Error('Failed to fetch habits')
-  let result = await res.json();
+  let result = await res.json()
+  if (!res.ok) throw new Error(result?.error || 'Failed to fetch habits');
 
   return result.data
 }
@@ -27,8 +27,8 @@ export async function createHabit(data: Partial<Habit>): Promise<Habit> {
     body: JSON.stringify(data),
   })
 
-  if (!res.ok) throw new Error('Failed to create habit')
   let result = await res.json()
+  if (!res.ok) throw new Error(result?.error || 'Failed to create habit');
 
   return result.data
 }
@@ -41,9 +41,10 @@ export async function fetchHabit(id: number): Promise<Habit> {
       Authorization: `Bearer ${getAuthToken()}`,
     },
   });
-  if (!res.ok) throw new Error('Failed to fetch habit');
 
-  let result = await res.json();
+  let result = await res.json()
+  if (!res.ok) throw new Error(result?.error || 'Failed to fetch habit');
+
   return result.data;
 }
 
@@ -56,9 +57,10 @@ export async function updateHabit(habit: Habit): Promise<Habit> {
     },
     body: JSON.stringify(habit),
   })
-  if (!res.ok) throw new Error('Failed to update habit')
 
-  let result = await res.json();
+  let result = await res.json()
+  if (!res.ok) throw new Error(result?.error || 'Failed to update habit');
+
   return result.data;
 }
 
@@ -70,8 +72,9 @@ export async function deleteHabit(id: number): Promise<Habit> {
       Authorization: `Bearer ${getAuthToken()}`,
     }
   })
-  if (!res.ok) throw new Error('Failed to delete habit')
 
-  let result = await res.json();
+  let result = await res.json()
+  if (!res.ok) throw new Error(result?.error || 'Failed to delete habit');
+
   return result.data;
 }

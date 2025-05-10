@@ -13,7 +13,7 @@ export function HabitList() {
   let { data, isLoading, isError, error } = useQuery({
     queryKey: ['habits', user?.id],
     queryFn: () => {
-      if (user?.id) return fetchHabits(user.id)
+      if (user?.id) return fetchHabits()
       return Promise.reject(new Error('User is not logged in.'))
     },
   })

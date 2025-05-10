@@ -1,12 +1,10 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useParams } from '@tanstack/react-router'
 import type { Habit } from '../../types'
-import { useAuthStore } from '../auth/auth.store'
 import { HabitForm } from './habit-form'
 import { fetchHabit, updateHabit } from './habits.api'
 
 export function EditHabit() {
-  let userId = useAuthStore((state) => state.user!.id)
   let queryClient = useQueryClient()
 
   let { habitId: id } = useParams({ strict: false }) as { habitId: string }
@@ -33,7 +31,7 @@ export function EditHabit() {
 
   let handleSubmit = (data: Partial<Habit>) => {
     if (!habit) return
-    mutate({ ...habit, ...data, userId })
+    mutate({ ...habit, ...data })
   }
 
   if (isPending) return <p>Loading habit...</p>

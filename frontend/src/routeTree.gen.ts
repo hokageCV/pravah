@@ -14,10 +14,12 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as AboutImport } from './routes/about'
 import { Route as IndexImport } from './routes/index'
 import { Route as HabitsCreateImport } from './routes/habits/create'
+import { Route as GoalsCreateImport } from './routes/goals/create'
 import { Route as AuthSignupImport } from './routes/auth/signup'
 import { Route as AuthLoginImport } from './routes/auth/login'
 import { Route as HabitsHabitIdIndexImport } from './routes/habits/$habitId/index'
 import { Route as HabitsHabitIdEditImport } from './routes/habits/$habitId/edit'
+import { Route as GoalsGoalIdEditImport } from './routes/goals/$goalId/edit'
 
 // Create/Update Routes
 
@@ -36,6 +38,12 @@ const IndexRoute = IndexImport.update({
 const HabitsCreateRoute = HabitsCreateImport.update({
   id: '/habits/create',
   path: '/habits/create',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const GoalsCreateRoute = GoalsCreateImport.update({
+  id: '/goals/create',
+  path: '/goals/create',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -60,6 +68,12 @@ const HabitsHabitIdIndexRoute = HabitsHabitIdIndexImport.update({
 const HabitsHabitIdEditRoute = HabitsHabitIdEditImport.update({
   id: '/habits/$habitId/edit',
   path: '/habits/$habitId/edit',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const GoalsGoalIdEditRoute = GoalsGoalIdEditImport.update({
+  id: '/goals/$goalId/edit',
+  path: '/goals/$goalId/edit',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -95,11 +109,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthSignupImport
       parentRoute: typeof rootRoute
     }
+    '/goals/create': {
+      id: '/goals/create'
+      path: '/goals/create'
+      fullPath: '/goals/create'
+      preLoaderRoute: typeof GoalsCreateImport
+      parentRoute: typeof rootRoute
+    }
     '/habits/create': {
       id: '/habits/create'
       path: '/habits/create'
       fullPath: '/habits/create'
       preLoaderRoute: typeof HabitsCreateImport
+      parentRoute: typeof rootRoute
+    }
+    '/goals/$goalId/edit': {
+      id: '/goals/$goalId/edit'
+      path: '/goals/$goalId/edit'
+      fullPath: '/goals/$goalId/edit'
+      preLoaderRoute: typeof GoalsGoalIdEditImport
       parentRoute: typeof rootRoute
     }
     '/habits/$habitId/edit': {
@@ -126,7 +154,9 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/signup': typeof AuthSignupRoute
+  '/goals/create': typeof GoalsCreateRoute
   '/habits/create': typeof HabitsCreateRoute
+  '/goals/$goalId/edit': typeof GoalsGoalIdEditRoute
   '/habits/$habitId/edit': typeof HabitsHabitIdEditRoute
   '/habits/$habitId': typeof HabitsHabitIdIndexRoute
 }
@@ -136,7 +166,9 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/signup': typeof AuthSignupRoute
+  '/goals/create': typeof GoalsCreateRoute
   '/habits/create': typeof HabitsCreateRoute
+  '/goals/$goalId/edit': typeof GoalsGoalIdEditRoute
   '/habits/$habitId/edit': typeof HabitsHabitIdEditRoute
   '/habits/$habitId': typeof HabitsHabitIdIndexRoute
 }
@@ -147,7 +179,9 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/signup': typeof AuthSignupRoute
+  '/goals/create': typeof GoalsCreateRoute
   '/habits/create': typeof HabitsCreateRoute
+  '/goals/$goalId/edit': typeof GoalsGoalIdEditRoute
   '/habits/$habitId/edit': typeof HabitsHabitIdEditRoute
   '/habits/$habitId/': typeof HabitsHabitIdIndexRoute
 }
@@ -159,7 +193,9 @@ export interface FileRouteTypes {
     | '/about'
     | '/auth/login'
     | '/auth/signup'
+    | '/goals/create'
     | '/habits/create'
+    | '/goals/$goalId/edit'
     | '/habits/$habitId/edit'
     | '/habits/$habitId'
   fileRoutesByTo: FileRoutesByTo
@@ -168,7 +204,9 @@ export interface FileRouteTypes {
     | '/about'
     | '/auth/login'
     | '/auth/signup'
+    | '/goals/create'
     | '/habits/create'
+    | '/goals/$goalId/edit'
     | '/habits/$habitId/edit'
     | '/habits/$habitId'
   id:
@@ -177,7 +215,9 @@ export interface FileRouteTypes {
     | '/about'
     | '/auth/login'
     | '/auth/signup'
+    | '/goals/create'
     | '/habits/create'
+    | '/goals/$goalId/edit'
     | '/habits/$habitId/edit'
     | '/habits/$habitId/'
   fileRoutesById: FileRoutesById
@@ -188,7 +228,9 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   AuthLoginRoute: typeof AuthLoginRoute
   AuthSignupRoute: typeof AuthSignupRoute
+  GoalsCreateRoute: typeof GoalsCreateRoute
   HabitsCreateRoute: typeof HabitsCreateRoute
+  GoalsGoalIdEditRoute: typeof GoalsGoalIdEditRoute
   HabitsHabitIdEditRoute: typeof HabitsHabitIdEditRoute
   HabitsHabitIdIndexRoute: typeof HabitsHabitIdIndexRoute
 }
@@ -198,7 +240,9 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   AuthLoginRoute: AuthLoginRoute,
   AuthSignupRoute: AuthSignupRoute,
+  GoalsCreateRoute: GoalsCreateRoute,
   HabitsCreateRoute: HabitsCreateRoute,
+  GoalsGoalIdEditRoute: GoalsGoalIdEditRoute,
   HabitsHabitIdEditRoute: HabitsHabitIdEditRoute,
   HabitsHabitIdIndexRoute: HabitsHabitIdIndexRoute,
 }
@@ -217,7 +261,9 @@ export const routeTree = rootRoute
         "/about",
         "/auth/login",
         "/auth/signup",
+        "/goals/create",
         "/habits/create",
+        "/goals/$goalId/edit",
         "/habits/$habitId/edit",
         "/habits/$habitId/"
       ]
@@ -234,8 +280,14 @@ export const routeTree = rootRoute
     "/auth/signup": {
       "filePath": "auth/signup.tsx"
     },
+    "/goals/create": {
+      "filePath": "goals/create.tsx"
+    },
     "/habits/create": {
       "filePath": "habits/create.tsx"
+    },
+    "/goals/$goalId/edit": {
+      "filePath": "goals/$goalId/edit.tsx"
     },
     "/habits/$habitId/edit": {
       "filePath": "habits/$habitId/edit.tsx"

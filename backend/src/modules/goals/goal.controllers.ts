@@ -9,9 +9,13 @@ export async function create(c: Context) {
   let db = createDb(c.env);
 
   let parseResult = insertGoalSchema.safeParse(body);
-  if (!parseResult.success) return c.json({ error: parseResult.error.format() }, HttpStatusCodes.UNPROCESSABLE_ENTITY);
+  if (!parseResult.success) {
+    console.error('❌ Goal insert validation failed:', parseResult.error.format())
+    return c.json({ error: parseResult.error.format() }, HttpStatusCodes.UNPROCESSABLE_ENTITY)
+  }
 
   let { habitId, level, targetValue, unit, description } = parseResult.data;
+  console.log('💧DBG:',{ habitId, level, targetValue, unit, description });
 
   try {
     let existingGoals = await db.select().from(goals)

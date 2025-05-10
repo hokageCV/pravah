@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { useNavigate, useParams } from '@tanstack/react-router'
+import { Link, useNavigate, useParams } from '@tanstack/react-router'
+import { GoalList } from '../goals/goal-list'
 import { useHabitStore } from './habit.store'
 import { deleteHabit } from './habits.api'
 
@@ -31,21 +32,29 @@ export default function ShowHabit() {
   }
 
   return (
-    <div className='p-4'>
-      <h2 className='text-xl font-semibold'>{habit.name}</h2>
-      {habit.description && <p className='mt-2'>{habit.description}</p>}
-      <button
-        onClick={handleEditClick}
-        className='mt-4 p-2 bg-blue-500 text-white rounded hover:bg-blue-600'
-      >
-        Edit Habit
-      </button>
-      <button
-        onClick={handleDeleteClick}
-        className='px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600'
-      >
-        Delete
-      </button>
-    </div>
+    <>
+      <div className='p-4'>
+        <h2 className='text-xl font-semibold'>{habit.name}</h2>
+        {habit.description && <p className='mt-2'>{habit.description}</p>}
+        <button
+          onClick={handleEditClick}
+          className='mt-4 p-2 bg-blue-500 text-white rounded hover:bg-blue-600'
+        >
+          Edit Habit
+        </button>
+        <button
+          onClick={handleDeleteClick}
+          className='px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600'
+        >
+          Delete
+        </button>
+      </div>
+      <div>
+        <Link to='/goals/create'  search={{ habitId: habit.id }} >
+          Create Goal
+        </Link>
+        <GoalList />
+      </div>
+    </>
   )
 }

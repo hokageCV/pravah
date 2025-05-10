@@ -14,7 +14,7 @@ export async function fetchHabits(userId: number): Promise<Habit[]> {
   if (!res.ok) throw new Error('Failed to fetch habits')
   let result = await res.json();
 
-  return result.habits
+  return result.data
 }
 
 export async function createHabit(data: Partial<Habit>): Promise<Habit> {
@@ -30,7 +30,7 @@ export async function createHabit(data: Partial<Habit>): Promise<Habit> {
   if (!res.ok) throw new Error('Failed to create habit')
   let result = await res.json()
 
-  return result.habit
+  return result.data
 }
 
 export async function fetchHabit(id: number): Promise<Habit> {
@@ -44,7 +44,7 @@ export async function fetchHabit(id: number): Promise<Habit> {
   if (!res.ok) throw new Error('Failed to fetch habit');
 
   let result = await res.json();
-  return result.habit;
+  return result.data;
 }
 
 export async function updateHabit(habit: Habit): Promise<Habit> {
@@ -53,12 +53,13 @@ export async function updateHabit(habit: Habit): Promise<Habit> {
     headers: {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${getAuthToken()}`,
-     },
+    },
     body: JSON.stringify(habit),
   })
   if (!res.ok) throw new Error('Failed to update habit')
 
-  return res.json()
+  let result = await res.json();
+  return result.data;
 }
 
 export async function deleteHabit(id: number): Promise<Habit> {
@@ -67,9 +68,10 @@ export async function deleteHabit(id: number): Promise<Habit> {
     headers: {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${getAuthToken()}`,
-     }
+    }
   })
   if (!res.ok) throw new Error('Failed to delete habit')
 
-  return res.json()
+  let result = await res.json();
+  return result.data;
 }

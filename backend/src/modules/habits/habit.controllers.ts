@@ -9,7 +9,10 @@ export async function create(c: Context) {
   let db = createDb(c.env);
 
   let parseResult = insertHabitSchema.safeParse(body);
-  if (!parseResult.success) return c.json({ error: parseResult.error.format() }, HttpStatusCodes.UNPROCESSABLE_ENTITY);
+  if (!parseResult.success) {
+    console.error('❌ Habit insert validation failed:', parseResult.error.format())
+    return c.json({ error: parseResult.error.format() }, HttpStatusCodes.UNPROCESSABLE_ENTITY)
+  }
 
   let userId = c.get('currentUser').id;
   let { name, description } = parseResult.data;
@@ -68,7 +71,10 @@ export async function update(c: Context) {
   if (!id || Number.isNaN(id)) return c.json({ error: 'Invalid or missing habit ID' }, HttpStatusCodes.BAD_REQUEST);
 
   let parseResult = patchHabitSchema.safeParse(body);
-  if (!parseResult.success) return c.json({ error: parseResult.error.format() }, HttpStatusCodes.UNPROCESSABLE_ENTITY);
+  if (!parseResult.success) {
+    console.error('❌ Habit insert validation failed:', parseResult.error.format())
+    return c.json({ error: parseResult.error.format() }, HttpStatusCodes.UNPROCESSABLE_ENTITY)
+  }
 
   let userId = c.get('currentUser').id;
 

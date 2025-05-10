@@ -55,8 +55,8 @@ export const selectHabitSchema = createSelectSchema(habits);
 
 export const insertHabitSchema = createInsertSchema(
   habits, { name: schema => schema.min(1).max(500) }
-).required({ name: true, userId: true, })
-  .omit({ createdAt: true, updatedAt: true, });
+).required({ name: true })
+  .omit({ createdAt: true, updatedAt: true, userId: true });
 
 export const patchHabitSchema = insertHabitSchema.partial();
 

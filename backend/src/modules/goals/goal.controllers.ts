@@ -15,7 +15,6 @@ export async function create(c: Context) {
   }
 
   let { habitId, level, targetValue, unit, description } = parseResult.data;
-  console.log('💧DBG:',{ habitId, level, targetValue, unit, description });
 
   try {
     let existingGoals = await db.select().from(goals)
@@ -85,7 +84,10 @@ export async function update(c: Context) {
   if (!id || Number.isNaN(id)) return c.json({ error: 'Invalid or missing goal ID' }, HttpStatusCodes.BAD_REQUEST);
 
   let parseResult = patchGoalSchema.safeParse(body);
-  if (!parseResult.success) return c.json({ error: parseResult.error.format() }, HttpStatusCodes.UNPROCESSABLE_ENTITY);
+  if (!parseResult.success) {
+    console.error('❌ Goal insert validation failed:', parseResult.error.format())
+    return c.json({ error: parseResult.error.format() }, HttpStatusCodes.UNPROCESSABLE_ENTITY)
+  }
 
   let updateFields = Object.fromEntries(
     Object.entries(parseResult.data).filter(([_, v]) => v !== undefined)

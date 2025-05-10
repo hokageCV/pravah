@@ -1,11 +1,12 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { useParams } from '@tanstack/react-router'
+import { useNavigate, useParams } from '@tanstack/react-router'
 import type { Habit } from '../../types'
 import { HabitForm } from './habit-form'
 import { fetchHabit, updateHabit } from './habits.api'
 
 export function EditHabit() {
   let queryClient = useQueryClient()
+  let navigate = useNavigate()
 
   let { habitId: id } = useParams({ strict: false }) as { habitId: string }
 
@@ -26,6 +27,7 @@ export function EditHabit() {
     mutationFn: updateHabit,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['habits'] })
+      navigate({ to: '/' })
     },
   })
 

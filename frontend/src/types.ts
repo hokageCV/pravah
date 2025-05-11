@@ -37,7 +37,7 @@ export type NewGoal = {
   description?: string
 }
 
-export type HabitProgress = {
+export type Log = {
   id: number
   habitId: number
   date: number

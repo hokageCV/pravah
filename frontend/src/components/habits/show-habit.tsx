@@ -1,6 +1,8 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Link, useNavigate, useParams } from '@tanstack/react-router'
 import { GoalList } from '../goals/goal-list'
+import { CreateLog } from '../logs/create-log'
+import { LogList } from '../logs/log-list'
 import { useHabitStore } from './habit.store'
 import { deleteHabit } from './habits.api'
 
@@ -14,9 +16,7 @@ export default function ShowHabit() {
   if (!habit) return <p>Habit not found.</p>
 
   let navigate = useNavigate()
-  let handleEditClick = () => {
-    navigate({ to: `/habits/${habit.id}/edit` })
-  }
+  let handleEditClick = () => navigate({ to: `/habits/${habit.id}/edit` })
 
   let { mutate: deleteMutate } = useMutation({
     mutationFn: deleteHabit,
@@ -26,9 +26,7 @@ export default function ShowHabit() {
     },
   })
   let handleDeleteClick = () => {
-    if (confirm(`Are you sure you want to delete "${habit.name}"?`)) {
-      deleteMutate(habit.id)
-    }
+    if (confirm(`Are you sure you want to delete "${habit.name}"?`)) deleteMutate(habit.id)
   }
 
   return (
@@ -50,10 +48,14 @@ export default function ShowHabit() {
         </button>
       </div>
       <div>
-        <Link to='/goals/create'  search={{ habitId: habit.id }} >
+        <Link to='/goals/create' search={{ habitId: habit.id }}>
           Create Goal
         </Link>
         <GoalList />
+      </div>
+      <div>
+        <CreateLog habitId={habit.id} />
+        <LogList habitId={habit.id} />
       </div>
     </>
   )

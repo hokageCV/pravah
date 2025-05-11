@@ -17,8 +17,12 @@
 							"script": {
 								"exec": [
 									"const response = pm.response.json();\r",
+									"\r",
 									"const userId = response.user.id;\r",
 									"pm.collectionVariables.set('user_id', userId);\r",
+									"\r",
+									"const token = response.token;\r",
+									"pm.collectionVariables.set('token', token);\r",
 									""
 								],
 								"type": "text/javascript",
@@ -78,8 +82,12 @@
 							"script": {
 								"exec": [
 									"const response = pm.response.json();\r",
+									"\r",
 									"const userId = response.user.id;\r",
 									"pm.collectionVariables.set('user_id', userId);\r",
+									"\r",
+									"const token = response.token;\r",
+									"pm.collectionVariables.set('token', token);\r",
 									""
 								],
 								"type": "text/javascript",
@@ -150,12 +158,28 @@
 			"item": [
 				{
 					"name": "habit",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"\r",
+									"const habitId = response.data.id;\r",
+									"pm.collectionVariables.set('habit_id', habitId);\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"read\",\r\n    \"description\": \"upskilled raho\",\r\n    \"userId\": {{user_id}}\r\n}",
+							"raw": "{\r\n    \"name\": \"rasen rasen gan gan\",\r\n    \"description\": \"upskilled raho\",\r\n    \"userId\": {{user_id}}\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -177,6 +201,22 @@
 				},
 				{
 					"name": "habit",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"\r",
+									"const habitId = response.data.id;\r",
+									"pm.collectionVariables.set('habit_id', habitId);\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
 					"request": {
 						"method": "PATCH",
 						"header": [],
@@ -190,13 +230,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/habits/2",
+							"raw": "{{base_url}}/habits/{{habit_id}}",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"habits",
-								"2"
+								"{{habit_id}}"
 							]
 						}
 					},
@@ -209,7 +249,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"exercise\",\r\n    \"userId\": {{user_id}},\r\n    \"description\": \"swasth raho\"\r\n}",
+							"raw": "",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -217,13 +257,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/habits/1",
+							"raw": "{{base_url}}/habits/{{habit_id}}",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"habits",
-								"1"
+								"{{habit_id}}"
 							]
 						}
 					},
@@ -231,22 +271,28 @@
 				},
 				{
 					"name": "habits",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{base_url}}/habits?user_id={{user_id}}",
+							"raw": "{{base_url}}/habits",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"habits"
-							],
-							"query": [
-								{
-									"key": "user_id",
-									"value": "{{user_id}}"
-								}
 							]
 						}
 					},
@@ -254,21 +300,528 @@
 				},
 				{
 					"name": "habit",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"\r",
+									"const habitId = response.data.id;\r",
+									"pm.collectionVariables.set('habit_id', habitId);\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{base_url}}/habits/1",
+							"raw": "{{base_url}}/habits/{{habit_id}}",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"habits",
-								"1"
+								"{{habit_id}}"
 							]
 						}
 					},
 					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							"const token = pm.collectionVariables.get('token')\r",
+							"if (!token) return console.warn('⚠️ token not set in collection variables');\r",
+							"\r",
+							"pm.request.headers.upsert({\r",
+							"  key: 'Authorization',\r",
+							"  value: `Bearer ${token}`\r",
+							"});\r",
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Goals",
+			"item": [
+				{
+					"name": "goal",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"\r",
+									"const resourceId = response.data.id;\r",
+									"pm.collectionVariables.set('goal_id', resourceId);\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"habitId\": {{habit_id}},\r\n    \"level\": \"C\",\r\n    \"targetValue\": 10,\r\n    \"unit\": \"minutes\",\r\n    \"description\": \"rasengan\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/goals/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"goals",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "goal",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"\r",
+									"const resourceId = response.data.id;\r",
+									"pm.collectionVariables.set('goal_id', resourceId);\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"targetValue\": 19,\r\n    \"description\": \"upskilled raho thoda sa ekdum thoda\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/goals/{{goal_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"goals",
+								"{{goal_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "goal",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/goals/{{goal_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"goals",
+								"{{goal_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "goals",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/goals?habit_id={{habit_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"goals"
+							],
+							"query": [
+								{
+									"key": "habit_id",
+									"value": "{{habit_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "goal",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"\r",
+									"const resourceId = response.data.id;\r",
+									"pm.collectionVariables.set('goal_id', resourceId);\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/goals/{{goal_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"goals",
+								"{{goal_id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							"const token = pm.collectionVariables.get('token')\r",
+							"if (!token) return console.warn('⚠️ token not set in collection variables');\r",
+							"\r",
+							"pm.request.headers.upsert({\r",
+							"  key: 'Authorization',\r",
+							"  value: `Bearer ${token}`\r",
+							"});\r",
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Habit Logs",
+			"item": [
+				{
+					"name": "habit_log",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"\r",
+									"const resourceId = response.data.id;\r",
+									"pm.collectionVariables.set('habit_log_id', resourceId);\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"habitId\": {{habit_id}},\r\n    \"goalLevel\": \"B\",\r\n    \"actualValue\": 20\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/habit_logs/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"habit_logs",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "habit_log",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"\r",
+									"const resourceId = response.data.id;\r",
+									"pm.collectionVariables.set('habit_log_id', resourceId);\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"goalLevel\": \"C\",\r\n    \"actualValue\": 20\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/habit_logs/{{habit_log_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"habit_logs",
+								"{{habit_log_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "habit_log",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/habit_logs/{{habit_log_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"habit_logs",
+								"{{habit_log_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "habit_logs",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/habit_logs?habit_id={{habit_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"habit_logs"
+							],
+							"query": [
+								{
+									"key": "habit_id",
+									"value": "{{habit_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "habit_logs",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"\r",
+									"const resourceId = response.data.id;\r",
+									"pm.collectionVariables.set('habit_log_id', resourceId);\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/habit_logs/{{habit_log_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"habit_logs",
+								"{{habit_log_id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							"const token = pm.collectionVariables.get('token')\r",
+							"if (!token) return console.warn('⚠️ token not set in collection variables');\r",
+							"\r",
+							"pm.request.headers.upsert({\r",
+							"  key: 'Authorization',\r",
+							"  value: `Bearer ${token}`\r",
+							"});\r",
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
 				}
 			]
 		}
@@ -320,6 +873,26 @@
 		},
 		{
 			"key": "user_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "token",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "habit_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "goal_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "habit_log_id",
 			"value": "",
 			"type": "string"
 		}

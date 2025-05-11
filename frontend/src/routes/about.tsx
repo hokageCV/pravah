@@ -9,7 +9,6 @@ function AboutComponent() {
   return (
     <div className="p-2">
       <h3>About</h3>
-      <u>asdfsdafasd</u>
     </div>
   )
 }

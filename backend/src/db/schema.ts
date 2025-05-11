@@ -1,5 +1,5 @@
 import { sql } from 'drizzle-orm';
-import { index, integer, sqliteTable, text } from 'drizzle-orm/sqlite-core';
+import { index, integer, sqliteTable, text, unique } from 'drizzle-orm/sqlite-core';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 
 const timestamps = {
@@ -84,15 +84,23 @@ export const patchGoalSchema = insertGoalSchema.partial();
 
 // ===========================================================
 
-export const habitProgress = sqliteTable('habit_progress', {
+export const habitLogs = sqliteTable('habit_logs', {
   id: integer({ mode: 'number' }).primaryKey({ autoIncrement: true }),
   habitId: integer({ mode: 'number' }).references(() => habits.id, { onDelete: 'cascade' }).notNull(),
-  date: integer({ mode: 'timestamp' }).$defaultFn(() => new Date()),
-  goalLevel: text(),
-  actualValue: integer({ mode: 'number' }).notNull(),
+  date: text().default(sql`CURRENT_DATE`).notNull(),
+  goalLevel: text({ enum: ['A', 'B', 'C'] }).notNull(),
   ...timestamps
 }, (table) => [
   index('date_idx').on(table.date),
+  unique('habit_id_date_unique').on(table.habitId, table.date),
 ]);
 
+export const selectHabitLogSchema = createSelectSchema(habitLogs);
 
+export const insertHabitLogSchema = createInsertSchema(habitLogs)
+  .required({ habitId: true, goalLevel: true })
+  .omit({ createdAt: true, updatedAt: true, date: true });
+
+export const patchHabitLogSchema = insertHabitLogSchema.partial();
+
+// ===========================================================

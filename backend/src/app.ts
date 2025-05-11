@@ -4,6 +4,7 @@ import { secureRoute } from './middlewares/auth';
 import authRoutes from './modules/auth/auth.routes';
 import habitRoutes from './modules/habits/habit.routes';
 import goalRoutes from './modules/goals/goal.routes';
+import habitLogRoutes from './modules/habit_logs/habit_logs.routes';
 
 const app = createApp()
 
@@ -15,6 +16,7 @@ app.route('/auth', authRoutes);
 
 secureRoute(app, '/habits', habitRoutes);
 secureRoute(app, '/goals', goalRoutes);
+secureRoute(app, '/habit_logs', habitLogRoutes);
 
 app.notFound(notFound)
 

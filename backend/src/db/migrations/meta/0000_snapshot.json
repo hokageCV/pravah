@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "fe5945a3-29b5-4f32-a5ee-8682fd9af3a4",
+  "id": "bcef490e-7488-4639-b489-b7a0282bc841",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "goals": {
@@ -94,8 +94,8 @@
       "uniqueConstraints": {},
       "checkConstraints": {}
     },
-    "habit_progress": {
-      "name": "habit_progress",
+    "habit_logs": {
+      "name": "habit_logs",
       "columns": {
         "id": {
           "name": "id",
@@ -113,21 +113,15 @@
         },
         "date": {
           "name": "date",
-          "type": "integer",
+          "type": "text",
           "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
+          "notNull": true,
+          "autoincrement": false,
+          "default": "CURRENT_DATE"
         },
         "goal_level": {
           "name": "goal_level",
           "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "actual_value": {
-          "name": "actual_value",
-          "type": "integer",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
@@ -156,12 +150,20 @@
             "date"
           ],
           "isUnique": false
+        },
+        "habit_id_date_unique": {
+          "name": "habit_id_date_unique",
+          "columns": [
+            "habit_id",
+            "date"
+          ],
+          "isUnique": true
         }
       },
       "foreignKeys": {
-        "habit_progress_habit_id_habits_id_fk": {
-          "name": "habit_progress_habit_id_habits_id_fk",
-          "tableFrom": "habit_progress",
+        "habit_logs_habit_id_habits_id_fk": {
+          "name": "habit_logs_habit_id_habits_id_fk",
+          "tableFrom": "habit_logs",
           "tableTo": "habits",
           "columnsFrom": [
             "habit_id"

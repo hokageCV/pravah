@@ -11,18 +11,18 @@ CREATE TABLE `goals` (
 );
 --> statement-breakpoint
 CREATE INDEX `habit_id_idx` ON `goals` (`habit_id`);--> statement-breakpoint
-CREATE TABLE `habit_progress` (
+CREATE TABLE `habit_logs` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`habit_id` integer NOT NULL,
-	`date` integer,
-	`goal_level` text,
-	`actual_value` integer NOT NULL,
+	`date` text DEFAULT CURRENT_DATE NOT NULL,
+	`goal_level` text NOT NULL,
 	`created_at` text DEFAULT CURRENT_TIMESTAMP,
 	`updated_at` text DEFAULT CURRENT_TIMESTAMP,
 	FOREIGN KEY (`habit_id`) REFERENCES `habits`(`id`) ON UPDATE no action ON DELETE cascade
 );
 --> statement-breakpoint
-CREATE INDEX `date_idx` ON `habit_progress` (`date`);--> statement-breakpoint
+CREATE INDEX `date_idx` ON `habit_logs` (`date`);--> statement-breakpoint
+CREATE UNIQUE INDEX `habit_id_date_unique` ON `habit_logs` (`habit_id`,`date`);--> statement-breakpoint
 CREATE TABLE `habits` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`user_id` integer NOT NULL,

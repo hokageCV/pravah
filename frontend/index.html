@@ -5,21 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Pravah</title>
     <link rel='icon' href='/favicon/favicon.ico' type='image/x-icon' />
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style type="text/tailwindcss">
-      html {
-        color-scheme: light dark;
-      }
-      * {
-        @apply border-gray-200 dark:border-gray-800;
-      }
-      body {
-        @apply bg-gray-50 text-gray-950 dark:bg-gray-900 dark:text-gray-200;
-      }
-    </style>
+    <link href='/src/styles.css' rel='stylesheet'>
   </head>
 
-  <body>
+  <body class='bg-c-background text-c-text'>
     <div id="app"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

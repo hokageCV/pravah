@@ -29,13 +29,23 @@ export function HabitList() {
 
   return (
     <>
-      <ul>
+      <ul className='space-y-4'>
         {habits.map((habit) => (
-          <li key={habit.id}>
+          <li
+            key={habit.id}
+            className='border border-c-border rounded-lg max-w-xl p-4 bg-surface shadow-sm hover:shadow transition'
+          >
             <Link to='/habits/$habitId' params={{ habitId: habit.id.toString() }}>
-              <strong>{habit.name}</strong>
+              <h2 className='text-lg font-semibold text-c-text'>{habit.name}</h2>
             </Link>
-            {habit.description && <span> — {habit.description}</span>}
+            {habit.description && (
+              <p className='text-sm text-c-text-muted'>{habit.description}</p>
+            )}
+            <div className='flex justify-end'>
+              <button className='bg-c-accent hover:bg-c-accent-hover text-white py-2 px-4 rounded-md cursor-pointer'>
+                Mark Complete
+              </button>
+            </div>
           </li>
         ))}
       </ul>

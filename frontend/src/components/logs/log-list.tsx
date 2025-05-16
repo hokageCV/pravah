@@ -36,11 +36,10 @@ export function LogList({ habitId }: LogListProps) {
 
   if (isLoading) return <p>Loading logs...</p>
   if (isError) return <p>Error loading logs: {error?.message}</p>
-  if (!logs || logs.length === 0) return <p>No logs found.</p>
+  if (!logs || logs.length === 0) return <p className='text-c-text-muted'>No logs found.</p>
 
   return (
-    <>
-      <div>log list</div>
+    <div>
       <ul>
         {logs.map((log) => (
           <li key={log.id}>
@@ -51,6 +50,6 @@ export function LogList({ habitId }: LogListProps) {
           </li>
         ))}
       </ul>
-    </>
+    </div>
   )
 }

@@ -41,18 +41,32 @@ export function GoalList() {
 
   return (
     <>
-      <ul>
-        {goals.map((goal) => (
-          <li key={goal.id} className='mb-2'>
-            <strong>{goal.level}</strong>: {goal.description}
-            <div style={{ display: 'inline-flex', gap: '0.5rem', marginLeft: '1rem' }}>
-              <Link to='/goals/$goalId/edit' params={{ goalId: goal.id.toString() }}>
+      <ul className='list'>
+        {goals
+          .sort((a, b) => a.level.localeCompare(b.level))
+          .map((goal) => (
+            <li key={goal.id} className='list-row p-2'>
+              <div></div>
+              <div>
+                <strong>{goal.level}: </strong>
+                <span className='font-normal'>{goal.description}</span>
+              </div>
+
+              <Link
+                to='/goals/$goalId/edit'
+                params={{ goalId: goal.id.toString() }}
+                className='text-c-text-muted font-light cursor-pointer'
+              >
                 Edit
               </Link>
-              <button onClick={() => handleDelete(goal)}>Delete</button>
-            </div>
-          </li>
-        ))}
+              <button
+                onClick={() => handleDelete(goal)}
+                className='text-c-text-muted font-light cursor-pointer'
+              >
+                Delete
+              </button>
+            </li>
+          ))}
       </ul>
     </>
   )

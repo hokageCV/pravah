@@ -42,6 +42,7 @@ export function EditGoal() {
   return (
     <>
       <GoalForm initialValue={goal} onSubmit={handleSubmit} />
+
       {updateStatus === 'pending' && <p>Updating goal...</p>}
       {updateStatus === 'error' && <p>Error: {(updateError as Error).message}</p>}
       {updateStatus === 'success' && <p>Goal updated!</p>}

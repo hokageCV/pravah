@@ -25,8 +25,8 @@ export function CreateGoal() {
 
   return (
     <>
-      <div>Create goal!!!</div>
       <GoalForm initialValue={initialGoalValue} onSubmit={handleSubmit} />
+
       {status === 'pending' && <p>Creating goal...</p>}
       {status === 'error' && <p>Error: {(error as Error).message}</p>}
       {status === 'success' && <p>Goal created!</p>}

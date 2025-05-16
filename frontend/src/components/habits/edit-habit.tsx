@@ -42,8 +42,8 @@ export function EditHabit() {
 
   return (
     <>
-      <h2>Edit Habit</h2>
       <HabitForm initialValue={habit} onSubmit={handleSubmit} />
+
       {updateStatus === 'pending' && <p>Updating habit...</p>}
       {updateStatus === 'error' && <p>Error: {(updateError as Error).message}</p>}
       {updateStatus === 'success' && <p>Habit updated!</p>}

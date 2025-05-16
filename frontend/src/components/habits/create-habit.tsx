@@ -22,7 +22,6 @@ export function CreateHabit() {
 
   return (
     <>
-      <h2>Create Habit</h2>
       <HabitForm initialValue={initialHabitValue} onSubmit={handleSubmit} />
 
       {status === 'pending' && <p>Creating habit...</p>}

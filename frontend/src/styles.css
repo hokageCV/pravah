@@ -1,0 +1,25 @@
+@import 'tailwindcss';
+@plugin "daisyui";
+
+@theme {
+  --color-c-accent: #f57c00;
+  --color-c-accent-hover: #ef6c00;
+  --color-c-accent-subtle: #ffa726;
+
+  --color-c-background: #f5f2eb;
+  --color-c-surface: #fdf4ea;
+  --color-c-border: #e3d9cc;
+
+  --color-c-primary: #c64846;
+  --color-c-secondary: #8bc6db;
+
+
+  --color-c-text: #2f2f2f;
+  --color-c-text-muted: #5a5248;
+
+  --color-c-nav: #f1e9dc;
+}
+
+html {
+  background-color: #f5f2eb;
+}

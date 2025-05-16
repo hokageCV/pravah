@@ -14,7 +14,7 @@ export function CreateLog({ habitId }: LogsSectionProps) {
     <div>
       <button
         onClick={() => setShowModal(true)}
-        className='bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700'
+        className='bg-c-accent-subtle text-white px-4 py-2 rounded-md hover:bg-c-accent-hover'
       >
         Create Log
       </button>

@@ -30,33 +30,58 @@ export default function ShowHabit() {
   }
 
   return (
-    <>
-      <div className='p-4'>
-        <h2 className='text-xl font-semibold'>{habit.name}</h2>
-        {habit.description && <p className='mt-2'>{habit.description}</p>}
-        <button
-          onClick={handleEditClick}
-          className='mt-4 p-2 bg-blue-500 text-white rounded hover:bg-blue-600'
-        >
-          Edit Habit
-        </button>
-        <button
-          onClick={handleDeleteClick}
-          className='px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600'
-        >
-          Delete
-        </button>
-      </div>
-      <div>
-        <Link to='/goals/create' search={{ habitId: habit.id }}>
-          Create Goal
-        </Link>
-        <GoalList />
-      </div>
-      <div>
-        <CreateLog habitId={habit.id} />
-        <LogList habitId={habit.id} />
-      </div>
-    </>
+    <div className='max-w-4xl mx-auto'>
+      <section className='w-full p-4'>
+        <div className='flex justify-between'>
+          <div>
+            <h2 className='text-2xl text-c-text font-semibold'>{habit.name}</h2>
+            {habit.description && <p className='mt-2'>{habit.description}</p>}
+          </div>
+
+          <div>
+            <button
+              onClick={handleEditClick}
+              className='mt-4 p-2 rounded bg-c-accent-subtle cursor-pointer'
+            >
+              ✎
+            </button>
+            <button
+              onClick={handleDeleteClick}
+              className='ml-1 px-4 py-2 rounded bg-c-accent-subtle cursor-pointer'
+            >
+              🗑
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <div className='divider'></div>
+
+      <section className='w-full p-4'>
+        <h3 className='text-xl text-text font-semibold'>Goals</h3>
+
+        <div className='flex justify-between'>
+          <GoalList />
+          <Link
+            to='/goals/create'
+            search={{ habitId: habit.id }}
+            className='btn btn-outline hover:bg-c-accent-hover'
+          >
+            Create Goal
+          </Link>
+        </div>
+      </section>
+
+      <div className='divider'></div>
+
+      <section className='w-full p-4'>
+        <h3 className='text-xl text-text font-semibold'>Logs</h3>
+
+        <div className='flex justify-between'>
+          <LogList habitId={habit.id} />
+          <CreateLog habitId={habit.id} />
+        </div>
+      </section>
+    </div>
   )
 }

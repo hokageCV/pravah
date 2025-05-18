@@ -79,7 +79,7 @@ export default function ShowHabit() {
 
         <div className='flex justify-between'>
           <LogList habitId={habit.id} />
-          <CreateLog habitId={habit.id} />
+          <CreateLog habit={habit} />
         </div>
       </section>
     </div>

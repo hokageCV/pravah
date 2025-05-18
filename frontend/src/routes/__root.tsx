@@ -37,6 +37,7 @@ function RootComponent() {
               >
                 About
               </Link>
+              |
               <button
                 onClick={handleLogout}
                 className='text-c-text hover:text-c-accent-hover transition-colors font-light'

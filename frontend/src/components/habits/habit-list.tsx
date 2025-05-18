@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
 import { useEffect } from 'react'
 import { useAuthStore } from '../auth/auth.store'
+import { CreateLog } from '../logs/create-log'
 import { useHabitStore } from './habit.store'
 import { fetchHabits } from './habits.api'
 
@@ -38,13 +39,9 @@ export function HabitList() {
             <Link to='/habits/$habitId' params={{ habitId: habit.id.toString() }}>
               <h2 className='text-lg font-semibold text-c-text'>{habit.name}</h2>
             </Link>
-            {habit.description && (
-              <p className='text-sm text-c-text-muted'>{habit.description}</p>
-            )}
+            {habit.description && <p className='text-sm text-c-text-muted'>{habit.description}</p>}
             <div className='flex justify-end'>
-              <button className='bg-c-accent hover:bg-c-accent-hover text-white py-2 px-4 rounded-md cursor-pointer'>
-                Mark Complete
-              </button>
+              <CreateLog habit={habit} />
             </div>
           </li>
         ))}

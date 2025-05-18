@@ -31,53 +31,55 @@ export default function ShowHabit() {
   }
 
   return (
-    <div className='max-w-4xl mx-auto'>
-      <section className='w-full p-4'>
-        <div className='flex justify-between items-start flex-wrap gap-4'>
-          <div className='flex-1 min-w-[200px]'>
-            <h2 className='text-2xl text-c-text font-semibold'>{capitalize(habit.name)}</h2>
-            {habit.description && (
-              <p className='mt-2 break-words text-c-text/80'>{capitalize(habit.description)}</p>
-            )}
-          </div>
+    <div className='max-w-4xl mx-auto pt-4 px-2 @container/main'>
+      <div className='flex flex-col @3xl/main:flex-row gap-2'>
+        <section className='bg-c-surface rounded-md shadow-md w-full p-4 @3xl/main:flex-1 @container/habit'>
+          <div className='flex flex-col @lg/habit:flex-row  items-start gap-4'>
+            <div className='flex-1 min-w-[200px]'>
+              <h2 className='text-2xl text-c-text font-semibold'>{capitalize(habit.name)}</h2>
+              {habit.description && (
+                <p className='mt-2 break-words text-c-text/80'>{capitalize(habit.description)}</p>
+              )}
+            </div>
 
-          <div className='flex items-start mt-2 shrink-0'>
-            <button
-              onClick={handleEditClick}
-              className='p-2 rounded bg-c-accent-subtle cursor-pointer'
-            >
-              ✎
-            </button>
-            <button
-              onClick={handleDeleteClick}
-              className='ml-2 px-4 py-2 rounded bg-c-accent-subtle cursor-pointer'
-            >
-              🗑
-            </button>
+            <div className='flex flex-row items-start mt-2 shrink-0'>
+              <button
+                onClick={handleEditClick}
+                className='p-2 rounded bg-c-accent-subtle hover:bg-c-accent-hover cursor-pointer'
+              >
+                ✎
+              </button>
+              <button
+                onClick={handleDeleteClick}
+                className='ml-2 px-4 py-2 rounded bg-c-accent-subtle hover:bg-c-accent-hover cursor-pointer'
+              >
+                🗑
+              </button>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+
+        <div className='divider'></div>
+
+        <section className='bg-c-surface rounded-md shadow-md w-full p-4 @3xl/main:flex-1'>
+          <h3 className='text-xl text-text font-semibold'>Goals</h3>
+
+          <div className='flex flex-col justify-between'>
+            <GoalList />
+            <Link
+              to='/goals/create'
+              search={{ habitId: habit.id }}
+              className='btn border-none bg-c-accent-subtle hover:bg-c-accent-hover self-end'
+            >
+              Create Goal
+            </Link>
+          </div>
+        </section>
+      </div>
 
       <div className='divider'></div>
 
-      <section className='w-full p-4'>
-        <h3 className='text-xl text-text font-semibold'>Goals</h3>
-
-        <div className='flex justify-between'>
-          <GoalList />
-          <Link
-            to='/goals/create'
-            search={{ habitId: habit.id }}
-            className='btn btn-outline hover:bg-c-accent-hover'
-          >
-            Create Goal
-          </Link>
-        </div>
-      </section>
-
-      <div className='divider'></div>
-
-      <section className='w-full p-4'>
+      <section className='bg-c-surface rounded-md shadow-md w-full p-4'>
         <h3 className='text-xl text-text font-semibold'>Logs</h3>
 
         <div className='flex justify-between'>

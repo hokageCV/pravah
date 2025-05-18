@@ -2,9 +2,9 @@ import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { Link, useParams } from '@tanstack/react-router'
 import { useEffect } from 'react'
 import { Goal } from '../../types'
+import { capitalize } from '../../utils/text'
 import { useGoalStore } from './goal.store'
 import { deleteGoal, fetchGoals } from './goals.api'
-import { capitalize } from '../../utils/text'
 
 export function GoalList() {
   let queryClient = useQueryClient()
@@ -46,10 +46,18 @@ export function GoalList() {
         {goals
           .sort((a, b) => a.level.localeCompare(b.level))
           .map((goal) => (
-            <li key={goal.id} className='list-row p-2'>
-              <div></div>
+            <li
+              key={goal.id}
+              className='list-row p-2 border-none shadow shadow-sm m-1 bg-c-surface'
+            >
               <div>
-                <strong>{goal.level}: </strong>
+                <strong>
+                  <span className='outline outline-c-accent-subtle text-c-text py-1 px-2 rounded-md'>
+                    {goal.level}
+                  </span>
+                </strong>
+              </div>
+              <div>
                 <span className='font-normal'>{capitalize(goal.description)}</span>
               </div>
 
@@ -58,13 +66,13 @@ export function GoalList() {
                 params={{ goalId: goal.id.toString() }}
                 className='text-c-text-muted font-light cursor-pointer'
               >
-                Edit
+                ✎
               </Link>
               <button
                 onClick={() => handleDelete(goal)}
                 className='text-c-text-muted font-light cursor-pointer'
               >
-                Delete
+                🗑
               </button>
             </li>
           ))}

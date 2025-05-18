@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
 import { useEffect } from 'react'
+import { capitalize } from '../../utils/text'
 import { useAuthStore } from '../auth/auth.store'
 import { CreateLog } from '../logs/create-log'
 import { useHabitStore } from './habit.store'
@@ -34,13 +35,15 @@ export function HabitList() {
         {habits.map((habit) => (
           <li
             key={habit.id}
-            className='border border-c-border rounded-lg max-w-xl p-4 bg-surface shadow-sm hover:shadow transition'
+            className='border border-c-border rounded-lg max-w-xl p-4 bg-surface shadow-sm hover:shadow transition flex justify-between'
           >
             <Link to='/habits/$habitId' params={{ habitId: habit.id.toString() }}>
-              <h2 className='text-lg font-semibold text-c-text'>{habit.name}</h2>
+              <h2 className='text-xl font-semibold text-c-text'>{capitalize(habit.name)}</h2>
+              {habit.description && (
+                <p className='text-sm text-c-text-muted truncate w-72'>{capitalize(habit.description)}</p>
+              )}
             </Link>
-            {habit.description && <p className='text-sm text-c-text-muted'>{habit.description}</p>}
-            <div className='flex justify-end'>
+            <div className='flex justify-end font-semibold whitespace-nowrap'>
               <CreateLog habit={habit} />
             </div>
           </li>

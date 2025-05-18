@@ -4,6 +4,7 @@ import { useEffect } from 'react'
 import { Goal } from '../../types'
 import { useGoalStore } from './goal.store'
 import { deleteGoal, fetchGoals } from './goals.api'
+import { capitalize } from '../../utils/text'
 
 export function GoalList() {
   let queryClient = useQueryClient()
@@ -49,7 +50,7 @@ export function GoalList() {
               <div></div>
               <div>
                 <strong>{goal.level}: </strong>
-                <span className='font-normal'>{goal.description}</span>
+                <span className='font-normal'>{capitalize(goal.description)}</span>
               </div>
 
               <Link

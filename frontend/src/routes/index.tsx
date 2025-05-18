@@ -11,11 +11,11 @@ export const Route = createFileRoute('/')({
 
 function HomeComponent() {
   return (
-    <div className=' mx-auto px-4 py-6'>
+    <div className='max-w-4xl mx-auto px-4 py-6'>
       <div className='mb-6'>
         <Link
           to='/habits/create'
-          className='inline-block bg-c-secondary text-white font-semibold px-5 py-2 rounded-md shadow hover:bg-green-700 transition-colors'
+          className='inline-block bg-c-text text-white font-semibold px-5 py-2 rounded-md shadow hover:bg-c-text-muted transition-colors'
         >
           + Create Habit
         </Link>

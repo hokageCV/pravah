@@ -3,6 +3,8 @@ import { Link, useParams } from '@tanstack/react-router'
 import { useEffect } from 'react'
 import { Goal } from '../../types'
 import { capitalize } from '../../utils/text'
+import { DeleteSvg } from '../svgs/delete'
+import { EditSvg } from '../svgs/edit'
 import { useGoalStore } from './goal.store'
 import { deleteGoal, fetchGoals } from './goals.api'
 
@@ -61,19 +63,23 @@ export function GoalList() {
                 <span className='font-normal'>{capitalize(goal.description)}</span>
               </div>
 
-              <Link
-                to='/goals/$goalId/edit'
-                params={{ goalId: goal.id.toString() }}
-                className='text-c-text-muted font-light cursor-pointer'
-              >
-                ✎
-              </Link>
-              <button
-                onClick={() => handleDelete(goal)}
-                className='text-c-text-muted font-light cursor-pointer'
-              >
-                🗑
-              </button>
+              <div className='inline-flex items-center gap-2 mt-1'>
+                <Link
+                  to='/goals/$goalId/edit'
+                  params={{ goalId: goal.id.toString() }}
+                  className='text-c-text-muted font-light cursor-pointer'
+                >
+                  <EditSvg />
+                </Link>
+              </div>
+              <div className='inline-flex items-center gap-2 mt-1'>
+                <button
+                  onClick={() => handleDelete(goal)}
+                  className='text-c-text-muted font-light cursor-pointer'
+                >
+                  <DeleteSvg />
+                </button>
+              </div>
             </li>
           ))}
       </ul>

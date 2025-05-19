@@ -4,6 +4,9 @@ import { capitalize } from '../../utils/text'
 import { GoalList } from '../goals/goal-list'
 import { CreateLog } from '../logs/create-log'
 import { LogList } from '../logs/log-list'
+import { DeleteSvg } from '../svgs/delete'
+import { EditSvg } from '../svgs/edit'
+import { GoalSvg } from '../svgs/goal'
 import { useHabitStore } from './habit.store'
 import { deleteHabit } from './habits.api'
 
@@ -47,13 +50,13 @@ export default function ShowHabit() {
                 onClick={handleEditClick}
                 className='p-2 rounded bg-c-accent-subtle hover:bg-c-accent-hover cursor-pointer'
               >
-                ✎
+                <EditSvg />
               </button>
               <button
                 onClick={handleDeleteClick}
                 className='ml-2 px-4 py-2 rounded bg-c-accent-subtle hover:bg-c-accent-hover cursor-pointer'
               >
-                🗑
+                <DeleteSvg />
               </button>
             </div>
           </div>
@@ -62,7 +65,10 @@ export default function ShowHabit() {
         <div className='divider'></div>
 
         <section className='bg-c-surface rounded-md shadow-md w-full p-4 @3xl/main:flex-1'>
-          <h3 className='text-xl text-text font-semibold'>Goals</h3>
+          <h3 className='text-xl text-text font-semibold inline-flex'>
+            <GoalSvg />
+            <span>Goals</span>
+          </h3>
 
           <div className='flex flex-col justify-between'>
             <GoalList />

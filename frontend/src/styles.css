@@ -8,6 +8,7 @@
 
   --color-c-background: #f5f2eb;
   --color-c-surface: #fdf4ea;
+  --color-c-surface-muted: #e8e1d9;
   --color-c-border: #e3d9cc;
 
   --color-c-primary: #c64846;
@@ -18,8 +19,23 @@
   --color-c-text-muted: #5a5248;
 
   --color-c-nav: #f1e9dc;
+
+  --color-c-goal-a: #f26619;
+  --color-c-goal-b:  #f8b089;
+  --color-c-goal-c: #fbd5c0;
+  --color-c-goal-miss: #b71c1c;
+}
+
+:root {
+  --min-column-size: 16rem;
 }
 
 html {
   background-color: #f5f2eb;
+}
+
+.grid-flex {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(var(--min-column-size, 15ch), 100%), 1fr));
 }

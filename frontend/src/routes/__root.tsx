@@ -31,6 +31,14 @@ function RootComponent() {
                 Home
               </Link>
               <Link
+                to='/groups'
+                activeProps={{ className: 'underline text-c-accent' }}
+                activeOptions={{ exact: true }}
+                className='text-c-text hover:text-c-accent-hover transition-colors font-light'
+              >
+                Groups
+              </Link>
+              <Link
                 to='/about'
                 activeProps={{ className: 'underline text-c-accent' }}
                 className='text-c-text hover:text-c-accent-hover transition-colors font-light'

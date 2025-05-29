@@ -29,20 +29,20 @@ export type Goal = {
   updatedAt: string
 }
 
-export type NewGoal = {
-  habitId: number
-  level: GoalLevel
-  targetValue: number
-  unit: string
-  description?: string
-}
-
 export type Log = {
   id: number
   habitId: number
   date: number
   goalLevel?: string
   actualValue: number
+  createdAt: string
+  updatedAt: string
+}
+
+export type Group = {
+  id: number
+  name: string
+  ownerId: number
   createdAt: string
   updatedAt: string
 }

@@ -1,0 +1,88 @@
+import { createDb } from '@/db';
+import { groupMembers, groups, insertGroupMemberSchema, users } from '@/db/schema';
+import { and, eq } from 'drizzle-orm';
+import { Context } from 'hono';
+import * as HttpStatusCodes from 'stoker/http-status-codes';
+
+export async function create(c: Context) {
+  let db = createDb(c.env);
+  let body = await c.req.json();
+
+  let groupId = Number(c.req.param('groupId'));
+  if (!groupId || Number.isNaN(groupId)) return c.json({ error: 'Invalid group ID' }, HttpStatusCodes.BAD_REQUEST);
+
+  let parseResult = insertGroupMemberSchema.safeParse(body);
+  if (!parseResult.success) {
+    console.error('❌ Group Member insert validation failed:', parseResult.error.format())
+    return c.json({ error: parseResult.error.format() }, HttpStatusCodes.UNPROCESSABLE_ENTITY);
+  }
+
+  let { userId } = parseResult.data;
+
+  try {
+    let [member] = await db.insert(groupMembers)
+      .values({ groupId, userId })
+      .returning();
+
+    return c.json({ data: member }, HttpStatusCodes.CREATED);
+  } catch (error) {
+    return c.json({ error: error instanceof Error ? error.message : 'Some error while creating membership' }, HttpStatusCodes.INTERNAL_SERVER_ERROR);
+  }
+}
+
+export async function index(c: Context) {
+  let db = createDb(c.env);
+
+  let groupId = Number(c.req.param('groupId'));
+  if (!groupId || Number.isNaN(groupId)) return c.json({ error: 'Invalid group ID' }, HttpStatusCodes.BAD_REQUEST);
+
+  try {
+    let members = await db
+      .select({ userId: users.id, name: users.username })
+      .from(groupMembers)
+      .innerJoin(users, eq(groupMembers.userId, users.id))
+      .where(eq(groupMembers.groupId, groupId))
+      .orderBy(users.username);
+
+    return c.json({ data: members }, HttpStatusCodes.OK);
+  } catch (error) {
+    return c.json({ error: error instanceof Error ? error.message : 'Some error while fetching membership' }, HttpStatusCodes.INTERNAL_SERVER_ERROR);
+  }
+}
+
+export async function destroy(c: Context) {
+  let db = createDb(c.env);
+  let body = await c.req.json();
+  let currentUserId = c.get('currentUser').id;
+
+  let groupId = Number(c.req.param('groupId'));
+  if (!groupId || Number.isNaN(groupId)) return c.json({ error: 'Invalid group ID' }, HttpStatusCodes.BAD_REQUEST);
+
+  let userId = Number(body.userId);
+  if (!userId || Number.isNaN(userId)) return c.json({ error: 'Invalid user ID in request body' }, HttpStatusCodes.BAD_REQUEST);
+
+  try {
+    let [group] = await db.select().from(groups)
+      .where(eq(groups.id, groupId))
+      .limit(1);
+
+    if (!group) return c.json({ error: 'Group not found' }, HttpStatusCodes.NOT_FOUND);
+    if (group.ownerId !== currentUserId) return c.json({ error: 'Unauthorized: only group owner can remove members' }, HttpStatusCodes.FORBIDDEN);
+    if (userId === currentUserId) return c.json({ error: 'Owner cannot remove themselves from group membership' }, HttpStatusCodes.BAD_REQUEST);
+
+    let result = await db.delete(groupMembers)
+      .where(
+        and(
+          eq(groupMembers.groupId, groupId),
+          eq(groupMembers.userId, userId)
+        )
+      )
+      .run();
+
+    if (result.rowsAffected === 0) return c.json({ error: 'Membership not found' }, HttpStatusCodes.NOT_FOUND);
+
+    return c.json({ data: userId }, HttpStatusCodes.OK);
+  } catch (error) {
+    return c.json({ error: error instanceof Error ? error.message : 'Some error while deleting membership' }, HttpStatusCodes.INTERNAL_SERVER_ERROR);
+  }
+}

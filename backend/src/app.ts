@@ -5,6 +5,7 @@ import authRoutes from './modules/auth/auth.routes';
 import habitRoutes from './modules/habits/habit.routes';
 import goalRoutes from './modules/goals/goal.routes';
 import habitLogRoutes from './modules/habit_logs/habit_logs.routes';
+import groupRoutes from './modules/groups/group.routes';
 
 const app = createApp()
 
@@ -17,6 +18,7 @@ app.route('/auth', authRoutes);
 secureRoute(app, '/habits', habitRoutes);
 secureRoute(app, '/goals', goalRoutes);
 secureRoute(app, '/habit_logs', habitLogRoutes);
+secureRoute(app, '/groups', groupRoutes)
 
 app.notFound(notFound)
 

@@ -104,3 +104,61 @@ export const insertHabitLogSchema = createInsertSchema(habitLogs)
 export const patchHabitLogSchema = insertHabitLogSchema.partial();
 
 // ===========================================================
+
+export const groups = sqliteTable('groups', {
+  id: integer({ mode: 'number' }).primaryKey({ autoIncrement: true }),
+  name: text().notNull(),
+  ownerId: integer({ mode: 'number' }).references(() => users.id, { onDelete: 'cascade' }).notNull(),
+  ...timestamps
+});
+
+export const selectGroupSchema = createSelectSchema(groups);
+
+export const insertGroupSchema = createInsertSchema(
+  groups, { name: schema => schema.min(1).max(100) }
+).required({ name: true })
+  .omit({ createdAt: true, updatedAt: true, ownerId: true });
+
+export const patchGroupSchema = insertGroupSchema.partial();
+
+// ==== ==== ==== ====
+
+export const groupMembers = sqliteTable('group_members', {
+  id: integer({ mode: 'number' }).primaryKey({ autoIncrement: true }),
+  groupId: integer({ mode: 'number' }).references(() => groups.id, { onDelete: 'cascade' }).notNull(),
+  userId: integer({ mode: 'number' }).references(() => users.id, { onDelete: 'cascade' }).notNull(),
+  ...timestamps
+}, (table) => [
+  index('group_member_id_idx').on(table.userId),
+  unique('group_members_unique_on_group_id_user_id').on(table.groupId, table.userId)
+]);
+
+export const selectGroupMemberSchema = createSelectSchema(groupMembers);
+
+export const insertGroupMemberSchema = createInsertSchema(groupMembers)
+  .required({ userId: true })
+  .omit({ createdAt: true, updatedAt: true, groupId: true });
+
+export const patchGroupMemberSchema = insertGroupMemberSchema.partial();
+
+// ==== ==== ==== ====
+
+export const groupHabits = sqliteTable('group_habits', {
+  id: integer({ mode: 'number' }).primaryKey({ autoIncrement: true }),
+  groupId: integer({ mode: 'number' }).references(() => groups.id, { onDelete: 'cascade' }).notNull(),
+  habitId: integer({ mode: 'number' }).references(() => habits.id, { onDelete: 'cascade' }).notNull(),
+  ...timestamps
+}, (table) => [
+  index('group_habit_id_idx').on(table.habitId),
+  unique('group_habits_unique_on_group_id_habit_id').on(table.groupId, table.habitId)
+]);
+
+export const selectGroupHabitSchema = createSelectSchema(groupHabits);
+
+export const insertGroupHabitSchema = createInsertSchema(groupHabits)
+  .required({ habitId: true })
+  .omit({ createdAt: true, updatedAt: true, groupId: true });
+
+export const patchGroupHabitSchema = insertGroupHabitSchema.partial();
+
+// ===========================================================

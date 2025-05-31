@@ -46,3 +46,11 @@ export type Group = {
   createdAt: string
   updatedAt: string
 }
+
+export type Membership = {
+  id: number
+  groupId: number
+  userdId: number
+  createdAt: string
+  updatedAt: string
+}

@@ -3,8 +3,8 @@ import { useEffect } from 'react'
 import type { Group } from '../../types'
 import { capitalize } from '../../utils/text'
 import { useAuthStore } from '../auth/auth.store'
-import { AddSvg } from '../svgs/add'
 import { DeleteSvg } from '../svgs/delete'
+import { AddMembers } from './add-members'
 import { useGroupStore } from './group.store'
 import { deleteGroup, fetchJoinedGroups } from './groups.api'
 
@@ -23,8 +23,6 @@ export function GroupList() {
   useEffect(() => {
     if (data) setGroups(data)
   }, [data])
-
-  let handleAdd = (group: Group) => console.log('add')
 
   let handleDelete = async (group: Group) => {
     if (confirm(`Are you sure you want to delete "${group.name}"?`)) {
@@ -51,15 +49,7 @@ export function GroupList() {
         >
           <span>{capitalize(group.name)}</span>
 
-          {group.ownerId == userId && (
-            <button
-              onClick={() => handleAdd(group)}
-              className='p-1 text-c-text-muted hover:cursor-pointer'
-              aria-label={`Edit ${group.name}`}
-            >
-              <AddSvg className='w-4 h-4' />
-            </button>
-          )}
+            {group.ownerId == userId && <AddMembers group={group} />}
 
           {group.ownerId == userId && (
             <button

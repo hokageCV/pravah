@@ -1,6 +1,6 @@
 import { createDb } from '@/db';
 import { groupMembers, groups, insertGroupMemberSchema, users } from '@/db/schema';
-import { and, eq } from 'drizzle-orm';
+import { and, eq, isNull, like } from 'drizzle-orm';
 import { Context } from 'hono';
 import * as HttpStatusCodes from 'stoker/http-status-codes';
 
@@ -85,4 +85,48 @@ export async function destroy(c: Context) {
   } catch (error) {
     return c.json({ error: error instanceof Error ? error.message : 'Some error while deleting membership' }, HttpStatusCodes.INTERNAL_SERVER_ERROR);
   }
+}
+
+export async function search(c: Context) {
+  let db = createDb(c.env);
+
+  let url = new URL(c.req.url);
+  let raw_query = (url.searchParams.get('query') || '').trim().toLowerCase();
+  if (!raw_query) return c.json({ error: 'Search query not found.' }, HttpStatusCodes.UNPROCESSABLE_ENTITY)
+
+  let groupId = Number(c.req.param('groupId'));
+  if (!groupId || Number.isNaN(groupId)) return c.json({ error: 'Invalid group ID' }, HttpStatusCodes.BAD_REQUEST);
+
+  let search_query = sanitizeInput(raw_query);
+
+  try {
+    let matchedUsers = await db
+      .select({ id: users.id, username: users.username })
+      .from(users)
+      .leftJoin(
+        groupMembers,
+        and(
+          eq(groupMembers.userId, users.id),
+          eq(groupMembers.groupId, groupId)
+        )
+      )
+      .where(
+        and(
+          like(users.username, `%${search_query}%`),
+          isNull(groupMembers.userId)
+        )
+      )
+      .limit(10)
+
+    return c.json({ data: matchedUsers }, HttpStatusCodes.OK);
+  }
+  catch (error) {
+    return c.json({ error: error instanceof Error ? error.message : 'Some error while fetching users' }, HttpStatusCodes.INTERNAL_SERVER_ERROR);
+  }
+}
+
+// ==========
+
+function sanitizeInput(input: string): string {
+  return input.replace(/[%_]/g, '');
 }

@@ -52,7 +52,7 @@ export async function joined(c: Context) {
 
   try {
     let joinedGroups = await db
-      .select({ id: groups.id, name: groups.name, ownerId: groups.ownerId, createdAt: groups.createdAt })
+      .selectDistinct({ id: groups.id, name: groups.name, ownerId: groups.ownerId, createdAt: groups.createdAt })
       .from(groups)
       .innerJoin(groupMembers, eq(groupMembers.groupId, groups.id))
       .where(eq(groupMembers.userId, userId))

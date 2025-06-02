@@ -20,6 +20,7 @@ import { Route as GoalsCreateImport } from './routes/goals/create'
 import { Route as AuthSignupImport } from './routes/auth/signup'
 import { Route as AuthLoginImport } from './routes/auth/login'
 import { Route as HabitsHabitIdIndexImport } from './routes/habits/$habitId/index'
+import { Route as GroupsGroupIdIndexImport } from './routes/groups/$groupId/index'
 import { Route as HabitsHabitIdEditImport } from './routes/habits/$habitId/edit'
 import { Route as GoalsGoalIdEditImport } from './routes/goals/$goalId/edit'
 
@@ -76,6 +77,12 @@ const AuthLoginRoute = AuthLoginImport.update({
 const HabitsHabitIdIndexRoute = HabitsHabitIdIndexImport.update({
   id: '/habits/$habitId/',
   path: '/habits/$habitId/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const GroupsGroupIdIndexRoute = GroupsGroupIdIndexImport.update({
+  id: '/groups/$groupId/',
+  path: '/groups/$groupId/',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -165,6 +172,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HabitsHabitIdEditImport
       parentRoute: typeof rootRoute
     }
+    '/groups/$groupId/': {
+      id: '/groups/$groupId/'
+      path: '/groups/$groupId'
+      fullPath: '/groups/$groupId'
+      preLoaderRoute: typeof GroupsGroupIdIndexImport
+      parentRoute: typeof rootRoute
+    }
     '/habits/$habitId/': {
       id: '/habits/$habitId/'
       path: '/habits/$habitId'
@@ -188,6 +202,7 @@ export interface FileRoutesByFullPath {
   '/groups': typeof GroupsIndexRoute
   '/goals/$goalId/edit': typeof GoalsGoalIdEditRoute
   '/habits/$habitId/edit': typeof HabitsHabitIdEditRoute
+  '/groups/$groupId': typeof GroupsGroupIdIndexRoute
   '/habits/$habitId': typeof HabitsHabitIdIndexRoute
 }
 
@@ -202,6 +217,7 @@ export interface FileRoutesByTo {
   '/groups': typeof GroupsIndexRoute
   '/goals/$goalId/edit': typeof GoalsGoalIdEditRoute
   '/habits/$habitId/edit': typeof HabitsHabitIdEditRoute
+  '/groups/$groupId': typeof GroupsGroupIdIndexRoute
   '/habits/$habitId': typeof HabitsHabitIdIndexRoute
 }
 
@@ -217,6 +233,7 @@ export interface FileRoutesById {
   '/groups/': typeof GroupsIndexRoute
   '/goals/$goalId/edit': typeof GoalsGoalIdEditRoute
   '/habits/$habitId/edit': typeof HabitsHabitIdEditRoute
+  '/groups/$groupId/': typeof GroupsGroupIdIndexRoute
   '/habits/$habitId/': typeof HabitsHabitIdIndexRoute
 }
 
@@ -233,6 +250,7 @@ export interface FileRouteTypes {
     | '/groups'
     | '/goals/$goalId/edit'
     | '/habits/$habitId/edit'
+    | '/groups/$groupId'
     | '/habits/$habitId'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -246,6 +264,7 @@ export interface FileRouteTypes {
     | '/groups'
     | '/goals/$goalId/edit'
     | '/habits/$habitId/edit'
+    | '/groups/$groupId'
     | '/habits/$habitId'
   id:
     | '__root__'
@@ -259,6 +278,7 @@ export interface FileRouteTypes {
     | '/groups/'
     | '/goals/$goalId/edit'
     | '/habits/$habitId/edit'
+    | '/groups/$groupId/'
     | '/habits/$habitId/'
   fileRoutesById: FileRoutesById
 }
@@ -274,6 +294,7 @@ export interface RootRouteChildren {
   GroupsIndexRoute: typeof GroupsIndexRoute
   GoalsGoalIdEditRoute: typeof GoalsGoalIdEditRoute
   HabitsHabitIdEditRoute: typeof HabitsHabitIdEditRoute
+  GroupsGroupIdIndexRoute: typeof GroupsGroupIdIndexRoute
   HabitsHabitIdIndexRoute: typeof HabitsHabitIdIndexRoute
 }
 
@@ -288,6 +309,7 @@ const rootRouteChildren: RootRouteChildren = {
   GroupsIndexRoute: GroupsIndexRoute,
   GoalsGoalIdEditRoute: GoalsGoalIdEditRoute,
   HabitsHabitIdEditRoute: HabitsHabitIdEditRoute,
+  GroupsGroupIdIndexRoute: GroupsGroupIdIndexRoute,
   HabitsHabitIdIndexRoute: HabitsHabitIdIndexRoute,
 }
 
@@ -311,6 +333,7 @@ export const routeTree = rootRoute
         "/groups/",
         "/goals/$goalId/edit",
         "/habits/$habitId/edit",
+        "/groups/$groupId/",
         "/habits/$habitId/"
       ]
     },
@@ -343,6 +366,9 @@ export const routeTree = rootRoute
     },
     "/habits/$habitId/edit": {
       "filePath": "habits/$habitId/edit.tsx"
+    },
+    "/groups/$groupId/": {
+      "filePath": "groups/$groupId/index.tsx"
     },
     "/habits/$habitId/": {
       "filePath": "habits/$habitId/index.tsx"

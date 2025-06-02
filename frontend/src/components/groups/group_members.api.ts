@@ -9,7 +9,12 @@ export async function createMembership(groupId: number, userId: number): Promise
   return result.data;
 }
 
-export async function searchUsers(groupId:number, query: string): Promise<User[]> {
+export async function fetchMembers(groupId: number): Promise<User[]> {
+  let result = await safeFetch({ url: `${BASE_URL}/groups/${groupId}/members`, method: 'GET' })
+  return result.data;
+}
+
+export async function searchUsers(groupId: number, query: string): Promise<User[]> {
   let result = await safeFetch({ url: `${BASE_URL}/groups/${groupId}/members/search?query=${query}`, method: 'GET' })
   return result.data;
 }

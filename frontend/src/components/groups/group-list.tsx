@@ -1,4 +1,5 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { Link } from '@tanstack/react-router'
 import { useEffect } from 'react'
 import type { Group } from '../../types'
 import { capitalize } from '../../utils/text'
@@ -47,9 +48,11 @@ export function GroupList() {
           key={group.id}
           className='grid grid-cols-[1fr_auto_auto] items-center rounded-md p-1 hover:bg-c-surface transition'
         >
-          <span>{capitalize(group.name)}</span>
+          <Link to='/groups/$groupId' params={{ groupId: group.id.toString() }}>
+            <span>{capitalize(group.name)}</span>
+          </Link>
 
-            {group.ownerId == userId && <AddMembers group={group} />}
+          {group.ownerId == userId && <AddMembers group={group} />}
 
           {group.ownerId == userId && (
             <button

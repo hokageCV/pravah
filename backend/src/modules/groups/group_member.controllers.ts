@@ -38,7 +38,7 @@ export async function index(c: Context) {
 
   try {
     let members = await db
-      .select({ userId: users.id, name: users.username })
+      .selectDistinct({ userId: users.id, username: users.username })
       .from(groupMembers)
       .innerJoin(users, eq(groupMembers.userId, users.id))
       .where(eq(groupMembers.groupId, groupId))

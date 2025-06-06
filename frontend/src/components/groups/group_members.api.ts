@@ -1,5 +1,5 @@
 import { BASE_URL } from '../../constants';
-import type { Membership, User } from '../../types';
+import type { MemberHabit, Membership, User } from '../../types';
 import { safeFetch } from '../../utils/api';
 
 export async function createMembership(groupId: number, userId: number): Promise<Membership> {
@@ -14,7 +14,7 @@ export async function fetchMembers(groupId: number): Promise<User[]> {
   return result.data;
 }
 
-export async function fetchMembersWithHabits(groupId: number): Promise<User[]> {
+export async function fetchMembersWithHabits(groupId: number): Promise<MemberHabit[]> {
   let result = await safeFetch({ url: `${BASE_URL}/groups/${groupId}/members/with-habits`, method: 'GET' })
   return result.data;
 }

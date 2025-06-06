@@ -62,3 +62,22 @@ export type GroupHabit = {
   createdAt: string
   updatedAt: string
 }
+
+export type MemberHabit = {
+  userId: number
+  userName: string
+  habitId: number
+  habitName: string
+  habitCreatedAt: string
+}
+
+export type DayData = {
+  day: string
+  date: string
+  weekday: number // 0 (Sun) to 6 (Sat)
+}
+
+export type MonthData = {
+  name: string
+  days: (DayData | null)[]
+}

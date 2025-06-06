@@ -26,3 +26,8 @@ export async function deleteLog(logId: number): Promise<Log> {
   let result = await safeFetch({ url: `${BASE_URL}/habit_logs/${logId}`, method: 'DELETE' })
   return result.data;
 }
+
+export async function fetchGroupLogs(groupId: number): Promise<Log[]> {
+  let result = await safeFetch({ url: `${BASE_URL}/habit_logs/grouped-logs?group_id=${groupId}`, method: 'GET' })
+  return result.data;
+}

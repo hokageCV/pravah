@@ -1,6 +1,6 @@
 import { createDb } from '@/db';
-import { habitLogs, habits, insertHabitLogSchema, patchHabitLogSchema } from '@/db/schema';
-import { eq } from 'drizzle-orm';
+import { groupHabits, habitLogs, habits, insertHabitLogSchema, patchHabitLogSchema } from '@/db/schema';
+import { and, eq, gte, inArray, lte } from 'drizzle-orm';
 import { Context } from 'hono';
 import * as HttpStatusCodes from 'stoker/http-status-codes';
 
@@ -126,5 +126,46 @@ export async function destroy(c: Context) {
     return c.json({ data: id }, HttpStatusCodes.OK);
   } catch (error) {
     return c.json({ error: error instanceof Error ? error.message : 'Some error while deleting habit log' }, HttpStatusCodes.INTERNAL_SERVER_ERROR);
+  }
+}
+
+export async function groupLogs(c: Context) {
+  let db = createDb(c.env);
+
+  let url = new URL(c.req.url);
+  let groupIdParam = url.searchParams.get('group_id');
+  let groupId = Number(groupIdParam);
+  if (!groupId) return c.json({ error: 'Invalid group ID' }, HttpStatusCodes.BAD_REQUEST);
+
+  let now = new Date()
+  let startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1)
+  let endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0)
+  let startStr = startOfMonth.toISOString().split('T')[0]
+  let endStr = endOfMonth.toISOString().split('T')[0]
+
+  try {
+    let habitData = await db
+      .select({ habitId: groupHabits.habitId })
+      .from(groupHabits)
+      .where(eq(groupHabits.groupId, groupId));
+
+    let habitIds = habitData.map(h => h.habitId);
+    if (habitIds.length === 0) return c.json({ data: [] }, HttpStatusCodes.OK);
+
+    let logs = await db.select().from(habitLogs)
+      .where(
+        and(
+          inArray(habitLogs.habitId, habitIds),
+          gte(habitLogs.date, startStr),
+          lte(habitLogs.date, endStr)
+        ))
+      .orderBy(habitLogs.habitId);
+
+    return c.json({ data: logs }, HttpStatusCodes.OK);
+  } catch (error) {
+    return c.json(
+      { error: error instanceof Error ? error.message : 'Some error while fetching with habit logs' },
+      HttpStatusCodes.INTERNAL_SERVER_ERROR
+    );
   }
 }

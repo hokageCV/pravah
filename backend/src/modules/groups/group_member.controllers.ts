@@ -59,7 +59,7 @@ export async function membersWithHabits(c: Context) {
 
   try {
     let members = await db
-      .selectDistinct({ userId: users.id, username: users.username })
+      .selectDistinct({ userId: users.id, userName: users.username, habitId: habits.id, habitName: habits.name, habitCreatedAt: habits.createdAt })
       .from(groupMembers)
       .innerJoin(users, eq(groupMembers.userId, users.id))
       .innerJoin(habits, eq(habits.userId, users.id))
@@ -80,7 +80,6 @@ export async function membersWithHabits(c: Context) {
     );
   }
 }
-
 
 export async function destroy(c: Context) {
   let db = createDb(c.env);

@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from '@tanstack/react-router'
+import { GroupLogGraph } from './group-log-graph'
 import { fetchMembersWithHabits } from './group_members.api'
 
 export function ShowGroup() {
@@ -20,10 +21,11 @@ export function ShowGroup() {
       <div className='max-w-5xl mx-auto py-4 px-2 space-y-4'>
         <ul>
           {data.map((user) => (
-            <li key={user.id}>{user.username}</li>
+            <li key={user.userId}>{user.userName}</li>
           ))}
         </ul>
       </div>
+      <GroupLogGraph groupId={id} usersData={data} />
     </>
   )
 }

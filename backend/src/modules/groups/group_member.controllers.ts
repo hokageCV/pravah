@@ -1,5 +1,5 @@
 import { createDb } from '@/db';
-import { groupMembers, groups, insertGroupMemberSchema, users } from '@/db/schema';
+import { groupHabits, groupMembers, groups, habits, insertGroupMemberSchema, users } from '@/db/schema';
 import { sanitizeInput } from '@/utils/text';
 import { and, eq, isNull, like } from 'drizzle-orm';
 import { Context } from 'hono';
@@ -50,6 +50,37 @@ export async function index(c: Context) {
     return c.json({ error: error instanceof Error ? error.message : 'Some error while fetching membership' }, HttpStatusCodes.INTERNAL_SERVER_ERROR);
   }
 }
+
+export async function membersWithHabits(c: Context) {
+  let db = createDb(c.env);
+
+  let groupId = Number(c.req.param('groupId'));
+  if (!groupId || Number.isNaN(groupId)) return c.json({ error: 'Invalid group ID' }, HttpStatusCodes.BAD_REQUEST);
+
+  try {
+    let members = await db
+      .selectDistinct({ userId: users.id, username: users.username })
+      .from(groupMembers)
+      .innerJoin(users, eq(groupMembers.userId, users.id))
+      .innerJoin(habits, eq(habits.userId, users.id))
+      .innerJoin(groupHabits, eq(groupHabits.habitId, habits.id))
+      .where(
+        and(
+          eq(groupMembers.groupId, groupId),
+          eq(groupHabits.groupId, groupId) // select habits only from given group
+        )
+      )
+      .orderBy(users.username);
+
+    return c.json({ data: members }, HttpStatusCodes.OK);
+  } catch (error) {
+    return c.json(
+      { error: error instanceof Error ? error.message : 'Some error while fetching members with habits' },
+      HttpStatusCodes.INTERNAL_SERVER_ERROR
+    );
+  }
+}
+
 
 export async function destroy(c: Context) {
   let db = createDb(c.env);

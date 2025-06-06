@@ -14,6 +14,11 @@ export async function fetchMembers(groupId: number): Promise<User[]> {
   return result.data;
 }
 
+export async function fetchMembersWithHabits(groupId: number): Promise<User[]> {
+  let result = await safeFetch({ url: `${BASE_URL}/groups/${groupId}/members/with-habits`, method: 'GET' })
+  return result.data;
+}
+
 export async function searchUsers(groupId: number, query: string): Promise<User[]> {
   let result = await safeFetch({ url: `${BASE_URL}/groups/${groupId}/members/search?query=${query}`, method: 'GET' })
   return result.data;

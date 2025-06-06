@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from '@tanstack/react-router'
-import { fetchMembers } from './group_members.api'
+import { fetchMembersWithHabits } from './group_members.api'
 
 export function ShowGroup() {
   let { groupId } = useParams({ strict: false }) as { groupId: string }
@@ -8,7 +8,7 @@ export function ShowGroup() {
 
   let { data, isLoading, isError, error } = useQuery({
     queryKey: ['groups', id],
-    queryFn: () => fetchMembers(id),
+    queryFn: () => fetchMembersWithHabits(id),
   })
 
   if (isLoading) return <div>Loading groups...</div>

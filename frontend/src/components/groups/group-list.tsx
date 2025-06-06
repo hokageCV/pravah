@@ -5,6 +5,7 @@ import type { Group } from '../../types'
 import { capitalize } from '../../utils/text'
 import { useAuthStore } from '../auth/auth.store'
 import { DeleteSvg } from '../svgs/delete'
+import { AddHabits } from './add-habits'
 import { AddMembers } from './add-members'
 import { useGroupStore } from './group.store'
 import { deleteGroup, fetchJoinedGroups } from './groups.api'
@@ -52,7 +53,10 @@ export function GroupList() {
             <span>{capitalize(group.name)}</span>
           </Link>
 
-          {group.ownerId == userId && <AddMembers group={group} />}
+          <div className='flex gap-1 max-w-sm'>
+            {group.ownerId == userId && <AddMembers group={group} />}
+            <AddHabits group={group} />
+          </div>
 
           {group.ownerId == userId && (
             <button

@@ -1,6 +1,7 @@
 import { createDb } from '@/db';
 import { groupHabits, habits, insertGroupHabitSchema } from '@/db/schema';
-import { and, eq } from 'drizzle-orm';
+import { sanitizeInput } from '@/utils/text';
+import { and, eq, isNull, like } from 'drizzle-orm';
 import { Context } from 'hono';
 import * as HttpStatusCodes from 'stoker/http-status-codes';
 
@@ -85,5 +86,43 @@ export async function destroy(c: Context) {
     return c.json({ data: habitId }, HttpStatusCodes.OK);
   } catch (error) {
     return c.json({ error: error instanceof Error ? error.message : 'Some error while deleting habit.' }, HttpStatusCodes.INTERNAL_SERVER_ERROR);
+  }
+}
+
+export async function search(c: Context) {
+  let db = createDb(c.env);
+
+  let url = new URL(c.req.url);
+  let raw_query = (url.searchParams.get('query') || '').trim().toLowerCase();
+  if (!raw_query) return c.json({ error: 'Search query not found.' }, HttpStatusCodes.UNPROCESSABLE_ENTITY)
+
+  let groupId = Number(c.req.param('groupId'));
+  if (!groupId || Number.isNaN(groupId)) return c.json({ error: 'Invalid group ID' }, HttpStatusCodes.BAD_REQUEST);
+
+  let search_query = sanitizeInput(raw_query);
+
+  try {
+    let matchedHabits = await db
+      .select({ id: habits.id, name: habits.name })
+      .from(habits)
+      .leftJoin(
+        groupHabits,
+        and(
+          eq(groupHabits.habitId, habits.id),
+          eq(groupHabits.groupId, groupId)
+        )
+      )
+      .where(
+        and(
+          like(habits.name, `%${search_query}%`),
+          isNull(groupHabits.habitId)
+        )
+      )
+      .limit(10)
+
+    return c.json({ data: matchedHabits }, HttpStatusCodes.OK);
+  }
+  catch (error) {
+    return c.json({ error: error instanceof Error ? error.message : 'Some error while fetching habits' }, HttpStatusCodes.INTERNAL_SERVER_ERROR);
   }
 }

@@ -1,5 +1,6 @@
 import { createDb } from '@/db';
 import { groupMembers, groups, insertGroupMemberSchema, users } from '@/db/schema';
+import { sanitizeInput } from '@/utils/text';
 import { and, eq, isNull, like } from 'drizzle-orm';
 import { Context } from 'hono';
 import * as HttpStatusCodes from 'stoker/http-status-codes';
@@ -123,10 +124,4 @@ export async function search(c: Context) {
   catch (error) {
     return c.json({ error: error instanceof Error ? error.message : 'Some error while fetching users' }, HttpStatusCodes.INTERNAL_SERVER_ERROR);
   }
-}
-
-// ==========
-
-function sanitizeInput(input: string): string {
-  return input.replace(/[%_]/g, '');
 }

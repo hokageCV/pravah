@@ -13,3 +13,8 @@ export async function addHabitToGroup(groupId: number, habitId: number): Promise
   let result = await safeFetch({ url: `${BASE_URL}/groups/${groupId}/habits`, method: 'POST', data })
   return result.data;
 }
+
+export async function fetchExistingHabits(groupId: number, userId: number): Promise<Partial<Habit>[]> {
+  let result = await safeFetch({ url: `${BASE_URL}/groups/${groupId}/habits/${userId}`, method: 'GET' })
+  return result.data;
+}

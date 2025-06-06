@@ -53,6 +53,37 @@ export async function index(c: Context) {
   }
 }
 
+export async function show(c: Context) {
+  let db = createDb(c.env);
+
+  let groupId = Number(c.req.param('groupId'));
+  if (!groupId || Number.isNaN(groupId)) return c.json({ error: 'Invalid group ID' }, HttpStatusCodes.BAD_REQUEST);
+
+  let userId = Number(c.req.param('userId'));
+  if (!userId || Number.isNaN(userId)) return c.json({ error: 'Invalid user ID' }, HttpStatusCodes.BAD_REQUEST);
+
+  try {
+    let results = await db
+      .select({
+        habitId: habits.id,
+        name: habits.name,
+        description: habits.description,
+      })
+      .from(habits)
+      .innerJoin(groupHabits, eq(habits.id, groupHabits.habitId))
+      .where(
+        and(
+          eq(habits.userId, userId), // habit owner as user
+          eq(groupHabits.groupId, groupId) // habit from group
+        )
+      );
+
+    return c.json({ data: results }, HttpStatusCodes.OK);
+  } catch (error) {
+    return c.json({ error: error instanceof Error ? error.message : 'Some error while retrieving data' }, HttpStatusCodes.INTERNAL_SERVER_ERROR);
+  }
+}
+
 export async function destroy(c: Context) {
   let db = createDb(c.env);
   let body = await c.req.json();

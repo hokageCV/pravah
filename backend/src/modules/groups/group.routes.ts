@@ -1,6 +1,6 @@
 import { Hono } from 'hono';
-import { create as habitsCreate, destroy as habitsDestroy, index as habitsIndex, search as habitsSearch } from './group_habits.controllers';
-import { create as membershipCreate, destroy as membershipDestroy, index as membershipIndex, membersWithHabits, search as membershipSearch } from './group_member.controllers';
+import { create as habitsCreate, destroy as habitsDestroy, index as habitsIndex, search as habitsSearch, show as habitsShow } from './group_habits.controllers';
+import { create as membershipCreate, destroy as membershipDestroy, index as membershipIndex, search as membershipSearch, membersWithHabits } from './group_member.controllers';
 import { create, destroy, index, joined } from './groups.controllers';
 
 const groupRoutes = new Hono();
@@ -17,6 +17,7 @@ groupRoutes.post('/:groupId/members', membershipCreate)
 groupRoutes.delete('/:groupId/members', membershipDestroy)
 
 groupRoutes.get('/:groupId/habits/search', habitsSearch)
+groupRoutes.get('/:groupId/habits/:userId', habitsShow)
 groupRoutes.get('/:groupId/habits', habitsIndex)
 groupRoutes.post('/:groupId/habits', habitsCreate)
 groupRoutes.delete('/:groupId/habits', habitsDestroy)

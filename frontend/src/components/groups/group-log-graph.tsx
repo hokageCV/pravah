@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { MemberHabit } from '../../types'
 import { getMonthData, mapLogToLevels } from '../../utils/date'
+import { capitalize } from '../../utils/text'
 import { DayCell } from '../logs/graph-day-cell'
 import { fetchGroupLogs } from '../logs/log.api'
 
@@ -33,11 +34,14 @@ export function GroupLogGraph({ groupId, usersData }: GroupLogGraphProps) {
   let monthData = getMonthData({ year, monthName, index: monthIndex })
 
   return (
-    <div className='grid-flex'>
+    <div className='grid-flex my-4'>
       {usersData.map((userData, idx) => (
-        <div key={idx} className='h-64  grid grid-rows-[auto_1fr] items-start justify-center'>
-          <h2 className='text-xl font-semibold mb-2 '>{userData.userName}</h2>
-          <p>{userData.habitName}</p>
+        <div
+          key={idx}
+          className='h-64 p-2  grid grid-rows-[auto_1fr] items-start justify-center bg-c-surface rounded-md shadow-md'
+        >
+          <h2 className='text-xl font-semibold'>{capitalize(userData.userName)}</h2>
+          <p className='text-c-text-muted'>{capitalize(userData.habitName)}</p>
           <div className='grid grid-cols-7 gap-1 text-sm content-start'>
             {monthData.days.map((dayObj, i) => (
               <DayCell

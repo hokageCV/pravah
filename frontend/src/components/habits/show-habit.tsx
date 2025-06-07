@@ -85,15 +85,6 @@ export default function ShowHabit() {
 
       <div className='divider'></div>
 
-      {/* <section className='bg-c-surface rounded-md shadow-md w-full p-4'>
-        <h3 className='text-xl text-text font-semibold'>Logs</h3>
-
-        <div className='flex justify-between'>
-          <LogList habitId={habit.id} />
-          <CreateLog habit={habit} />
-        </div>
-      </section> */}
-
       <section className='bg-c-surface rounded-md shadow-md w-full mt-4 p-4'>
         <div className='flex justify-between'>
           <h3 className='text-xl text-text font-semibold'>Logs</h3>

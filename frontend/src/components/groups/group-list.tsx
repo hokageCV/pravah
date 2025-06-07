@@ -44,31 +44,33 @@ export function GroupList() {
 
   return (
     <ul className='grid gap-y-1 max-w-2xs'>
-      {groups.map((group) => (
-        <li
-          key={group.id}
-          className='grid grid-cols-[1fr_auto_auto] items-center rounded-md p-1 hover:bg-c-surface transition'
-        >
-          <Link to='/groups/$groupId' params={{ groupId: group.id.toString() }}>
-            <span>{capitalize(group.name)}</span>
-          </Link>
+      {groups
+        .filter((group) => group && group.id != null)
+        .map((group) => (
+          <li
+            key={group.id}
+            className='grid grid-cols-[1fr_auto_auto] items-center rounded-md p-1 hover:bg-c-surface transition'
+          >
+            <Link to='/groups/$groupId' params={{ groupId: group.id.toString() }}>
+              <span>{capitalize(group.name)}</span>
+            </Link>
 
-          <div className='flex gap-1 max-w-sm'>
-            {group.ownerId == userId && <AddMembers group={group} />}
-            <AddHabits group={group} />
-          </div>
+            <div className='flex gap-1 max-w-sm'>
+              {group.ownerId == userId && <AddMembers group={group} />}
+              <AddHabits group={group} />
+            </div>
 
-          {group.ownerId == userId && (
-            <button
-              onClick={() => handleDelete(group)}
-              className='p-1 text-c-text-muted hover:cursor-pointer'
-              aria-label={`Delete ${group.name}`}
-            >
-              <DeleteSvg className='w-4 h-4' />
-            </button>
-          )}
-        </li>
-      ))}
+            {group.ownerId == userId && (
+              <button
+                onClick={() => handleDelete(group)}
+                className='p-1 text-c-text-muted hover:cursor-pointer'
+                aria-label={`Delete ${group.name}`}
+              >
+                <DeleteSvg className='w-4 h-4' />
+              </button>
+            )}
+          </li>
+        ))}
     </ul>
   )
 }

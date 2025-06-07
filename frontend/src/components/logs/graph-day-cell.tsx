@@ -21,7 +21,7 @@ export function DayCell({ dayObj, logGoalLevels, index, habitId, habitCreatedAt 
   let today = new Date()
   let hasGoal = !!goalLevel
 
-  if (dayDate < createdAtDate) highlightClass = 'bg-c-surface-muted text-white'
+  if ((dayDate < createdAtDate) && !hasGoal) highlightClass = 'bg-c-surface-muted text-white'
   else if (dayDate > today) highlightClass = 'bg-c-surface-muted text-white'
   else if (hasGoal) {
     if (goalLevel === 'A') highlightClass = 'bg-c-goal-a  text-white'

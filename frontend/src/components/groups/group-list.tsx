@@ -18,7 +18,7 @@ export function GroupList() {
   let userId = useAuthStore((state) => state.user?.id)
 
   let { data, isLoading, isError, error } = useQuery({
-    queryKey: ['groups'],
+    queryKey: ['groups', userId],
     queryFn: () => fetchJoinedGroups(),
   })
 

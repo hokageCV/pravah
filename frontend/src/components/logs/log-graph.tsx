@@ -31,7 +31,7 @@ export function LogGraph({ habit }: LogGraphProps) {
   if (!logs || logs.length === 0) return <p className='text-c-text-muted'>No logs found.</p>
 
   let logGoalLevels = mapLogToLevels(logs)
-  let results = getCalendarData(new Date().getFullYear())
+  let results = getCalendarData(new Date().getUTCFullYear())
 
   return (
     <div className='grid-flex'>

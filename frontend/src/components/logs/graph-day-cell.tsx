@@ -1,5 +1,4 @@
 import type { DayData } from '../../types'
-import { isSameDate } from '../../utils/date'
 
 type DayCellProps = {
   dayObj: DayData | null
@@ -12,22 +11,23 @@ type DayCellProps = {
 export function DayCell({ dayObj, logGoalLevels, index, habitId, habitCreatedAt }: DayCellProps) {
   if (!dayObj) return <div key={index} />
 
-  let dateKey = new Date(dayObj.date).toISOString().split('T')[0]
-  let key = `${habitId}_${dateKey}`
+  let dayDateStr = dayObj.date
+  let key = `${habitId}_${dayDateStr}`
   let goalLevel = logGoalLevels.get(key)
-  let highlightClass = ''
-  let dayDate = new Date(dayObj.date)
-  let createdAtDate = new Date(habitCreatedAt)
-  let today = new Date()
+
+  let createdAtDateStr = habitCreatedAt.split('T')[0]
+  let today = new Date().toISOString().split('T')[0]
+
   let hasGoal = !!goalLevel
 
-  if ((dayDate < createdAtDate) && !hasGoal) highlightClass = 'bg-c-surface-muted text-white'
-  else if (dayDate > today) highlightClass = 'bg-c-surface-muted text-white'
+  let highlightClass = ''
+  if (dayDateStr < createdAtDateStr && !hasGoal) highlightClass = 'bg-c-surface-muted text-white'
+  else if (dayDateStr > today) highlightClass = 'bg-c-surface-muted text-white'
   else if (hasGoal) {
     if (goalLevel === 'A') highlightClass = 'bg-c-goal-a  text-white'
     else if (goalLevel === 'B') highlightClass = 'bg-c-goal-b text-white'
     else if (goalLevel === 'C') highlightClass = 'bg-c-goal-c text-white'
-  } else if (isSameDate(dayDate, today)) {
+  } else if (dayDateStr === today) {
     highlightClass = 'bg-c-surface-muted text-white'
   } else if (!hasGoal) highlightClass = 'bg-c-goal-miss text-white'
 
@@ -41,7 +41,7 @@ export function DayCell({ dayObj, logGoalLevels, index, habitId, habitCreatedAt 
 
   return (
     <div key={index} className={`p-1 rounded rounded-xs text-center ${highlightClass}`}>
-      <span className={`text-white ${opacityClass}`}>{new Date(dayObj.date).getDate()}</span>
+      <span className={`text-white ${opacityClass}`}>{dayObj.date.split('-')[2]}</span>
     </div>
   )
 }

@@ -11,7 +11,7 @@ export async function create(c: Context) {
   let parseResult = insertHabitSchema.safeParse(body);
   if (!parseResult.success) {
     console.error('❌ Habit insert validation failed:', parseResult.error.format())
-    return c.json({ error: parseResult.error.format() }, HttpStatusCodes.UNPROCESSABLE_ENTITY)
+    return c.json({ error: 'Required fields missing' }, HttpStatusCodes.UNPROCESSABLE_ENTITY)
   }
 
   let userId = c.get('currentUser').id;
@@ -73,7 +73,7 @@ export async function update(c: Context) {
   let parseResult = patchHabitSchema.safeParse(body);
   if (!parseResult.success) {
     console.error('❌ Habit insert validation failed:', parseResult.error.format())
-    return c.json({ error: parseResult.error.format() }, HttpStatusCodes.UNPROCESSABLE_ENTITY)
+    return c.json({ error: 'Required fields missing' }, HttpStatusCodes.UNPROCESSABLE_ENTITY)
   }
 
   let userId = c.get('currentUser').id;

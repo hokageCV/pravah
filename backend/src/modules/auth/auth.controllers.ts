@@ -12,7 +12,7 @@ export async function signup(c: Context) {
   let db = createDb(c.env);
 
   let parseResult = insertUserSchema.safeParse(body);
-  if (!parseResult.success) return c.json({ error: parseResult.error.format() }, HttpStatusCodes.UNPROCESSABLE_ENTITY);
+  if (!parseResult.success) return c.json({ error: 'Required fields missing' }, HttpStatusCodes.UNPROCESSABLE_ENTITY);
 
   let { username, email, password } = parseResult.data;
   let hashedPassword = await bcrypt.hash(password, 10);

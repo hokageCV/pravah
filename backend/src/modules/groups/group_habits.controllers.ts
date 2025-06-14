@@ -15,7 +15,7 @@ export async function create(c: Context) {
   let parseResult = insertGroupHabitSchema.safeParse(body);
   if (!parseResult.success) {
     console.error('❌ Group Habit insert validation failed:', parseResult.error.format())
-    return c.json({ error: parseResult.error.format() }, HttpStatusCodes.UNPROCESSABLE_ENTITY);
+    return c.json({ error: 'Required fields missing' }, HttpStatusCodes.UNPROCESSABLE_ENTITY);
   }
 
   let { habitId } = parseResult.data

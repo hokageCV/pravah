@@ -1,5 +1,6 @@
 import { createDb } from '@/db';
 import { groupHabits, habitLogs, habits, insertHabitLogSchema, patchHabitLogSchema } from '@/db/schema';
+import { parseConstraint } from '@/utils/error';
 import { and, eq, gte, inArray, lte } from 'drizzle-orm';
 import { Context } from 'hono';
 import * as HttpStatusCodes from 'stoker/http-status-codes';
@@ -11,7 +12,7 @@ export async function create(c: Context) {
   let parseResult = insertHabitLogSchema.safeParse(body);
   if (!parseResult.success) {
     console.error('❌ HabitLog insert validation failed:', parseResult.error.format())
-    return c.json({ error: parseResult.error.format() }, HttpStatusCodes.UNPROCESSABLE_ENTITY)
+    return c.json({ error: 'Required fields missing' }, HttpStatusCodes.UNPROCESSABLE_ENTITY)
   }
 
   let userId = c.get('currentUser').id;
@@ -30,7 +31,12 @@ export async function create(c: Context) {
 
     return c.json({ data: newHabitLog }, HttpStatusCodes.CREATED);
   } catch (error) {
-    return c.json({ error: error instanceof Error ? error.message : 'Some error while creating habit log' }, HttpStatusCodes.INTERNAL_SERVER_ERROR);
+    if (!(error instanceof Error)) return c.json({ error: 'An unknown error occurred.' }, HttpStatusCodes.INTERNAL_SERVER_ERROR);
+
+    let constraint = parseConstraint(error);
+    if (constraint?.type === 'unique') return c.json({ error: 'You have already logged this habit for today.' }, HttpStatusCodes.CONFLICT);
+
+    return c.json({ error: error.message }, HttpStatusCodes.INTERNAL_SERVER_ERROR);
   }
 }
 
@@ -88,7 +94,7 @@ export async function update(c: Context) {
   let parseResult = patchHabitLogSchema.safeParse(body);
   if (!parseResult.success) {
     console.error('❌ Habit log insert validation failed:', parseResult.error.format())
-    return c.json({ error: parseResult.error.format() }, HttpStatusCodes.UNPROCESSABLE_ENTITY)
+    return c.json({ error: 'Required fields missing' }, HttpStatusCodes.UNPROCESSABLE_ENTITY)
   }
 
   let updateFields = Object.fromEntries(

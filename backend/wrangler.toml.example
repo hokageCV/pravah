@@ -2,14 +2,27 @@ name = "pravah-backend"
 main = "src/index.ts"
 compatibility_date = "2024-10-19"
 compatibility_flags = [ "nodejs_compat" ]
+keep_vars = true
 
 [vars]
-DATABASE_URL = ''
-DATABASE_AUTH_TOKEN = ''
 JWT_SECRET = ''
-FRONTEND_URL = ''
 APIKEY = ''
 PORT = '3123'
-APP_ENV = ''
 DB_SEEDING = 'false'
-DB_MIGRATING = 'true'
+DB_MIGRATING = 'false'
+APP_ENV = 'production'
+DATABASE_URL = ''
+DATABASE_AUTH_TOKEN = ''
+FRONTEND_URL = ''
+
+[env.dev.vars]
+JWT_SECRET = ''
+APIKEY = ''
+PORT = '3123'
+DB_SEEDING = 'false'
+DB_MIGRATING = 'false'
+APP_ENV = 'development'
+DATABASE_URL = ''
+DATABASE_AUTH_TOKEN = ''
+FRONTEND_URL = 'http://localhost:3001'
+

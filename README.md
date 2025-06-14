@@ -20,4 +20,6 @@ Measure habit progress in effortlessly.
 ## Development
 
 - wrangler.toml is for configuring application in at build time
-- .env is for drizzle 
+- .env is for drizzle
+
+- Deploy backend: `pnpm run deploy`

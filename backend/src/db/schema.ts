@@ -65,10 +65,10 @@ export const patchHabitSchema = insertHabitSchema.partial();
 export const goals = sqliteTable('goals', {
   id: integer({ mode: 'number' }).primaryKey({ autoIncrement: true }),
   habitId: integer({ mode: 'number' }).references(() => habits.id, { onDelete: 'cascade' }).notNull(),
-  level: text({ enum: ['A', 'B', 'C'] }),
-  targetValue: integer({ mode: 'number' }).notNull(),
-  unit: text().notNull(),
-  description: text(),
+  level: text({ enum: ['A', 'B', 'C'] }).notNull(),
+  targetValue: integer({ mode: 'number' }).notNull().default(1),
+  unit: text().notNull().default(''),
+  description: text().notNull(),
   ...timestamps
 }, (table) => [
   index('habit_id_idx').on(table.habitId),
@@ -77,7 +77,7 @@ export const goals = sqliteTable('goals', {
 export const selectGoalSchema = createSelectSchema(goals);
 
 export const insertGoalSchema = createInsertSchema(goals)
-  .required({ level: true, habitId: true, targetValue: true })
+  .required({ level: true, habitId: true, description: true })
   .omit({ createdAt: true, updatedAt: true, });
 
 export const patchGoalSchema = insertGoalSchema.partial();

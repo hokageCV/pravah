@@ -56,28 +56,6 @@ export function GoalForm({ initialValue, onSubmit }: GoalFormProps) {
               className='w-full px-3 py-2 border border-c-border rounded-lg bg-white text-sm text-c-text focus:outline-none focus:ring-2 focus:ring-c-accent/40 focus:border-c-accent'
             ></textarea>
           </fieldset>
-          <fieldset className='fieldset'>
-            <legend className='fieldset-legend text-sm text-c-text'>Unit</legend>
-            <input
-              type='text'
-              name='unit'
-              value={formData.unit ?? ''}
-              onChange={handleChange}
-              required
-              className='w-full px-3 py-2 border border-c-border rounded-lg bg-white text-sm text-c-text focus:outline-none focus:ring-2 focus:ring-c-accent/40 focus:border-c-accent'
-            />
-          </fieldset>
-          <fieldset className='fieldset'>
-            <legend className='fieldset-legend text-sm text-c-text'>Target Value</legend>
-            <input
-              type='number'
-              name='targetValue'
-              value={formData.targetValue ?? ''}
-              onChange={handleChange}
-              required
-              className='w-full px-3 py-2 border border-c-border rounded-lg bg-white text-sm text-c-text focus:outline-none focus:ring-2 focus:ring-c-accent/40 focus:border-c-accent'
-            />
-          </fieldset>
 
           <button
             type='submit'

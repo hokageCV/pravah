@@ -1,5 +1,6 @@
 import { useMutation } from '@tanstack/react-query'
 import { useEffect, useRef, useState } from 'react'
+import { useSound } from 'react-sounds'
 import type { Group, Habit } from '../../types'
 import { addHabitToGroup, searchHabits } from './group_habits.api'
 
@@ -15,6 +16,7 @@ export function AddHabitsModal({ group, close }: AddHabitsProps) {
   let [results, setResults] = useState<HabitOption[]>([])
   let [selectedHabit, setSelectedHabit] = useState<HabitOption | null>(null)
   let [showDropdown, setShowDropdown] = useState(false)
+  let { play: playSuccess } = useSound('notification/success')
 
   let dropdownRef = useRef<HTMLDivElement>(null)
 
@@ -54,7 +56,10 @@ export function AddHabitsModal({ group, close }: AddHabitsProps) {
       if (!selectedHabit) throw new Error('No habit selected')
       return addHabitToGroup(group.id, selectedHabit.id)
     },
-    onSuccess: () => close(),
+    onSuccess: () => {
+      playSuccess()
+      setTimeout(close, 800)
+    },
     onError: (err) => console.error('Membership creation failed:', err),
   })
 

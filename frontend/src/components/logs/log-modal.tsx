@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
 import { createPortal } from 'react-dom'
+import { useSound } from 'react-sounds'
 import type { Habit } from '../../types'
 import { createLog } from './log.api'
 
@@ -13,13 +14,17 @@ export function LogModal({ habit, onClose }: LogModalProps) {
   let queryClient = useQueryClient()
   let habitId = habit.id
   let [goalLevel, setGoalLevel] = useState('A')
+  let { play: playHabitLogged } = useSound('arcade/coin')
+  let { play: playError } = useSound('notification/error')
 
   let { mutate, status, error } = useMutation({
     mutationFn: createLog,
     onSuccess: () => {
+      playHabitLogged()
       queryClient.invalidateQueries({ queryKey: ['logs', { habitId }] })
-      onClose()
+      setTimeout(onClose, 1000)
     },
+    onError: () => playError(),
   })
 
   let handleSubmit = (e: React.FormEvent) => {

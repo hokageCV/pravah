@@ -17,12 +17,18 @@ importers:
       '@tanstack/react-router':
         specifier: ^1.114.29
         version: 1.116.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      howler:
+        specifier: ^2.2.4
+        version: 2.2.4
       react:
         specifier: ^19.1.0
         version: 19.1.0
       react-dom:
         specifier: ^19.1.0
         version: 19.1.0(react@19.1.0)
+      react-sounds:
+        specifier: ^1.0.25
+        version: 1.0.25(howler@2.2.4)(react@19.1.0)
       tailwindcss:
         specifier: ^4.1.7
         version: 4.1.7
@@ -739,6 +745,9 @@ packages:
   graceful-fs@4.2.11:
     resolution: {integrity: sha512-RbJ5/jmFcNNCcDV5o9eTnBLJ/HszWV0P73bc+Ff4nS/rJj+YaS6IGyiOL0VoBYX+l1Wrl3k63h/KrH+nhJ0XvQ==}
 
+  howler@2.2.4:
+    resolution: {integrity: sha512-iARIBPgcQrwtEr+tALF+rapJ8qSc+Set2GJQl7xT1MQzWaVkFebdJhR3alVlSiUf5U7nAANKuj3aWpwerocD5w==}
+
   is-binary-path@2.1.0:
     resolution: {integrity: sha512-ZMERYes6pDydyuGidse7OsHxtbI7WVeUEozgR/g7rd0xUimYNlvZRE/K2MgZTjWy725IfelLeVcEM97mmtRGXw==}
     engines: {node: '>=8'}
@@ -898,6 +907,13 @@ packages:
   react-refresh@0.17.0:
     resolution: {integrity: sha512-z6F7K9bV85EfseRCp2bzrpyQ0Gkw1uLoCel9XBVWPg/TjRj94SkJzUTGfOa4bs7iJvBWtQG0Wq7wnI0syw3EBQ==}
     engines: {node: '>=0.10.0'}
+
+  react-sounds@1.0.25:
+    resolution: {integrity: sha512-szyOayVjaTomED1MSQdcNw5gBxHffClR982sl3yxeUi3hmmfJZf0Q1+hneab7z8x4khM64bvlrF4VQltzyEjUg==}
+    hasBin: true
+    peerDependencies:
+      howler: ^2.2.3
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
 
   react@19.1.0:
     resolution: {integrity: sha512-FS+XFBNvn3GTAWq26joslQgWNoFu08F4kl0J4CgdNKADkdSGXQyTCnKteIAJy96Br6YbpEU1LSzV5dYtjMkMDg==}
@@ -1670,6 +1686,8 @@ snapshots:
 
   graceful-fs@4.2.11: {}
 
+  howler@2.2.4: {}
+
   is-binary-path@2.1.0:
     dependencies:
       binary-extensions: 2.3.0
@@ -1779,6 +1797,11 @@ snapshots:
       scheduler: 0.26.0
 
   react-refresh@0.17.0: {}
+
+  react-sounds@1.0.25(howler@2.2.4)(react@19.1.0):
+    dependencies:
+      howler: 2.2.4
+      react: 19.1.0
 
   react@19.1.0: {}
 

@@ -9,6 +9,7 @@ import { AddHabits } from './add-habits'
 import { AddMembers } from './add-members'
 import { useGroupStore } from './group.store'
 import { deleteGroup, fetchJoinedGroups } from './groups.api'
+import { useSound } from 'react-sounds'
 
 export function GroupList() {
   let queryClient = useQueryClient()
@@ -16,6 +17,8 @@ export function GroupList() {
   let groups = useGroupStore((state) => state.groups)
   let setGroups = useGroupStore((state) => state.setGroups)
   let userId = useAuthStore((state) => state.user?.id)
+
+  let { play: playDelete } = useSound('notification/popup')
 
   let { data, isLoading, isError, error } = useQuery({
     queryKey: ['groups', userId],
@@ -32,6 +35,7 @@ export function GroupList() {
         await deleteGroup(group.id)
         setGroups(groups.filter((g) => g.id !== group.id))
         queryClient.invalidateQueries({ queryKey: ['groups'] })
+        playDelete()
       } catch (err) {
         alert((err as Error).message)
       }

@@ -27,7 +27,7 @@ export function EditGoal() {
   } = useMutation({
     mutationFn: updateGoal,
     onSuccess: (updatedGoal: Goal) => {
-      queryClient.invalidateQueries({ queryKey: ['goals'] })
+      queryClient.invalidateQueries({ queryKey: ['goals', goal?.habitId] })
       navigate({ to: `/habits/${updatedGoal.habitId}` })
     },
   })
@@ -41,7 +41,7 @@ export function EditGoal() {
 
   return (
     <>
-      <GoalForm initialValue={goal} onSubmit={handleSubmit} />
+      <GoalForm initialValue={goal} onSubmit={handleSubmit} habitId={goal.habitId} />
 
       {updateStatus === 'pending' && <p>Updating goal...</p>}
       {updateStatus === 'error' && <p>Error: {(updateError as Error).message}</p>}

@@ -16,7 +16,7 @@ export function CreateGoal() {
   let { mutate, status, error } = useMutation({
     mutationFn: createGoal,
     onSuccess: (createdGoal: Goal, submittedGoal: Partial<Goal>) => {
-      queryClient.invalidateQueries({ queryKey: ['goals'] })
+      queryClient.invalidateQueries({ queryKey: ['goals', habitId] })
       navigate({ to: `/habits/${createdGoal.habitId}` })
     },
   })
@@ -25,7 +25,7 @@ export function CreateGoal() {
 
   return (
     <>
-      <GoalForm initialValue={initialGoalValue} onSubmit={handleSubmit} />
+      <GoalForm initialValue={initialGoalValue} onSubmit={handleSubmit} habitId={habitId} />
 
       {status === 'pending' && <p>Creating goal...</p>}
       {status === 'error' && <p>Error: {(error as Error).message}</p>}

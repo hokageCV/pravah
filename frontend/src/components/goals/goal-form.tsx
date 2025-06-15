@@ -1,13 +1,24 @@
 import { useState } from 'react'
 import { Goal } from '../../types'
+import { useGoalStore } from './goal.store'
 
 type GoalFormProps = {
   initialValue: Partial<Goal>
   onSubmit: (goal: Partial<Goal>) => void
+  habitId: number
 }
 
-export function GoalForm({ initialValue, onSubmit }: GoalFormProps) {
+export function GoalForm({ initialValue, onSubmit, habitId }: GoalFormProps) {
   let [formData, setFormData] = useState<Partial<Goal>>(initialValue)
+
+  let goals = useGoalStore((state) => state.goals)
+  let usedLevels = goals
+    .filter((goal) => goal.habitId === habitId)
+    .map((goal) => goal.level) as string[]
+  let currentLevel = formData.level
+  let levelOptions = ['A', 'B', 'C'].filter(
+    (lvl) => !usedLevels.includes(lvl) || lvl === currentLevel
+  )
 
   let handleChange = (
     e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement>
@@ -36,14 +47,17 @@ export function GoalForm({ initialValue, onSubmit }: GoalFormProps) {
               value={formData.level ?? ''}
               onChange={handleChange}
               required
-              className='select w-full px-3 py-2 border border-c-border rounded-lg bg-white text-sm text-c-text focus:outline-none focus:ring-2 focus:ring-c-accent/40 focus:border-c-accent'
+              disabled={!!initialValue.level}
+              className='select w-full px-3 py-2 border border-c-border rounded-lg bg-white text-sm text-c-text focus:outline-none focus:ring-2 focus:ring-c-accent/40 focus:border-c-accent disabled:bg-slate-300 disabled:text-c-text'
             >
-              <option value='' disabled={true}>
+              <option value='' disabled={true} className='text-c-text-muted'>
                 Select one
               </option>
-              <option value='A'>A</option>
-              <option value='B'>B</option>
-              <option value='C'>C</option>
+              {levelOptions.map((lvl) => (
+                <option key={lvl} value={lvl}>
+                  {lvl}
+                </option>
+              ))}
             </select>
           </fieldset>
           <fieldset className='fieldset'>

@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Link, useNavigate, useParams } from '@tanstack/react-router'
 import { capitalize } from '../../utils/text'
 import { GoalList } from '../goals/goal-list'
+import { useGoalStore } from '../goals/goal.store'
 import { CreateLog } from '../logs/create-log'
 import { LogGraph } from '../logs/log-graph'
 import { DeleteSvg } from '../svgs/delete'
@@ -32,6 +33,10 @@ export default function ShowHabit() {
   let handleDeleteClick = () => {
     if (confirm(`Are you sure you want to delete "${habit.name}"?`)) deleteMutate(habit.id)
   }
+
+  let goals = useGoalStore((state) => state.goals)
+  let habitGoals = goals.filter((goal) => goal.habitId === habit.id)
+  let showCreateGoal = habitGoals.length < 3
 
   return (
     <div className='max-w-5xl mx-auto py-4 px-2 @container/main'>
@@ -72,13 +77,15 @@ export default function ShowHabit() {
 
           <div className='flex flex-col justify-between'>
             <GoalList />
-            <Link
-              to='/goals/create'
-              search={{ habitId: habit.id }}
-              className='btn border-none bg-c-accent-subtle hover:bg-c-accent-hover self-end'
-            >
-              Create Goal
-            </Link>
+            {showCreateGoal && (
+              <Link
+                to='/goals/create'
+                search={{ habitId: habit.id }}
+                className='btn border-none bg-c-accent-subtle hover:bg-c-accent-hover self-end'
+              >
+                Create Goal
+              </Link>
+            )}
           </div>
         </section>
       </div>

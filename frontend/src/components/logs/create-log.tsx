@@ -17,7 +17,7 @@ export function CreateLog({ habit }: LogsSectionProps) {
         onClick={() => setShowModal(true)}
         className='bg-c-accent-subtle text-white px-4 py-2 rounded-md hover:bg-c-accent-hover cursor-pointer'
       >
-        Create Log
+        Add Progress
       </button>
 
       {showModal && <LogModal habit={habit} onClose={handleClose} />}

@@ -1,8 +1,11 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
 import { createPortal } from 'react-dom'
 import { useSound } from 'react-sounds'
 import type { Habit } from '../../types'
+import { capitalize } from '../../utils/text'
+import { useGoalStore } from '../goals/goal.store'
+import { fetchGoals } from '../goals/goals.api'
 import { createLog } from './log.api'
 
 type LogModalProps = {
@@ -32,6 +35,14 @@ export function LogModal({ habit, onClose }: LogModalProps) {
     mutate({ habitId, goalLevel })
   }
 
+  let storedGoals = useGoalStore((s) => s.goals).filter((goal) => goal.habitId == habit.id)
+  let { data: fetchedGoals } = useQuery({
+    queryKey: ['goals'],
+    queryFn: () => fetchGoals(habitId),
+    enabled: !storedGoals,
+  })
+  let goals = storedGoals || fetchedGoals
+
   return createPortal(
     <div className='fixed inset-0 z-50 flex items-center justify-center bg-[rgba(0,0,0,0.50)]'>
       <div className='bg-white p-6 rounded-xl shadow-xl w-full max-w-md'>
@@ -43,22 +54,25 @@ export function LogModal({ habit, onClose }: LogModalProps) {
           <input type='hidden' value={habitId} />
 
           <div>
-            <label className='block mb-2 font-medium'>Goal Level</label>
-            <div className='flex gap-4'>
-              {['A', 'B', 'C'].map((level) => (
-                <label key={level} className='flex items-center gap-2 text-lg'>
+            <ul>
+              {goals.map((goal) => (
+                <li
+                  key={goal.level}
+                  className=' grid grid-cols-[auto_auto_1fr] items-center gap-2 py-2'
+                >
                   <input
                     type='radio'
                     name='goalLevel'
-                    value={level}
-                    checked={goalLevel === level}
-                    onChange={() => setGoalLevel(level as 'A' | 'B' | 'C')}
+                    value={goal.level}
+                    checked={goalLevel === goal.level}
+                    onChange={() => setGoalLevel(goal.level)}
                     className='radio radio-lg bg-c-surface checked:bg-c-accent-subtle'
                   />
-                  {level}
-                </label>
+                  <div className='font-medium text-sm'>{goal.level}</div>
+                  <div className='text-sm pl-3'>{capitalize(goal.description)}</div>
+                </li>
               ))}
-            </div>
+            </ul>
           </div>
 
           <div className='flex justify-end gap-2 pt-2'>

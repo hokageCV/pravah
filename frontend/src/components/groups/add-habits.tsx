@@ -23,7 +23,7 @@ export function AddHabits({ group }: AddHabitsProp) {
     enabled: !!userId,
   })
 
-  if (isLoading || isError || data?.length) return null
+  if (isLoading || isError || (data && data?.length > 0)) return null
 
   return (
     <div>

@@ -21,15 +21,15 @@ export function DayCell({ dayObj, logGoalLevels, index, habitId, habitCreatedAt 
   let hasGoal = !!goalLevel
 
   let highlightClass = ''
-  if (dayDateStr < createdAtDateStr && !hasGoal) highlightClass = 'bg-c-surface-muted text-white'
-  else if (dayDateStr > today) highlightClass = 'bg-c-surface-muted text-white'
+  if (dayDateStr < createdAtDateStr && !hasGoal) highlightClass = 'bg-c-surface-muted text-c-text'
+  else if (dayDateStr > today) highlightClass = 'bg-c-surface-muted text-c-text'
   else if (hasGoal) {
     if (goalLevel === 'A') highlightClass = 'bg-c-goal-a  text-white'
     else if (goalLevel === 'B') highlightClass = 'bg-c-goal-b text-white'
     else if (goalLevel === 'C') highlightClass = 'bg-c-goal-c text-white'
   } else if (dayDateStr === today) {
-    highlightClass = 'bg-c-surface-muted text-white'
-  } else if (!hasGoal) highlightClass = 'bg-c-goal-miss text-white'
+    highlightClass = 'bg-c-surface-muted text-c-text'
+  } else if (!hasGoal) highlightClass = 'bg-c-goal-miss text-c-text'
 
   let isGoalMiss = highlightClass.includes('bg-c-goal-miss')
   let isValidGoal = ['bg-c-goal-a', 'bg-c-goal-b', 'bg-c-goal-c'].some((cls) =>
@@ -41,7 +41,9 @@ export function DayCell({ dayObj, logGoalLevels, index, habitId, habitCreatedAt 
 
   return (
     <div key={index} className={`p-1 rounded rounded-xs text-center ${highlightClass}`}>
-      <span className={`text-white ${opacityClass}`}>{dayObj.date.split('-')[2]}</span>
+      <span className={` ${opacityClass} ${dayDateStr === today ? '' : 'invisible select-none'}`}>
+        {dayDateStr === today ? dayDateStr.split('-')[2] : '88'}
+      </span>
     </div>
   )
 }

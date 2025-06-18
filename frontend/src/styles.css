@@ -24,6 +24,9 @@
   --color-c-goal-b:  #f8b089;
   --color-c-goal-c: #fbd5c0;
   --color-c-goal-miss: #b71c1c;
+
+  --spacing-cell-w: 190px;
+  --spacing-cell-h: 156px;
 }
 
 :root {

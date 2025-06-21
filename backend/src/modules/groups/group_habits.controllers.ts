@@ -86,13 +86,12 @@ export async function show(c: Context) {
 
 export async function destroy(c: Context) {
   let db = createDb(c.env);
-  let body = await c.req.json();
   let currentUserId = c.get('currentUser').id;
 
   let groupId = Number(c.req.param('groupId'));
   if (!groupId || Number.isNaN(groupId)) return c.json({ error: 'Invalid group ID' }, HttpStatusCodes.BAD_REQUEST);
 
-  let habitId = Number(body.habitId);
+  let habitId = Number(c.req.param('habitId'));
   if (!habitId || Number.isNaN(habitId)) return c.json({ error: 'Invalid habit ID in request body' }, HttpStatusCodes.BAD_REQUEST);
 
   try {

@@ -18,3 +18,8 @@ export async function fetchExistingHabits(groupId: number, userId: number): Prom
   let result = await safeFetch({ url: `${BASE_URL}/groups/${groupId}/habits/${userId}`, method: 'GET' })
   return result.data;
 }
+
+export async function deleteGroupHabit(groupId: number, habitId: number): Promise<GroupHabit> {
+  let result = await safeFetch({ url: `${BASE_URL}/groups/${groupId}/habits/${habitId}`, method: 'DELETE' })
+  return result.data;
+}

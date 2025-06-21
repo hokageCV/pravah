@@ -1,11 +1,12 @@
 import { useQuery } from '@tanstack/react-query'
+import { useState } from 'react'
 import { MemberHabit } from '../../types'
 import { getMonthData, mapLogToLevels } from '../../utils/date'
 import { capitalize } from '../../utils/text'
+import { useAuthStore } from '../auth/auth.store'
 import { DayCell } from '../logs/graph-day-cell'
 import { fetchGroupLogs } from '../logs/log.api'
-import { DeleteSvg2 } from '../svgs/delete2'
-import { EditSvg2 } from '../svgs/edit2'
+import { DeleteGroupHabit } from './delete-group-habit'
 
 type GroupLogGraphProps = {
   groupId: number
@@ -13,6 +14,8 @@ type GroupLogGraphProps = {
 }
 
 export function GroupLogGraph({ groupId, usersData }: GroupLogGraphProps) {
+  let userId = useAuthStore((state) => state.user?.id)
+
   let {
     data: logs,
     isLoading,
@@ -22,6 +25,12 @@ export function GroupLogGraph({ groupId, usersData }: GroupLogGraphProps) {
     queryKey: ['group_logs', groupId],
     queryFn: () => fetchGroupLogs(groupId),
   })
+
+  let [filteredUsersData, setFilteredUsersData] = useState(usersData)
+
+  let handleHabitDelete = (deletedHabitId: number) => {
+    setFilteredUsersData((prev) => prev.filter((user) => user.habitId !== deletedHabitId))
+  }
 
   if (isLoading) return undefined
   if (isError) return <div>Error: {(error as Error).message}</div>
@@ -37,9 +46,9 @@ export function GroupLogGraph({ groupId, usersData }: GroupLogGraphProps) {
 
   return (
     <div className='grid-flex my-4'>
-      {usersData.map((userData, idx) => (
+      {filteredUsersData.map((userData, idx) => (
         <div
-          key={idx}
+          key={`${userData.habitId}-${idx}`}
           className='min-h-64 p-2 grid grid-rows-[auto,1fr] grid-cols-[1fr,auto] bg-c-surface rounded-md shadow-md gap-2'
         >
           <div className='col-start-1 row-start-1 overflow-hidden'>
@@ -48,18 +57,20 @@ export function GroupLogGraph({ groupId, usersData }: GroupLogGraphProps) {
           </div>
 
           <div className='col-start-2 row-start-1 flex gap-2 shrink-0 justify-self-end self-start'>
-            <button className='p-1 text-c-text hover:text-c-primary'>
-              <EditSvg2 />
-            </button>
-            <button className='p-1 text-c-text hover:text-c-danger'>
-              <DeleteSvg2 />
-            </button>
+            {userId === userData.userId && (
+              <DeleteGroupHabit
+                groupId={groupId}
+                habitId={userData.habitId}
+                onDelete={() => handleHabitDelete(userData.habitId)}
+              />
+            )}
           </div>
 
           <div className='col-span-2 row-start-2'>
             <div className='grid grid-cols-7 gap-1 text-sm max-w-cell-w max-h-cell-h m-auto'>
               {monthData.days.map((dayObj, i) => (
                 <DayCell
+                  key={i}
                   dayObj={dayObj}
                   logGoalLevels={logGoalLevels}
                   index={i}

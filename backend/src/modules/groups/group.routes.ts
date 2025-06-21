@@ -20,6 +20,6 @@ groupRoutes.get('/:groupId/habits/search', habitsSearch)
 groupRoutes.get('/:groupId/habits/:userId', habitsShow)
 groupRoutes.get('/:groupId/habits', habitsIndex)
 groupRoutes.post('/:groupId/habits', habitsCreate)
-groupRoutes.delete('/:groupId/habits', habitsDestroy)
+groupRoutes.delete('/:groupId/habits/:habitId', habitsDestroy)
 
 export default groupRoutes;

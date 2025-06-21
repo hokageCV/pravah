@@ -1,6 +1,10 @@
-import { createFileRoute, Link } from '@tanstack/react-router'
+import { createFileRoute, Link, redirect } from '@tanstack/react-router'
+import { isAuthenticated } from '../utils/auth'
 
 export const Route = createFileRoute('/info')({
+  beforeLoad: () => {
+    if (isAuthenticated()) throw redirect({ to: '/' })
+  },
   component: HeroPage,
 })
 

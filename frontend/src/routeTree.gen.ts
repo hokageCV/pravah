@@ -11,6 +11,7 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as InfoImport } from './routes/info'
 import { Route as AboutImport } from './routes/about'
 import { Route as IndexImport } from './routes/index'
 import { Route as GroupsIndexImport } from './routes/groups/index'
@@ -25,6 +26,12 @@ import { Route as HabitsHabitIdEditImport } from './routes/habits/$habitId/edit'
 import { Route as GoalsGoalIdEditImport } from './routes/goals/$goalId/edit'
 
 // Create/Update Routes
+
+const InfoRoute = InfoImport.update({
+  id: '/info',
+  path: '/info',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const AboutRoute = AboutImport.update({
   id: '/about',
@@ -116,6 +123,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutImport
       parentRoute: typeof rootRoute
     }
+    '/info': {
+      id: '/info'
+      path: '/info'
+      fullPath: '/info'
+      preLoaderRoute: typeof InfoImport
+      parentRoute: typeof rootRoute
+    }
     '/auth/login': {
       id: '/auth/login'
       path: '/auth/login'
@@ -194,6 +208,7 @@ declare module '@tanstack/react-router' {
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/info': typeof InfoRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/signup': typeof AuthSignupRoute
   '/goals/create': typeof GoalsCreateRoute
@@ -209,6 +224,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/info': typeof InfoRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/signup': typeof AuthSignupRoute
   '/goals/create': typeof GoalsCreateRoute
@@ -225,6 +241,7 @@ export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/info': typeof InfoRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/signup': typeof AuthSignupRoute
   '/goals/create': typeof GoalsCreateRoute
@@ -242,6 +259,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/about'
+    | '/info'
     | '/auth/login'
     | '/auth/signup'
     | '/goals/create'
@@ -256,6 +274,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/about'
+    | '/info'
     | '/auth/login'
     | '/auth/signup'
     | '/goals/create'
@@ -270,6 +289,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/about'
+    | '/info'
     | '/auth/login'
     | '/auth/signup'
     | '/goals/create'
@@ -286,6 +306,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  InfoRoute: typeof InfoRoute
   AuthLoginRoute: typeof AuthLoginRoute
   AuthSignupRoute: typeof AuthSignupRoute
   GoalsCreateRoute: typeof GoalsCreateRoute
@@ -301,6 +322,7 @@ export interface RootRouteChildren {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  InfoRoute: InfoRoute,
   AuthLoginRoute: AuthLoginRoute,
   AuthSignupRoute: AuthSignupRoute,
   GoalsCreateRoute: GoalsCreateRoute,
@@ -325,6 +347,7 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/about",
+        "/info",
         "/auth/login",
         "/auth/signup",
         "/goals/create",
@@ -342,6 +365,9 @@ export const routeTree = rootRoute
     },
     "/about": {
       "filePath": "about.tsx"
+    },
+    "/info": {
+      "filePath": "info.tsx"
     },
     "/auth/login": {
       "filePath": "auth/login.tsx"

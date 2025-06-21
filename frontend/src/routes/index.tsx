@@ -4,7 +4,7 @@ import { isAuthenticated } from '../utils/auth'
 
 export const Route = createFileRoute('/')({
   beforeLoad: () => {
-    if (!isAuthenticated()) throw redirect({ to: '/auth/signup' })
+    if (!isAuthenticated()) throw redirect({ to: '/info' })
   },
   component: HomeComponent,
 })

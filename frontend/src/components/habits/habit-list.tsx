@@ -40,18 +40,24 @@ export function HabitList() {
           return (
             <li
               key={habit.id}
-              className='border border-c-border rounded-lg max-w-xl p-4 bg-surface shadow-sm hover:shadow transition flex justify-between'
+              className='border border-c-border rounded-lg p-4 max-w-xl bg-surface shadow-sm hover:shadow transition flex flex-col sm:flex-row gap-3 sm:gap-0 sm:justify-between'
             >
-              <Link to='/habits/$habitId' params={{ habitId: habit.id.toString() }}>
-                <h2 className='text-xl font-semibold text-c-text'>{capitalize(habit.name)}</h2>
+              <Link
+                to='/habits/$habitId'
+                params={{ habitId: habit.id.toString() }}
+                className='min-w-0 flex-1'
+              >
+                <h2 className='text-xl font-semibold text-c-text truncate'>
+                  {capitalize(habit.name)}
+                </h2>
                 {habit.description && (
-                  <p className='text-sm text-c-text-muted truncate w-72'>
+                  <p className='text-sm text-c-text-muted truncate'>
                     {capitalize(habit.description)}
                   </p>
                 )}
               </Link>
               {hasGoal && (
-                <div className='flex justify-end font-semibold whitespace-nowrap'>
+                <div className='flex sm:justify-end font-semibold shrink-0'>
                   <CreateLog habit={habit} />
                 </div>
               )}

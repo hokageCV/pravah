@@ -36,7 +36,7 @@ export function HabitForm({ initialValue, onSubmit }: HabitFormProps) {
             />
           </fieldset>
           <fieldset className='fieldset'>
-            <legend className='fieldset-legend text-sm text-c-text'>Description</legend>
+            <legend className='fieldset-legend text-sm text-c-text'>Why you want to have this habit ?</legend>
             <textarea
               name='description'
               value={formData.description ?? ''}

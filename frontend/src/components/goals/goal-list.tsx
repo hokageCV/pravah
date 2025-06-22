@@ -10,37 +10,49 @@ import { deleteGoal, fetchGoals } from './goals.api'
 
 export function GoalList() {
   let queryClient = useQueryClient()
-
-  let goals = useGoalStore((state) => state.goals)
-  let setGoals = useGoalStore((state) => state.setGoals)
   let { habitId: habitIdParam } = useParams({ strict: false })
   let habitId = Number(habitIdParam)
 
-  let { data, isLoading, isError, error } = useQuery({
-    queryKey: ['goals'],
+  let { goals: storedGoals, setGoals } = useGoalStore()
+
+  let currentHabitGoals = storedGoals.filter((g) => g.habitId === habitId)
+  let hasGoals = currentHabitGoals.length > 0
+
+  let {
+    data: fetchedGoals,
+    isLoading,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ['goals', habitId],
     queryFn: () => fetchGoals(habitId),
+    enabled: !hasGoals,
   })
 
   useEffect(() => {
-    if (data) setGoals(data)
-  }, [data])
+    if (fetchedGoals) {
+      let otherHabitGoals = storedGoals.filter((g) => g.habitId !== habitId)
+      setGoals([...otherHabitGoals, ...fetchedGoals])
+    }
+  }, [fetchedGoals])
 
   let handleDelete = async (goal: Goal) => {
-    if (confirm(`Are you sure you want to delete "${goal.description}"?`)) {
+    if (confirm(`Delete "${goal.description}"?`)) {
       try {
         await deleteGoal(goal.id)
-        setGoals(goals.filter((g) => g.id !== goal.id))
-        queryClient.invalidateQueries({ queryKey: ['goals'] })
+        setGoals(storedGoals.filter((g) => g.id !== goal.id))
+        await queryClient.invalidateQueries({ queryKey: ['goals', habitId] })
       } catch (err) {
         alert((err as Error).message)
       }
     }
   }
 
-  if (isLoading) return <div>Loading goals...</div>
-  if (isError) return <div>Error: {(error as Error).message}</div>
+  let goals = hasGoals ? currentHabitGoals : fetchedGoals || []
 
-  if (!goals || goals.length === 0) return <div>No goals found.</div>
+  if (isLoading && !hasGoals) return <div>Loading goals...</div>
+  if (isError) return <div>Error: {(error as Error).message}</div>
+  if (!goals.length) return <div>No goals found.</div>
 
   return (
     <>

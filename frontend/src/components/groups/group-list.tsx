@@ -1,6 +1,7 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
 import { useEffect } from 'react'
+import { useSound } from 'react-sounds'
 import type { Group } from '../../types'
 import { capitalize } from '../../utils/text'
 import { useAuthStore } from '../auth/auth.store'
@@ -9,31 +10,42 @@ import { AddHabits } from './add-habits'
 import { AddMembers } from './add-members'
 import { useGroupStore } from './group.store'
 import { deleteGroup, fetchJoinedGroups } from './groups.api'
-import { useSound } from 'react-sounds'
 
 export function GroupList() {
   let queryClient = useQueryClient()
-
-  let groups = useGroupStore((state) => state.groups)
-  let setGroups = useGroupStore((state) => state.setGroups)
-  let userId = useAuthStore((state) => state.user?.id)
-
   let { play: playDelete } = useSound('notification/popup')
 
-  let { data, isLoading, isError, error } = useQuery({
+  let { groups: storedGroups, setGroups, lastUpdated, setLastUpdated } = useGroupStore()
+  let userId = useAuthStore((state) => state.user?.id)
+
+  let isStale = Date.now() - new Date(lastUpdated).getTime() > 6 * 60 * 60 * 1000 // Check if data is stale (>6 hours old)
+
+  let {
+    data: fetchedGroups,
+    isLoading,
+    isError,
+    error,
+  } = useQuery({
     queryKey: ['groups', userId],
-    queryFn: () => fetchJoinedGroups(),
+    queryFn: fetchJoinedGroups,
+    enabled: isStale,
+    staleTime: 6 * 60 * 60 * 1000,
   })
 
+  let groups = (storedGroups?.length ? storedGroups : fetchedGroups) || []
+
   useEffect(() => {
-    if (data) setGroups(data)
-  }, [data])
+    if (fetchedGroups) {
+      setGroups(fetchedGroups)
+      setLastUpdated(new Date().toISOString())
+    }
+  }, [fetchedGroups])
 
   let handleDelete = async (group: Group) => {
     if (confirm(`Are you sure you want to delete "${group.name}"?`)) {
       try {
         await deleteGroup(group.id)
-        setGroups(groups.filter((g) => g.id !== group.id))
+        setGroups(storedGroups.filter((g) => g.id !== group.id))
         queryClient.invalidateQueries({ queryKey: ['groups'] })
         playDelete()
       } catch (err) {
@@ -42,7 +54,7 @@ export function GroupList() {
     }
   }
 
-  if (isLoading) return <p>Loading groups...</p>
+  if (isLoading && !storedGroups?.length) return <p>Loading groups...</p>
   if (isError) return <p>Error loading groups: {error?.message}</p>
   if (!groups || groups.length === 0) return <p className='text-c-text-muted'>No groups found.</p>
 

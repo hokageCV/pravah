@@ -8,6 +8,7 @@ import { fetchGoal, updateGoal } from './goals.api'
 export function EditGoal() {
   let queryClient = useQueryClient()
   let navigate = useNavigate()
+  let updateStoreGoal = useGoalStore((state) => state.updateGoal)
   let { goalId: id } = useParams({ strict: false })
   let goalId = Number(id)
 
@@ -22,12 +23,15 @@ export function EditGoal() {
   let { mutate, status, error } = useMutation({
     mutationFn: updateGoal,
     onSuccess: (updatedGoal) => {
-      useGoalStore.getState().updateGoal(updatedGoal)
-
-      queryClient.invalidateQueries({ queryKey: ['goal', goalId] })
-      queryClient.invalidateQueries({ queryKey: ['goals', updatedGoal.habitId] })
+      updateStoreGoal(updatedGoal)
+      queryClient.setQueryData<Goal[]>(['goals', updatedGoal.habitId], (old = []) =>
+        old.map((g) => (g.id === updatedGoal.id ? updatedGoal : g))
+      )
 
       navigate({ to: `/habits/${updatedGoal.habitId}` })
+    },
+    onError: (error) => {
+      console.log(`Failed to update: ${error.message}`)
     },
   })
 

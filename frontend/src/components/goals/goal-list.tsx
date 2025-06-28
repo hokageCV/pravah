@@ -13,7 +13,7 @@ export function GoalList() {
   let { habitId: habitIdParam } = useParams({ strict: false })
   let habitId = Number(habitIdParam)
 
-  let { goals: storedGoals, setGoals } = useGoalStore()
+  let { goals: storedGoals, setGoals, removeGoal } = useGoalStore()
 
   let currentHabitGoals = storedGoals.filter((g) => g.habitId === habitId)
   let hasGoals = currentHabitGoals.length > 0
@@ -40,10 +40,12 @@ export function GoalList() {
     if (confirm(`Delete "${goal.description}"?`)) {
       try {
         await deleteGoal(goal.id)
-        setGoals(storedGoals.filter((g) => g.id !== goal.id))
-        await queryClient.invalidateQueries({ queryKey: ['goals', habitId] })
+        removeGoal(goal.id)
+        queryClient.setQueryData<Goal[]>(['goals', goal.habitId], (old = []) =>
+          old.filter((g) => g.id !== goal.id)
+        )
       } catch (err) {
-        alert((err as Error).message)
+        console.log((err as Error).message)
       }
     }
   }

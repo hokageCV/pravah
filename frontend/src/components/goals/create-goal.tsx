@@ -16,27 +16,13 @@ export function CreateGoal() {
 
   let { mutate, status, error } = useMutation({
     mutationFn: createGoal,
-    onMutate: async (newGoal) => {
-      let optimisticGoal: Goal = {
-        ...newGoal,
-        id: Date.now(), // Temporary ID
-        habitId,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      } as Goal
-      addGoal(optimisticGoal)
+    onSuccess: (newGoal) => {
+      addGoal(newGoal)
+      queryClient.setQueryData<Goal[]>(['goals', habitId], (old = []) => [...old, newGoal])
 
-      return { optimisticGoal }
-    },
-    onSuccess: (actualGoal, _, context) => {
-      useGoalStore.getState().removeGoal(context?.optimisticGoal.id!)
-      addGoal(actualGoal)
-      queryClient.invalidateQueries({ queryKey: ['goals', habitId] })
       navigate({ to: `/habits/${habitId}` })
     },
-    onError: (_, __, context) => {
-      useGoalStore.getState().removeGoal(context?.optimisticGoal.id!)
-    },
+    onError: (error) => console.log(`Failed to create goal: ${error.message}`),
   })
 
   let handleSubmit = (data: Partial<Goal>) => mutate({ ...data, habitId })

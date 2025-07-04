@@ -9,7 +9,7 @@ type DayCellProps = {
 }
 
 export function DayCell({ dayObj, logGoalLevels, index, habitId, habitCreatedAt }: DayCellProps) {
-  if (!dayObj) return <div key={index} />
+  if (!dayObj || !dayObj.date) return <div key={index} />
 
   let dayDateStr = dayObj.date
   let key = `${habitId}_${dayDateStr}`

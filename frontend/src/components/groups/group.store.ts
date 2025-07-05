@@ -21,26 +21,29 @@ export const useGroupStore = create<GroupState>()(
 
       setGroups: (groups) => set({ groups }),
 
-      addGroup: (group) => set((state) => ({
-        groups: [...state.groups, group],
-        lastUpdated: new Date().toISOString()
-      })),
+      addGroup: (group) =>
+        set((state) => ({
+          groups: [...state.groups, group],
+          lastUpdated: new Date().toISOString(),
+        })),
 
-      updateGroup: (group) => set((state) => ({
-        groups: state.groups.map(g => g.id === group.id ? group : g),
-        lastUpdated: new Date().toISOString()
-      })),
+      updateGroup: (group) =>
+        set((state) => ({
+          groups: state.groups.map((g) => (g.id === group.id ? group : g)),
+          lastUpdated: new Date().toISOString(),
+        })),
 
-      removeGroup: (id) => set((state) => ({
-        groups: state.groups.filter(g => g.id !== id),
-        lastUpdated: new Date().toISOString()
-      })),
+      removeGroup: (id) =>
+        set((state) => ({
+          groups: state.groups.filter((g) => g.id !== id),
+          lastUpdated: new Date().toISOString(),
+        })),
 
-      setLastUpdated: (date) => set({ lastUpdated: date })
+      setLastUpdated: (date) => set({ lastUpdated: date }),
     }),
     {
       name: 'pravah-group-storage',
       storage: createJSONStorage(() => localStorage),
-    }
-  )
+    },
+  ),
 );

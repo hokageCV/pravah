@@ -1,12 +1,12 @@
 type ConfirmationModalProps = {
-  isOpen: boolean
-  onClose: () => void
-  onConfirm: () => void
-  title: string
-  message: string
-  confirmText?: string
-  cancelText?: string
-}
+  isOpen: boolean;
+  onClose: () => void;
+  onConfirm: () => void;
+  title: string;
+  message: string;
+  confirmText?: string;
+  cancelText?: string;
+};
 
 export function ConfirmationModal({
   isOpen,
@@ -17,7 +17,7 @@ export function ConfirmationModal({
   confirmText = 'Delete',
   cancelText = 'Cancel',
 }: ConfirmationModalProps) {
-  if (!isOpen) return null
+  if (!isOpen) return null;
 
   return (
     <div className='fixed inset-0  bg-opacity-5 flex items-center justify-center z-50 bg-[rgba(0,0,0,0.50)]'>
@@ -40,5 +40,5 @@ export function ConfirmationModal({
         </div>
       </div>
     </div>
-  )
+  );
 }

@@ -14,5 +14,5 @@ export function DeleteSvg2(props: React.SVGProps<SVGSVGElement>) {
         clipRule='evenodd'
       />
     </svg>
-  )
+  );
 }

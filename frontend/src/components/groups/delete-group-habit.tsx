@@ -1,32 +1,36 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { useState } from 'react'
-import { ConfirmationModal } from '../shared/confirmation-modal'
-import { DeleteSvg2 } from '../svgs/delete2'
-import { deleteGroupHabit } from './group_habits.api'
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useState } from 'react';
+import { ConfirmationModal } from '../shared/confirmation-modal';
+import { DeleteSvg2 } from '../svgs/delete2';
+import { deleteGroupHabit } from './group_habits.api';
 
 type DeleteGroupHabitProps = {
-  groupId: number
-  habitId: number
-  onDelete?: () => void
-}
+  groupId: number;
+  habitId: number;
+  onDelete?: () => void;
+};
 
-export function DeleteGroupHabit({ groupId, habitId, onDelete }: DeleteGroupHabitProps) {
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const queryClient = useQueryClient()
+export function DeleteGroupHabit({
+  groupId,
+  habitId,
+  onDelete,
+}: DeleteGroupHabitProps) {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const queryClient = useQueryClient();
 
   const deleteMutation = useMutation({
     mutationFn: () => deleteGroupHabit(groupId, habitId),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['group_logs', groupId] })
-      onDelete?.()
+      queryClient.invalidateQueries({ queryKey: ['group_logs', groupId] });
+      onDelete?.();
     },
-  })
+  });
 
-  const handleDeleteClick = () => setIsModalOpen(true)
+  const handleDeleteClick = () => setIsModalOpen(true);
   const handleConfirmDelete = () => {
-    deleteMutation.mutate()
-    setIsModalOpen(false)
-  }
+    deleteMutation.mutate();
+    setIsModalOpen(false);
+  };
 
   return (
     <>
@@ -48,5 +52,5 @@ export function DeleteGroupHabit({ groupId, habitId, onDelete }: DeleteGroupHabi
         message='This will remove the habit from the group. Are you sure?'
       />
     </>
-  )
+  );
 }

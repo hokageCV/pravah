@@ -23,5 +23,5 @@ export function EditSvg(props: React.SVGProps<SVGSVGElement>) {
         strokeLinejoin='round'
       />
     </svg>
-  )
+  );
 }

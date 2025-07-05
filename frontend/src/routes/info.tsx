@@ -1,12 +1,12 @@
-import { createFileRoute, Link, redirect } from '@tanstack/react-router'
-import { isAuthenticated } from '../utils/auth'
+import { createFileRoute, Link, redirect } from '@tanstack/react-router';
+import { isAuthenticated } from '../utils/auth';
 
 export const Route = createFileRoute('/info')({
   beforeLoad: () => {
-    if (isAuthenticated()) throw redirect({ to: '/' })
+    if (isAuthenticated()) throw redirect({ to: '/' });
   },
   component: HeroPage,
-})
+});
 
 export function HeroPage() {
   return (
@@ -16,7 +16,7 @@ export function HeroPage() {
       <FeaturesSection />
       <CTASection />
     </div>
-  )
+  );
 }
 
 function Navbar() {
@@ -39,7 +39,7 @@ function Navbar() {
         </div>
       </div>
     </nav>
-  )
+  );
 }
 
 function HeroSection() {
@@ -54,7 +54,8 @@ function HeroSection() {
               <span className='block text-c-primary'>Momentum</span>
             </h1>
             <p className='mt-3 text-base text-c-text-muted sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0'>
-              Pravah helps you track daily habits and build lasting momentum toward your goals.
+              Pravah helps you track daily habits and build lasting momentum
+              toward your goals.
             </p>
             <div className='mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start gap-3'>
               <Link
@@ -81,10 +82,10 @@ function HeroSection() {
                       i % 8 === 0
                         ? 'bg-c-goal-miss'
                         : i % 5 === 0
-                        ? 'bg-c-goal-a'
-                        : i % 3 === 0
-                        ? 'bg-c-goal-b'
-                        : 'bg-c-goal-c'
+                          ? 'bg-c-goal-a'
+                          : i % 3 === 0
+                            ? 'bg-c-goal-b'
+                            : 'bg-c-goal-c'
                     }`}
                   />
                 ))}
@@ -94,7 +95,7 @@ function HeroSection() {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 function FeaturesSection() {
@@ -108,7 +109,8 @@ function FeaturesSection() {
     },
     {
       name: 'Habit Groups',
-      description: 'Build momentum together by joining groups and tracking habits with friends.',
+      description:
+        'Build momentum together by joining groups and tracking habits with friends.',
       icon: '👥',
       color: 'text-c-secondary',
     },
@@ -132,11 +134,12 @@ function FeaturesSection() {
     // },
     {
       name: 'Motivation Boost',
-      description: 'Get encouragement when your momentum slows to help you get back on track.',
+      description:
+        'Get encouragement when your momentum slows to help you get back on track.',
       icon: '💪',
       color: 'text-c-goal-c',
     },
-  ]
+  ];
 
   return (
     <section className='py-12 bg-c-surface' id='features'>
@@ -161,10 +164,16 @@ function FeaturesSection() {
                 className='card bg-c-surface-muted p-6 hover:shadow-lg transition-shadow hover:-translate-y-1'
               >
                 <div className='flex items-start'>
-                  <span className={`text-3xl mr-4 ${feature.color}`}>{feature.icon}</span>
+                  <span className={`text-3xl mr-4 ${feature.color}`}>
+                    {feature.icon}
+                  </span>
                   <div>
-                    <h3 className='text-lg font-medium text-c-text'>{feature.name}</h3>
-                    <p className='mt-1 text-sm text-c-text-muted'>{feature.description}</p>
+                    <h3 className='text-lg font-medium text-c-text'>
+                      {feature.name}
+                    </h3>
+                    <p className='mt-1 text-sm text-c-text-muted'>
+                      {feature.description}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -173,7 +182,7 @@ function FeaturesSection() {
         </div>
       </div>
     </section>
-  )
+  );
 }
 
 function CTASection() {
@@ -181,7 +190,9 @@ function CTASection() {
     <section className='bg-gradient-to-r from-c-primary to-c-accent'>
       <div className='max-w-7xl mx-auto text-center py-16 px-4 sm:py-20 sm:px-6 lg:px-8'>
         <h2 className='text-3xl font-extrabold text-white sm:text-4xl'>
-          <span className='block'>Ready to turn small steps into big results?</span>
+          <span className='block'>
+            Ready to turn small steps into big results?
+          </span>
         </h2>
         <p className='mt-4 text-lg leading-6 text-c-surface'>
           Start your habit journey today with Pravah
@@ -196,5 +207,5 @@ function CTASection() {
         </div>
       </div>
     </section>
-  )
+  );
 }

@@ -1,7 +1,7 @@
 import { createDb } from '@/db';
 import { users } from '@/db/schema';
 import { eq } from 'drizzle-orm';
-import { Context, MiddlewareHandler } from 'hono';
+import type { Context, MiddlewareHandler } from 'hono';
 import { verify } from 'hono/jwt';
 
 type UserTokenPayload = { userId: number };
@@ -27,7 +27,7 @@ const currentUser = (): MiddlewareHandler => {
 
     let payload: UserTokenPayload;
     try {
-      payload = await verify(token, c.env.JWT_SECRET) as UserTokenPayload;
+      payload = (await verify(token, c.env.JWT_SECRET)) as UserTokenPayload;
     } catch {
       return c.json({ error: 'Invalid token' }, 401);
     }

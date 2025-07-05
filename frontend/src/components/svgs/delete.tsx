@@ -44,5 +44,5 @@ export function DeleteSvg(props: React.SVGProps<SVGSVGElement>) {
         strokeLinejoin='round'
       />
     </svg>
-  )
+  );
 }

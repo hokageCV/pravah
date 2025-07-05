@@ -26,5 +26,5 @@ export function GoalSvg(props: React.SVGProps<SVGSVGElement>) {
         />
       </g>
     </svg>
-  )
+  );
 }

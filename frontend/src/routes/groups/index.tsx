@@ -1,9 +1,9 @@
-import { createFileRoute, Link } from '@tanstack/react-router'
-import { GroupList } from '../../components/groups/group-list'
+import { createFileRoute, Link } from '@tanstack/react-router';
+import { GroupList } from '../../components/groups/group-list';
 
 export const Route = createFileRoute('/groups/')({
   component: Component,
-})
+});
 
 function Component() {
   return (
@@ -18,5 +18,5 @@ function Component() {
       </div>
       <GroupList />
     </div>
-  )
+  );
 }

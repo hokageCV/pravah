@@ -1,15 +1,15 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { useEffect, useState } from 'react'
-import { Log } from '../../types'
-import { deleteLog, fetchLogs } from './log.api'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useEffect, useState } from 'react';
+import type { Log } from '../../types';
+import { deleteLog, fetchLogs } from './log.api';
 
 type LogListProps = {
-  habitId: number
-}
+  habitId: number;
+};
 
 export function LogList({ habitId }: LogListProps) {
-  let queryClient = useQueryClient()
-  let [logs, setLogs] = useState<Log[]>([])
+  let queryClient = useQueryClient();
+  let [logs, setLogs] = useState<Log[]>([]);
 
   let {
     data: fetchedLogs,
@@ -19,24 +19,25 @@ export function LogList({ habitId }: LogListProps) {
   } = useQuery({
     queryKey: ['logs', { habitId }],
     queryFn: () => fetchLogs(habitId),
-  })
+  });
   useEffect(() => {
-    if (fetchedLogs) setLogs(fetchedLogs)
-  }, [fetchedLogs])
+    if (fetchedLogs) setLogs(fetchedLogs);
+  }, [fetchedLogs]);
 
   let { mutate } = useMutation({
     mutationFn: deleteLog,
     onSuccess: (_data, logId) => {
-      queryClient.invalidateQueries({ queryKey: ['logs', { habitId }] })
-      setLogs((prevLogs) => prevLogs.filter((log) => log.id !== logId))
+      queryClient.invalidateQueries({ queryKey: ['logs', { habitId }] });
+      setLogs((prevLogs) => prevLogs.filter((log) => log.id !== logId));
     },
-  })
+  });
 
-  let handleDelete = (logId: number) => mutate(logId)
+  let handleDelete = (logId: number) => mutate(logId);
 
-  if (isLoading) return <p>Loading logs...</p>
-  if (isError) return <p>Error loading logs: {error?.message}</p>
-  if (!logs || logs.length === 0) return <p className='text-c-text-muted'>No logs found.</p>
+  if (isLoading) return <p>Loading logs...</p>;
+  if (isError) return <p>Error loading logs: {error?.message}</p>;
+  if (!logs || logs.length === 0)
+    return <p className='text-c-text-muted'>No logs found.</p>;
 
   return (
     <div>
@@ -51,5 +52,5 @@ export function LogList({ habitId }: LogListProps) {
         ))}
       </ul>
     </div>
-  )
+  );
 }

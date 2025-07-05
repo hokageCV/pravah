@@ -1,19 +1,24 @@
-import { Link, Outlet, createRootRoute, useNavigate } from '@tanstack/react-router'
-import { useAuthStore } from '../components/auth/auth.store'
+import {
+  Link,
+  Outlet,
+  createRootRoute,
+  useNavigate,
+} from '@tanstack/react-router';
+import { useAuthStore } from '../components/auth/auth.store';
 
 export const Route = createRootRoute({
   component: RootComponent,
-})
+});
 
 function RootComponent() {
-  let setUser = useAuthStore((state) => state.setUser)
-  let user = useAuthStore((state) => state.user)
-  let navigate = useNavigate()
+  let setUser = useAuthStore((state) => state.setUser);
+  let user = useAuthStore((state) => state.user);
+  let navigate = useNavigate();
 
   let handleLogout = () => {
-    setUser(null)
-    navigate({ to: '/auth/signup' })
-  }
+    setUser(null);
+    navigate({ to: '/auth/signup' });
+  };
 
   return (
     <>
@@ -63,5 +68,5 @@ function RootComponent() {
       )}
       <Outlet />
     </>
-  )
+  );
 }

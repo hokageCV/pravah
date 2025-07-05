@@ -1,12 +1,13 @@
-type ConstraintType = | 'unique' | 'notnull' | 'foreignkey' | 'check' | 'unknown';
+type ConstraintType = 'unique' | 'notnull' | 'foreignkey' | 'check' | 'unknown';
 
 type ConstraintError = {
   type: ConstraintType;
   message: string;
-}
+};
 
 export function parseConstraint(error: unknown): ConstraintError | null {
-  if (typeof error !== 'object' || error === null || !('code' in error)) return null;
+  if (typeof error !== 'object' || error === null || !('code' in error))
+    return null;
 
   let message = (error as any).message ?? '';
 

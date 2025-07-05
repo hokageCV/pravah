@@ -1,73 +1,78 @@
-import { useMutation } from '@tanstack/react-query'
-import { useEffect, useRef, useState } from 'react'
-import type { Group, User } from '../../types'
-import { createMembership, searchUsers } from './group_members.api'
+import { useMutation } from '@tanstack/react-query';
+import { useEffect, useRef, useState } from 'react';
+import type { Group, User } from '../../types';
+import { createMembership, searchUsers } from './group_members.api';
 
 type AddMembersProps = {
-  group: Group
-  close: () => void
-}
+  group: Group;
+  close: () => void;
+};
 
-type UserOption = Pick<User, 'id' | 'username'>
+type UserOption = Pick<User, 'id' | 'username'>;
 
 export function AddMembersModal({ group, close }: AddMembersProps) {
-  let [query, setQuery] = useState('')
-  let [results, setResults] = useState<UserOption[]>([])
-  let [selectedUser, setSelectedUser] = useState<UserOption | null>(null)
-  let [showDropdown, setShowDropdown] = useState(false)
+  let [query, setQuery] = useState('');
+  let [results, setResults] = useState<UserOption[]>([]);
+  let [selectedUser, setSelectedUser] = useState<UserOption | null>(null);
+  let [showDropdown, setShowDropdown] = useState(false);
 
-  let dropdownRef = useRef<HTMLDivElement>(null)
+  let dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (query.length < 3) {
-      setResults([])
-      return
+      setResults([]);
+      return;
     }
 
-    let controller = new AbortController()
+    let controller = new AbortController();
 
     searchUsers(group.id, query)
       .then((res) => setResults(res))
-      .catch(console.error)
+      .catch(console.error);
 
-    return () => controller.abort()
-  }, [query])
+    return () => controller.abort();
+  }, [query]);
 
   useEffect(() => {
     let handleClickOutside = (e: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node))
-        setShowDropdown(false)
-    }
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(e.target as Node)
+      )
+        setShowDropdown(false);
+    };
 
-    document.addEventListener('mousedown', handleClickOutside)
-    return () => document.removeEventListener('mousedown', handleClickOutside)
-  }, [])
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   let handleSelect = (user: UserOption) => {
-    setSelectedUser(user)
-    setQuery(user.username)
-    setShowDropdown(false)
-  }
+    setSelectedUser(user);
+    setQuery(user.username);
+    setShowDropdown(false);
+  };
 
   let { mutate, status, error } = useMutation({
     mutationFn: () => {
-      if (!selectedUser) throw new Error('No user selected')
-      return createMembership(group.id, selectedUser.id)
+      if (!selectedUser) throw new Error('No user selected');
+      return createMembership(group.id, selectedUser.id);
     },
     onSuccess: () => close(),
     onError: (err) => console.error('Membership creation failed:', err),
-  })
+  });
 
   let handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!selectedUser) return
-    mutate()
-  }
+    e.preventDefault();
+    if (!selectedUser) return;
+    mutate();
+  };
 
   return (
     <div className='fixed inset-0 z-50 flex items-center justify-center bg-[rgba(0,0,0,0.50)]'>
       <div className='bg-white p-6 rounded-xl shadow-xl w-full max-w-md'>
-        <h2 className='text-xl font-semibold mb-4'>Add members to {group.name}</h2>
+        <h2 className='text-xl font-semibold mb-4'>
+          Add members to {group.name}
+        </h2>
 
         <form onSubmit={handleSubmit} className='space-y-4'>
           <div className='relative' ref={dropdownRef}>
@@ -75,8 +80,8 @@ export function AddMembersModal({ group, close }: AddMembersProps) {
               type='text'
               value={query}
               onChange={(e) => {
-                setQuery(e.target.value)
-                setShowDropdown(true)
+                setQuery(e.target.value);
+                setShowDropdown(true);
               }}
               placeholder='Search by username'
               className='w-full border px-3 py-2 rounded-md'
@@ -94,7 +99,9 @@ export function AddMembersModal({ group, close }: AddMembersProps) {
                 ))}
 
                 {results.length === 0 && (
-                  <li className='p-2 text-gray-500 cursor-default'>No results found</li>
+                  <li className='p-2 text-gray-500 cursor-default'>
+                    No results found
+                  </li>
                 )}
               </ul>
             )}
@@ -119,5 +126,5 @@ export function AddMembersModal({ group, close }: AddMembersProps) {
         </form>
       </div>
     </div>
-  )
+  );
 }

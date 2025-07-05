@@ -1,42 +1,43 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { Link, useNavigate, useParams } from '@tanstack/react-router'
-import { capitalize } from '../../utils/text'
-import { GoalList } from '../goals/goal-list'
-import { useGoalStore } from '../goals/goal.store'
-import { CreateLog } from '../logs/create-log'
-import { LogGraph } from '../logs/log-graph'
-import { DeleteSvg } from '../svgs/delete'
-import { EditSvg } from '../svgs/edit'
-import { GoalSvg } from '../svgs/goal'
-import { useHabitStore } from './habit.store'
-import { deleteHabit } from './habits.api'
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { Link, useNavigate, useParams } from '@tanstack/react-router';
+import { capitalize } from '../../utils/text';
+import { GoalList } from '../goals/goal-list';
+import { useGoalStore } from '../goals/goal.store';
+import { CreateLog } from '../logs/create-log';
+import { LogGraph } from '../logs/log-graph';
+import { DeleteSvg } from '../svgs/delete';
+import { EditSvg } from '../svgs/edit';
+import { GoalSvg } from '../svgs/goal';
+import { useHabitStore } from './habit.store';
+import { deleteHabit } from './habits.api';
 
 export default function ShowHabit() {
-  let queryClient = useQueryClient()
+  let queryClient = useQueryClient();
 
-  let { habitId } = useParams({ strict: false }) as { habitId: string }
-  let id = Number(habitId)
+  let { habitId } = useParams({ strict: false }) as { habitId: string };
+  let id = Number(habitId);
 
-  let habit = useHabitStore((state) => state.habits.find((h) => h.id === id))
-  if (!habit) return <p>Habit not found.</p>
+  let habit = useHabitStore((state) => state.habits.find((h) => h.id === id));
+  if (!habit) return <p>Habit not found.</p>;
 
-  let navigate = useNavigate()
-  let handleEditClick = () => navigate({ to: `/habits/${habit.id}/edit` })
+  let navigate = useNavigate();
+  let handleEditClick = () => navigate({ to: `/habits/${habit.id}/edit` });
 
   let { mutate: deleteMutate } = useMutation({
     mutationFn: deleteHabit,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['habits'] })
-      navigate({ to: '/' })
+      queryClient.invalidateQueries({ queryKey: ['habits'] });
+      navigate({ to: '/' });
     },
-  })
+  });
   let handleDeleteClick = () => {
-    if (confirm(`Are you sure you want to delete "${habit.name}"?`)) deleteMutate(habit.id)
-  }
+    if (confirm(`Are you sure you want to delete "${habit.name}"?`))
+      deleteMutate(habit.id);
+  };
 
-  let goals = useGoalStore((state) => state.goals)
-  let habitGoals = goals.filter((goal) => goal.habitId === habit.id)
-  let showCreateGoal = habitGoals.length < 3
+  let goals = useGoalStore((state) => state.goals);
+  let habitGoals = goals.filter((goal) => goal.habitId === habit.id);
+  let showCreateGoal = habitGoals.length < 3;
 
   return (
     <div className='max-w-5xl mx-auto py-4 px-2 @container/main'>
@@ -44,9 +45,13 @@ export default function ShowHabit() {
         <section className='bg-c-surface rounded-md shadow-md w-full p-4 @3xl/main:flex-1 @container/habit'>
           <div className='flex flex-col @lg/habit:flex-row  items-start gap-4'>
             <div className='flex-1 min-w-[200px]'>
-              <h2 className='text-2xl text-c-text font-semibold'>{capitalize(habit.name)}</h2>
+              <h2 className='text-2xl text-c-text font-semibold'>
+                {capitalize(habit.name)}
+              </h2>
               {habit.description && (
-                <p className='mt-2 break-words text-c-text/80'>{capitalize(habit.description)}</p>
+                <p className='mt-2 break-words text-c-text/80'>
+                  {capitalize(habit.description)}
+                </p>
               )}
             </div>
 
@@ -102,5 +107,5 @@ export default function ShowHabit() {
         </div>
       </section>
     </div>
-  )
+  );
 }

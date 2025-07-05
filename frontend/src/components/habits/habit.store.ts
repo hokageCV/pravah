@@ -17,22 +17,24 @@ export const useHabitStore = create<HabitState>()(
 
       setHabits: (habits) => set({ habits }),
 
-      addHabit: (habit) => set((state) => ({
-        habits: [...state.habits, habit],
-      })),
+      addHabit: (habit) =>
+        set((state) => ({
+          habits: [...state.habits, habit],
+        })),
 
-      updateHabit: (habit) => set((state) => ({
-        habits: state.habits.map(h => h.id === habit.id ? habit : h),
-      })),
+      updateHabit: (habit) =>
+        set((state) => ({
+          habits: state.habits.map((h) => (h.id === habit.id ? habit : h)),
+        })),
 
-      removeHabit: (id) => set((state) => ({
-        habits: state.habits.filter(h => h.id !== id),
-      })),
+      removeHabit: (id) =>
+        set((state) => ({
+          habits: state.habits.filter((h) => h.id !== id),
+        })),
     }),
     {
       name: 'pravah-habit-storage',
       storage: createJSONStorage(() => localStorage),
-    }
-  )
+    },
+  ),
 );
-

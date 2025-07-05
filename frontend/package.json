@@ -8,9 +8,12 @@
     "dev": "vite --port=3001",
     "build": "vite build",
     "serve": "vite preview",
-    "start": "vite"
+    "start": "vite",
+    "lint": "biome lint --write ",
+    "format": "biome format --write"
   },
   "devDependencies": {
+    "@biomejs/biome": "2.0.6",
     "@tanstack/router-plugin": "^1.114.30",
     "@types/node": "^22.13.14",
     "@types/react": "^19.0.12",

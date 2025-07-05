@@ -1,6 +1,5 @@
-import {defineConfig} from 'drizzle-kit'
-import env from '@/env-runtime'
-
+import { defineConfig } from 'drizzle-kit';
+import env from '@/env-runtime';
 
 export default defineConfig({
   dialect: 'turso',

@@ -1,15 +1,15 @@
-import { useState } from 'react'
-import type { Habit } from '../../types'
-import { LogModal } from './log-modal'
+import { useState } from 'react';
+import type { Habit } from '../../types';
+import { LogModal } from './log-modal';
 
 type LogsSectionProps = {
-  habit: Habit
-}
+  habit: Habit;
+};
 
 export function CreateLog({ habit }: LogsSectionProps) {
-  let [showModal, setShowModal] = useState(false)
+  let [showModal, setShowModal] = useState(false);
 
-  let handleClose = () => setShowModal(false)
+  let handleClose = () => setShowModal(false);
 
   return (
     <div>
@@ -22,5 +22,5 @@ export function CreateLog({ habit }: LogsSectionProps) {
 
       {showModal && <LogModal habit={habit} onClose={handleClose} />}
     </div>
-  )
+  );
 }

@@ -1,8 +1,8 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/about')({
   component: AboutSection,
-})
+});
 
 function AboutSection() {
   return (
@@ -13,7 +13,7 @@ function AboutSection() {
         <PWAInstallNotice />
       </div>
     </section>
-  )
+  );
 }
 
 function ABCFrameworkSection() {
@@ -28,8 +28,12 @@ function ABCFrameworkSection() {
       <div className='mt-10'>
         <div className='card bg-c-surface p-6 max-w-2xl mx-auto'>
           <div className='text-center mb-6'>
-            <h3 className='text-lg font-medium text-c-text'>Example Goal: Daily Reading</h3>
-            <p className='mt-1 text-sm text-c-text-muted'>Tracked with ABC achievement levels</p>
+            <h3 className='text-lg font-medium text-c-text'>
+              Example Goal: Daily Reading
+            </h3>
+            <p className='mt-1 text-sm text-c-text-muted'>
+              Tracked with ABC achievement levels
+            </p>
           </div>
 
           <div className='grid grid-cols-1 md:grid-cols-3 gap-4'>
@@ -58,10 +62,13 @@ function ABCFrameworkSection() {
 
           <div className='mt-8 text-sm text-c-text-muted'>
             <p>
-              The ABC system creates flexible achievement levels for each goal. Hitting your{' '}
-              <span className='text-c-goal-a font-medium'>A target</span> is ideal, but{' '}
-              <span className='text-c-goal-b font-medium'>B</span> maintains momentum, and even{' '}
-              <span className='text-c-goal-c font-medium'>C</span> keeps the habit alive.
+              The ABC system creates flexible achievement levels for each goal.
+              Hitting your{' '}
+              <span className='text-c-goal-a font-medium'>A target</span> is
+              ideal, but <span className='text-c-goal-b font-medium'>B</span>{' '}
+              maintains momentum, and even{' '}
+              <span className='text-c-goal-c font-medium'>C</span> keeps the
+              habit alive.
             </p>
           </div>
         </div>
@@ -69,7 +76,7 @@ function ABCFrameworkSection() {
 
       <ResourceLinks />
     </div>
-  )
+  );
 }
 
 function GroupFeaturesSection() {
@@ -87,7 +94,10 @@ function GroupFeaturesSection() {
           title='Create Groups'
           description='Start a group and invite others to join your habit journey'
           color='c-secondary'
-          points={['One person creates the group as owner', 'Add members via username']}
+          points={[
+            'One person creates the group as owner',
+            'Add members via username',
+          ]}
         />
         <FeatureCard
           icon='📊'
@@ -111,7 +121,7 @@ function GroupFeaturesSection() {
         />
       </div>
     </div>
-  )
+  );
 }
 
 function PWAInstallNotice() {
@@ -154,7 +164,7 @@ function PWAInstallNotice() {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 function SectionHeader({
@@ -162,19 +172,23 @@ function SectionHeader({
   subtitle,
   description,
 }: {
-  title: string
-  subtitle: string
-  description: string
+  title: string;
+  subtitle: string;
+  description: string;
 }) {
   return (
     <div className='lg:text-center'>
-      <h2 className='text-base text-c-primary font-semibold tracking-wide uppercase'>{title}</h2>
+      <h2 className='text-base text-c-primary font-semibold tracking-wide uppercase'>
+        {title}
+      </h2>
       <p className='mt-2 text-3xl leading-8 font-extrabold tracking-tight text-c-text sm:text-4xl'>
         {subtitle}
       </p>
-      <p className='mt-4 max-w-2xl text-xl text-c-text-muted lg:mx-auto'>{description}</p>
+      <p className='mt-4 max-w-2xl text-xl text-c-text-muted lg:mx-auto'>
+        {description}
+      </p>
     </div>
-  )
+  );
 }
 
 function GoalTarget({
@@ -184,11 +198,11 @@ function GoalTarget({
   progress,
   color,
 }: {
-  level: string
-  title: string
-  value: string
-  progress: number
-  color: string
+  level: string;
+  title: string;
+  value: string;
+  progress: number;
+  color: string;
 }) {
   return (
     <div className={`border border-${color} rounded-lg p-4 text-center`}>
@@ -200,10 +214,13 @@ function GoalTarget({
       <h4 className='font-medium text-c-text'>{title}</h4>
       <p className='mt-1 text-sm text-c-text-muted'>{value}</p>
       <div className='mt-2 h-2 w-full bg-c-surface-muted rounded-full'>
-        <div className={`h-2 rounded-full bg-${color}`} style={{ width: `${progress}%` }}></div>
+        <div
+          className={`h-2 rounded-full bg-${color}`}
+          style={{ width: `${progress}%` }}
+        ></div>
       </div>
     </div>
-  )
+  );
 }
 
 function ResourceLinks() {
@@ -220,10 +237,18 @@ function ResourceLinks() {
         text='Watch Video'
       />
     </div>
-  )
+  );
 }
 
-function ResourceLink({ href, icon, text }: { href: string; icon: string; text: string }) {
+function ResourceLink({
+  href,
+  icon,
+  text,
+}: {
+  href: string;
+  icon: string;
+  text: string;
+}) {
   return (
     <a
       href={href}
@@ -237,7 +262,11 @@ function ResourceLink({ href, icon, text }: { href: string; icon: string; text: 
     >
       {icon === 'youtube' ? (
         <>
-          <svg className='mr-2 h-4 w-4 text-red-600' fill='currentColor' viewBox='0 0 24 24'>
+          <svg
+            className='mr-2 h-4 w-4 text-red-600'
+            fill='currentColor'
+            viewBox='0 0 24 24'
+          >
             <path d='M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z' />
           </svg>
           {text}
@@ -256,7 +285,7 @@ function ResourceLink({ href, icon, text }: { href: string; icon: string; text: 
         </>
       )}
     </a>
-  )
+  );
 }
 
 function FeatureCard({
@@ -266,11 +295,11 @@ function FeatureCard({
   color,
   points,
 }: {
-  icon: string
-  title: string
-  description: string
-  color: string
-  points: string[]
+  icon: string;
+  title: string;
+  description: string;
+  color: string;
+  points: string[];
 }) {
   return (
     <div className='card bg-c-surface p-6 hover:shadow-lg transition-shadow'>
@@ -292,5 +321,5 @@ function FeatureCard({
         ))}
       </ul>
     </div>
-  )
+  );
 }

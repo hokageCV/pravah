@@ -17,22 +17,24 @@ export const useGoalStore = create<GoalState>()(
 
       setGoals: (goals) => set({ goals }),
 
-      addGoal: (goal) => set((state) => ({
-        goals: [...state.goals, goal],
-      })),
+      addGoal: (goal) =>
+        set((state) => ({
+          goals: [...state.goals, goal],
+        })),
 
-      updateGoal: (goal) => set((state) => ({
-        goals: state.goals.map(g => g.id === goal.id ? goal : g),
-      })),
+      updateGoal: (goal) =>
+        set((state) => ({
+          goals: state.goals.map((g) => (g.id === goal.id ? goal : g)),
+        })),
 
-      removeGoal: (id) => set((state) => ({
-        goals: state.goals.filter(g => g.id !== id),
-      })),
+      removeGoal: (id) =>
+        set((state) => ({
+          goals: state.goals.filter((g) => g.id !== id),
+        })),
     }),
     {
       name: 'pravah-goal-storage',
       storage: createJSONStorage(() => localStorage),
-    }
-  )
+    },
+  ),
 );
-

@@ -1,47 +1,49 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { useState } from 'react'
-import { createPortal } from 'react-dom'
-import { useSound } from 'react-sounds'
-import type { Habit } from '../../types'
-import { capitalize } from '../../utils/text'
-import { useGoalStore } from '../goals/goal.store'
-import { fetchGoals } from '../goals/goals.api'
-import { createLog } from './log.api'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useState } from 'react';
+import { createPortal } from 'react-dom';
+import { useSound } from 'react-sounds';
+import type { Habit } from '../../types';
+import { capitalize } from '../../utils/text';
+import { useGoalStore } from '../goals/goal.store';
+import { fetchGoals } from '../goals/goals.api';
+import { createLog } from './log.api';
 
 type LogModalProps = {
-  habit: Habit
-  onClose: () => void
-}
+  habit: Habit;
+  onClose: () => void;
+};
 
 export function LogModal({ habit, onClose }: LogModalProps) {
-  let queryClient = useQueryClient()
-  let habitId = habit.id
-  let [goalLevel, setGoalLevel] = useState('A')
-  let { play: playHabitLogged } = useSound('arcade/coin')
-  let { play: playError } = useSound('notification/error')
+  let queryClient = useQueryClient();
+  let habitId = habit.id;
+  let [goalLevel, setGoalLevel] = useState('A');
+  let { play: playHabitLogged } = useSound('arcade/coin');
+  let { play: playError } = useSound('notification/error');
 
   let { mutate, status, error } = useMutation({
     mutationFn: createLog,
     onSuccess: () => {
-      playHabitLogged()
-      queryClient.invalidateQueries({ queryKey: ['logs', { habitId }] })
-      setTimeout(onClose, 1000)
+      playHabitLogged();
+      queryClient.invalidateQueries({ queryKey: ['logs', { habitId }] });
+      setTimeout(onClose, 1000);
     },
     onError: () => playError(),
-  })
+  });
 
   let handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    mutate({ habitId, goalLevel })
-  }
+    e.preventDefault();
+    mutate({ habitId, goalLevel });
+  };
 
-  let storedGoals = useGoalStore((s) => s.goals).filter((goal) => goal.habitId == habit.id)
+  let storedGoals = useGoalStore((s) => s.goals).filter(
+    (goal) => goal.habitId == habit.id,
+  );
   let { data: fetchedGoals } = useQuery({
     queryKey: ['goals'],
     queryFn: () => fetchGoals(habitId),
     enabled: !storedGoals,
-  })
-  let goals = storedGoals || fetchedGoals
+  });
+  let goals = storedGoals || fetchedGoals;
 
   return createPortal(
     <div className='fixed inset-0 z-50 flex items-center justify-center bg-[rgba(0,0,0,0.50)]'>
@@ -69,7 +71,9 @@ export function LogModal({ habit, onClose }: LogModalProps) {
                     className='radio radio-lg bg-c-surface checked:bg-c-accent-subtle'
                   />
                   <div className='font-medium text-sm'>{goal.level}</div>
-                  <div className='text-sm pl-3'>{capitalize(goal.description)}</div>
+                  <div className='text-sm pl-3'>
+                    {capitalize(goal.description)}
+                  </div>
                 </li>
               ))}
             </ul>
@@ -91,11 +95,15 @@ export function LogModal({ habit, onClose }: LogModalProps) {
             </button>
           </div>
 
-          {status === 'pending' && <p className='text-sm text-gray-500'>Creating...</p>}
-          {status === 'error' && <p className='text-sm text-red-600'>{(error as Error).message}</p>}
+          {status === 'pending' && (
+            <p className='text-sm text-gray-500'>Creating...</p>
+          )}
+          {status === 'error' && (
+            <p className='text-sm text-red-600'>{(error as Error).message}</p>
+          )}
         </form>
       </div>
     </div>,
-    document.body
-  )
+    document.body,
+  );
 }

@@ -12,7 +12,7 @@ export function createDb(env: EnvType) {
     casing: 'snake_case',
     schema,
     logger: true,
-  })
+  });
 
-  return db
+  return db;
 }

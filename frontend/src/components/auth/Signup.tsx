@@ -3,6 +3,7 @@ import { Link, useRouter } from '@tanstack/react-router';
 import { type FormEvent, useState } from 'react';
 import { BASE_URL } from '../../constants';
 import { useAuthStore } from './auth.store';
+import { PasswordInput } from './password';
 
 export function Signup() {
   let [formData, setFormData] = useState({
@@ -102,25 +103,16 @@ export function Signup() {
             />
           </div>
 
-          <div>
-            <label
-              htmlFor='password'
-              className='block text-sm font-medium text-c-text mb-1'
-            >
-              Password
-            </label>
-            <input
-              type='password'
-              id='password'
-              name='password'
-              value={formData.password}
-              onChange={(e) =>
-                setFormData((prev) => ({ ...prev, password: e.target.value }))
-              }
-              required
-              className='w-full px-3 py-2 border border-c-border rounded-lg bg-white text-sm text-c-text focus:outline-none focus:ring-2 focus:ring-c-accent/40 focus:border-c-accent'
-            />
-          </div>
+          <PasswordInput
+            id='password'
+            name='password'
+            value={formData.password}
+            onChange={(e) =>
+              setFormData((prev) => ({ ...prev, password: e.target.value }))
+            }
+            label='Password'
+            required
+          />
 
           <button
             type='submit'

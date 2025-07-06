@@ -14,27 +14,27 @@ export function HabitList() {
   let user = useAuthStore((state) => state.user);
   let goals = useGoalStore((state) => state.goals);
 
-  let { data, isLoading, isError, error } = useQuery({
+  let { data, isError, error } = useQuery({
     queryKey: ['habits', user?.id],
     queryFn: () => {
       if (user?.id) return fetchHabits();
       return Promise.reject(new Error('User is not logged in.'));
     },
+    initialData: habits.length ? habits : undefined,
+    staleTime: 30 * 60 * 1000,
   });
 
   useEffect(() => {
     if (data) setHabits(data);
   }, [data]);
 
-  if (isLoading) return <div>Loading habits...</div>;
   if (isError) return <div>Error: {(error as Error).message}</div>;
-
-  if (!habits || habits.length === 0) return <div>No habits found.</div>;
+  if (!data?.length) return <div>No habits found</div>;
 
   return (
     <>
       <ul className='space-y-4'>
-        {habits.map((habit) => {
+        {data.map((habit) => {
           let hasGoal = goals.some((goal) => goal.habitId === habit.id);
 
           return (

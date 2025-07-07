@@ -16,6 +16,10 @@ export function DayCell({
   habitCreatedAt,
 }: DayCellProps) {
   if (!dayObj || !dayObj.date) return <div key={index} />;
+  if (!habitCreatedAt) {
+    console.warn('habitCreatedAt is undefined in DayCell', { habitId, index });
+    return <div key={index} />;
+  }
 
   let dayDateStr = dayObj.date;
   let key = `${habitId}_${dayDateStr}`;

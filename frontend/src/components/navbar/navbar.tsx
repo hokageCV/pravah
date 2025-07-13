@@ -28,12 +28,30 @@ export function Navbar() {
             Pravah
           </div>
 
+          <div className='flex lg:hidden gap-4 mr-2'>
+            <MobileNavLink to='/' text='Home' />
+            <MobileNavLink to='/groups' text='Groups' />
+          </div>
+
           <DesktopNavbar />
         </div>
       </nav>
 
       <MobileDrawer isOpen={isDrawerOpen} onClose={closeDrawer} />
     </>
+  );
+}
+
+function MobileNavLink({ to, text }: { to: string; text: string }) {
+  return (
+    <Link
+      to={to}
+      activeProps={{ className: 'underline text-c-accent' }}
+      activeOptions={to === '/' ? { exact: true } : undefined}
+      className='text-c-text hover:text-c-accent-hover transition-colors font-light text-lg'
+    >
+      {text}
+    </Link>
   );
 }
 

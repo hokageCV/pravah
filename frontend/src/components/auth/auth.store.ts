@@ -1,8 +1,9 @@
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
+import { User } from '../../types';
 
 type AuthState = {
-  user: { id: number; username: string } | null;
+  user: User | null;
   token: string | null;
   setUser: (user: AuthState['user']) => void;
   setToken: (token: string | null) => void;

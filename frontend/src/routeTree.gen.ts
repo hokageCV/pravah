@@ -11,6 +11,7 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as ProfileImport } from './routes/profile'
 import { Route as InfoImport } from './routes/info'
 import { Route as AboutImport } from './routes/about'
 import { Route as IndexImport } from './routes/index'
@@ -26,6 +27,12 @@ import { Route as HabitsHabitIdEditImport } from './routes/habits/$habitId/edit'
 import { Route as GoalsGoalIdEditImport } from './routes/goals/$goalId/edit'
 
 // Create/Update Routes
+
+const ProfileRoute = ProfileImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const InfoRoute = InfoImport.update({
   id: '/info',
@@ -130,6 +137,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof InfoImport
       parentRoute: typeof rootRoute
     }
+    '/profile': {
+      id: '/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof ProfileImport
+      parentRoute: typeof rootRoute
+    }
     '/auth/login': {
       id: '/auth/login'
       path: '/auth/login'
@@ -209,6 +223,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/info': typeof InfoRoute
+  '/profile': typeof ProfileRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/signup': typeof AuthSignupRoute
   '/goals/create': typeof GoalsCreateRoute
@@ -225,6 +240,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/info': typeof InfoRoute
+  '/profile': typeof ProfileRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/signup': typeof AuthSignupRoute
   '/goals/create': typeof GoalsCreateRoute
@@ -242,6 +258,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/info': typeof InfoRoute
+  '/profile': typeof ProfileRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/signup': typeof AuthSignupRoute
   '/goals/create': typeof GoalsCreateRoute
@@ -260,6 +277,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/info'
+    | '/profile'
     | '/auth/login'
     | '/auth/signup'
     | '/goals/create'
@@ -275,6 +293,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/info'
+    | '/profile'
     | '/auth/login'
     | '/auth/signup'
     | '/goals/create'
@@ -290,6 +309,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/info'
+    | '/profile'
     | '/auth/login'
     | '/auth/signup'
     | '/goals/create'
@@ -307,6 +327,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
   InfoRoute: typeof InfoRoute
+  ProfileRoute: typeof ProfileRoute
   AuthLoginRoute: typeof AuthLoginRoute
   AuthSignupRoute: typeof AuthSignupRoute
   GoalsCreateRoute: typeof GoalsCreateRoute
@@ -323,6 +344,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   InfoRoute: InfoRoute,
+  ProfileRoute: ProfileRoute,
   AuthLoginRoute: AuthLoginRoute,
   AuthSignupRoute: AuthSignupRoute,
   GoalsCreateRoute: GoalsCreateRoute,
@@ -348,6 +370,7 @@ export const routeTree = rootRoute
         "/",
         "/about",
         "/info",
+        "/profile",
         "/auth/login",
         "/auth/signup",
         "/goals/create",
@@ -368,6 +391,9 @@ export const routeTree = rootRoute
     },
     "/info": {
       "filePath": "info.tsx"
+    },
+    "/profile": {
+      "filePath": "profile.tsx"
     },
     "/auth/login": {
       "filePath": "auth/login.tsx"

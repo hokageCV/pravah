@@ -92,6 +92,17 @@ function NavLinks({ onItemClick }: { onItemClick?: () => void }) {
         </Link>
       </li>
       <li>
+        <Link
+          to='/profile'
+          activeProps={{ className: 'underline text-c-accent' }}
+          activeOptions={{ exact: true }}
+          className='text-c-text hover:text-c-accent-hover transition-colors font-light text-lg'
+          onClick={onItemClick}
+        >
+          Profile
+        </Link>
+      </li>
+      <li>
         <button
           onClick={handleLogout}
           className='text-c-text hover:text-c-accent-hover transition-colors font-light text-lg text-left'

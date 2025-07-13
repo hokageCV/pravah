@@ -39,6 +39,9 @@ export function Login() {
       setUser({
         id: data.user.id,
         username: data.user.username,
+        email: data.user.email,
+        createdAt: data.user.createdAt,
+        updatedAt: data.user.updatedAt,
       });
       setToken(data.token);
       router.navigate({ to: '/' });

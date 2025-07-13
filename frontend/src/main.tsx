@@ -6,6 +6,7 @@ import { routeTree } from './routeTree.gen';
 import { PostHogProvider } from 'posthog-js/react';
 
 import * as Sentry from '@sentry/react';
+import { PathNotFound } from './components/path-not-found';
 
 Sentry.init({
   dsn: import.meta.env.VITE_SENTRY_DSN,
@@ -22,6 +23,7 @@ const queryClient = new QueryClient();
 const router = createRouter({
   routeTree,
   defaultPreload: 'intent',
+  defaultNotFoundComponent: PathNotFound,
 });
 
 // Register things for typesafety

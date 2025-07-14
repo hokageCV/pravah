@@ -1,6 +1,7 @@
 import { capitalize } from '../../utils/text';
 import { DateTime } from 'luxon';
 import { useAuthStore } from '../auth/auth.store';
+import { NotificationToggle } from './notification-toggle';
 
 export function ProfilePage() {
   let user = useAuthStore((state) => state.user);
@@ -28,6 +29,8 @@ export function ProfilePage() {
             </span>
           </p>
         )}
+
+        <NotificationToggle />
       </div>
     </>
   );

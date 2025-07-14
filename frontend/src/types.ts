@@ -81,3 +81,9 @@ export type MonthData = {
   name: string;
   days: (DayData | null)[];
 };
+
+export type NotificationPermissionStatus =
+  | 'granted'
+  | 'denied'
+  | 'default'
+  | 'unsupported';

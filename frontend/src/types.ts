@@ -39,12 +39,14 @@ export type Log = {
   updatedAt: string;
 };
 
+export type StreakInfo = {
+  currentStreak: number;
+  longestStreak: number;
+};
+
 export type LogResponse = {
   logs: Log[];
-  streakInfo: {
-    currentStreak: number;
-    longestStreak: number;
-  };
+  streakInfo: StreakInfo;
 };
 
 export type Group = {

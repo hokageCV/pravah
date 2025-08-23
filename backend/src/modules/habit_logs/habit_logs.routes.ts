@@ -2,6 +2,7 @@ import { Hono } from 'hono';
 import {
   create,
   destroy,
+  getStreaks,
   groupLogs,
   index,
   show,
@@ -11,6 +12,7 @@ import {
 const habitLogRoutes = new Hono();
 
 habitLogRoutes.get('/grouped-logs', groupLogs);
+habitLogRoutes.get('/streaks', getStreaks);
 habitLogRoutes.get('/', index);
 habitLogRoutes.get('/:id', show);
 habitLogRoutes.post('/', create);

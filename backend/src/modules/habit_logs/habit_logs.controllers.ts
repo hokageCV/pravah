@@ -297,3 +297,39 @@ export async function groupLogs(c: Context) {
     );
   }
 }
+
+export async function getStreaks(c: Context) {
+  let db = createDb(c.env);
+  let userId = c.get('currentUser').id;
+
+  let url = new URL(c.req.url);
+  let habitIdParam = url.searchParams.get('habit_id');
+  let habitId = Number(habitIdParam);
+  if (!habitIdParam || Number.isNaN(habitId))
+    return c.json(
+      { error: 'Missing or invalid habit_id' },
+      HttpStatusCodes.BAD_REQUEST,
+    );
+
+  try {
+    let [habit] = await db
+      .select()
+      .from(habits)
+      .where(eq(habits.id, habitId))
+      .limit(1);
+    if (!habit)
+      return c.json({ error: 'Habit not found' }, HttpStatusCodes.NOT_FOUND);
+
+    let allHabitLogs = await db
+      .select({ date: habitLogs.date })
+      .from(habitLogs)
+      .where(eq(habitLogs.habitId, habitId))
+      .all();
+
+    let streakInfo = calculateStreaks(allHabitLogs);
+
+    return c.json({ data: streakInfo }, HttpStatusCodes.OK);
+  } catch (error) {
+    return c.json( { error: error instanceof Error ? error.message : 'Some error while calculating streaks', }, HttpStatusCodes.INTERNAL_SERVER_ERROR,);
+  }
+}

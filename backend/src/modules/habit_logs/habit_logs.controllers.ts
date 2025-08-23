@@ -10,6 +10,7 @@ import { parseConstraint } from '@/utils/error';
 import { and, eq, gte, inArray, lte } from 'drizzle-orm';
 import type { Context } from 'hono';
 import * as HttpStatusCodes from 'stoker/http-status-codes';
+import { calculateStreaks } from './calculate_streak';
 
 export async function create(c: Context) {
   let body = await c.req.json();
@@ -103,8 +104,9 @@ export async function index(c: Context) {
       .from(habitLogs)
       .where(eq(habitLogs.habitId, habitId))
       .all();
+    let streakInfo = calculateStreaks(allHabitLogs);
 
-    return c.json({ data: allHabitLogs }, HttpStatusCodes.OK);
+    return c.json({ data: {logs: allHabitLogs, streakInfo } }, HttpStatusCodes.OK);
   } catch (error) {
     return c.json(
       {

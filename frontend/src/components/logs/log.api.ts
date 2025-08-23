@@ -1,8 +1,8 @@
 import { BASE_URL } from '../../constants';
-import type { Log } from '../../types';
+import type { Log, LogResponse } from '../../types';
 import { safeFetch } from '../../utils/api';
 
-export async function fetchLogs(habitId: number): Promise<Log[]> {
+export async function fetchLogs(habitId: number): Promise<LogResponse> {
   let result = await safeFetch({
     url: `${BASE_URL}/habit_logs?habit_id=${habitId}`,
     method: 'GET',

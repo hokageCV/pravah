@@ -11,10 +11,14 @@ type LogGraphProps = {
 
 export function LogGraph({ habit }: LogGraphProps) {
   let [logs, setLogs] = useState<Log[]>([]);
+  let [streakInfo, setStreakInfo] = useState({
+    currentStreak: 0,
+    longestStreak: 0,
+  });
   let habitId = habit.id;
 
   let {
-    data: fetchedLogs,
+    data: logResponse,
     isLoading,
     isError,
     error,
@@ -23,8 +27,10 @@ export function LogGraph({ habit }: LogGraphProps) {
     queryFn: () => fetchLogs(habitId),
   });
   useEffect(() => {
-    if (fetchedLogs) setLogs(fetchedLogs);
-  }, [fetchedLogs]);
+    if (!logResponse) return;
+    setLogs(logResponse.logs);
+    setStreakInfo(logResponse.streakInfo);
+  }, [logResponse]);
 
   if (isLoading) return <p>Loading logs...</p>;
   if (isError) return <p>Error loading logs: {error?.message}</p>;
@@ -35,26 +41,53 @@ export function LogGraph({ habit }: LogGraphProps) {
   let results = getCalendarData(new Date().getUTCFullYear());
 
   return (
-    <div className='grid-flex'>
-      {results.map((month, idx) => (
-        <div
-          key={idx}
-          className='h-64  grid grid-rows-[auto_1fr] items-start justify-center'
-        >
-          <h2 className='text-xl font-semibold mb-2 '>{month.name}</h2>
-          <div className='grid grid-cols-7 gap-1 text-sm content-start'>
-            {month.days.map((dayObj, i) => (
-              <DayCell
-                dayObj={dayObj}
-                logGoalLevels={logGoalLevels}
-                index={i}
-                habitId={habit.id}
-                habitCreatedAt={habit.createdAt}
-              />
-            ))}
+    <>
+      <StreakDisplay streakInfo={streakInfo} />
+
+      <div className='grid-flex'>
+        {results.map((month, idx) => (
+          <div
+            key={idx}
+            className='h-64  grid grid-rows-[auto_1fr] items-start justify-center'
+          >
+            <h2 className='text-xl font-semibold mb-2 '>{month.name}</h2>
+            <div className='grid grid-cols-7 gap-1 text-sm content-start'>
+              {month.days.map((dayObj, i) => (
+                <DayCell
+                  dayObj={dayObj}
+                  logGoalLevels={logGoalLevels}
+                  index={i}
+                  habitId={habit.id}
+                  habitCreatedAt={habit.createdAt}
+                />
+              ))}
+            </div>
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
+    </>
+  );
+}
+
+function StreakDisplay({
+  streakInfo,
+}: {
+  streakInfo: { currentStreak: number; longestStreak: number };
+}) {
+  return (
+    <div className='flex gap-6 justify-center mb-6 p-4 bg-muted/50 rounded-lg'>
+      <div className='text-center'>
+        <p className='text-2xl font-bold text-accent'>
+          {streakInfo.currentStreak}
+        </p>
+        <p className='text-sm text-muted-foreground'>Current Streak</p>
+      </div>
+      <div className='text-center'>
+        <p className='text-2xl font-bold text-muted-foreground'>
+          {streakInfo.longestStreak}
+        </p>
+        <p className='text-sm text-muted-foreground'>Longest Streak</p>
+      </div>
     </div>
   );
 }

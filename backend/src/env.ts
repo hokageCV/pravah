@@ -6,7 +6,19 @@ const envSchema = z.object({
     .url('DATABASE_URL must be a valid URL')
     .min(1, 'DATABASE_URL is required'),
   DATABASE_AUTH_TOKEN: z.string(),
-  FRONTEND_URL: z.string().url('Front end url is required'),
+  FRONTEND_URLS: z
+    .string()
+    .min(1, 'At least one FRONTEND_URL is required')
+    .refine((val) => {
+      return val.split(',').every((url) => {
+        try {
+          new URL(url.trim())
+          return true
+        } catch {
+          return false
+        }
+      })
+    }, 'FRONTEND_URLS must be a comma-separated list of valid URLs'),
   JWT_SECRET: z.string().min(1, 'JWT_SECRET is required').optional(),
   PORT: z
     .string()

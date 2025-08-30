@@ -127,13 +127,28 @@ function HabitStreak({ habitId }: { habitId: number }) {
     queryFn: () => fetchStreaks(habitId),
   });
 
-  if (isLoading) return <p className='text-xs tect-c-text-muted'>Streak: ...</p>;
+  if (isLoading) {
+    return (
+      <p className="text-xs text-muted-foreground italic">
+        Loading streak…
+      </p>
+    );
+  }
 
   return (
-    <div className='flex-shrink-0 ml-3'>
-      <p className='text-sm text-c-accent'>
-        {`${streakData?.currentStreak || 0} day streak`}
-      </p>
-    </div>
+    <p className="mt-2 text-sm">
+      <span className="text-xs font-medium tracking-wide text-muted-foreground">
+        Streak:
+      </span>{' '}
+      <span>
+        {streakData?.currentStreak || 0}d
+      </span>{' '}
+      <span className="text-muted-foreground text-xs">(current)</span>
+      {' '}|{' '}
+      <span>
+        {streakData?.longestStreak || 0}d
+      </span>{' '}
+      <span className="text-muted-foreground text-xs">(best)</span>
+    </p>
   );
 }

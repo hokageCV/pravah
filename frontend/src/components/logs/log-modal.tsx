@@ -11,13 +11,17 @@ import { createLog } from './log.api';
 type LogModalProps = {
   habit: Habit;
   onClose: () => void;
+  showDate?: boolean;
 };
 
-export function LogModal({ habit, onClose }: LogModalProps) {
+export function LogModal({ habit, onClose, showDate = false }: LogModalProps) {
   let queryClient = useQueryClient();
   let habitId = habit.id;
   let [goalLevel, setGoalLevel] = useState('A');
   let { play: playHabitLogged } = useSound('arcade/coin');
+  let [selectedDate, setSelectedDate] = useState(
+    () => new Date().toISOString().split('T')[0],
+  );
   let { play: playError } = useSound('notification/error');
 
   let { mutate, status, error } = useMutation({
@@ -32,7 +36,12 @@ export function LogModal({ habit, onClose }: LogModalProps) {
 
   let handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    mutate({ habitId, goalLevel });
+
+    const logData = showDate
+      ? { habitId, goalLevel, date: selectedDate }
+      : { habitId, goalLevel };
+
+    mutate(logData);
   };
 
   let storedGoals = useGoalStore((s) => s.goals).filter(
@@ -54,6 +63,13 @@ export function LogModal({ habit, onClose }: LogModalProps) {
         </h2>
         <form onSubmit={handleSubmit} className='space-y-4'>
           <input type='hidden' value={habitId} />
+
+          {showDate && (
+            <DateSelector
+              selectedDate={selectedDate}
+              onDateChange={setSelectedDate}
+            />
+          )}
 
           <div>
             <ul>
@@ -105,5 +121,47 @@ export function LogModal({ habit, onClose }: LogModalProps) {
       </div>
     </div>,
     document.body,
+  );
+}
+
+function DateSelector({
+  selectedDate,
+  onDateChange,
+}: {
+  selectedDate: string;
+  onDateChange: (dateString: string) => void;
+}) {
+  const today = new Date().toISOString().split('T')[0];
+  const yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000)
+    .toISOString()
+    .split('T')[0];
+
+  const options = [
+    { label: 'Today', value: today },
+    { label: 'Yesterday', value: yesterday },
+  ];
+
+  return (
+    <div className='mb-4'>
+      <label className='block text-sm font-medium text-gray-700 mb-2'>
+        Date
+      </label>
+      <div className='flex gap-2'>
+        {options.map((option) => (
+          <button
+            key={option.value}
+            type='button'
+            onClick={() => onDateChange(option.value)}
+            className={`px-3 py-2 rounded-md text-sm font-medium cursor-pointer ${
+              selectedDate === option.value
+                ? 'bg-c-accent text-white'
+                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+            }`}
+          >
+            {option.label}
+          </button>
+        ))}
+      </div>
+    </div>
   );
 }

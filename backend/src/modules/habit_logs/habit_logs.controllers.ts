@@ -23,13 +23,13 @@ export async function create(c: Context) {
       parseResult.error.format(),
     );
     return c.json(
-      { error: 'Required fields missing' },
+      { error: 'Required fields missing or invalid date format' },
       HttpStatusCodes.UNPROCESSABLE_ENTITY,
     );
   }
 
   let userId = c.get('currentUser').id;
-  let { habitId, goalLevel } = parseResult.data;
+  let { habitId, goalLevel, date } = parseResult.data;
 
   try {
     let [habit] = await db
@@ -47,7 +47,11 @@ export async function create(c: Context) {
 
     let [newHabitLog] = await db
       .insert(habitLogs)
-      .values({ habitId, goalLevel })
+      .values({
+        habitId,
+        goalLevel,
+        ...(date && { date }) // Only include date if provided
+      })
       .returning();
 
     return c.json({ data: newHabitLog }, HttpStatusCodes.CREATED);

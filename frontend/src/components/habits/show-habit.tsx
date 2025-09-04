@@ -100,7 +100,7 @@ export default function ShowHabit() {
       <section className='bg-c-surface rounded-md shadow-md w-full mt-4 p-4'>
         <div className='flex justify-between'>
           <h3 className='text-xl text-text font-semibold'>Progress</h3>
-          <CreateLog habit={habit} />
+          <CreateLog habit={habit} showDate={true} />
         </div>
         <div>
           <LogGraph habit={habit} />

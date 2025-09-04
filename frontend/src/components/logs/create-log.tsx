@@ -4,9 +4,10 @@ import { LogModal } from './log-modal';
 
 type LogsSectionProps = {
   habit: Habit;
+  showDate?: boolean;
 };
 
-export function CreateLog({ habit }: LogsSectionProps) {
+export function CreateLog({ habit, showDate = false }: LogsSectionProps) {
   let [showModal, setShowModal] = useState(false);
 
   let handleClose = () => setShowModal(false);
@@ -20,7 +21,9 @@ export function CreateLog({ habit }: LogsSectionProps) {
         Add Progress
       </button>
 
-      {showModal && <LogModal habit={habit} onClose={handleClose} />}
+      {showModal && (
+        <LogModal habit={habit} onClose={handleClose} showDate={showDate} />
+      )}
     </div>
   );
 }

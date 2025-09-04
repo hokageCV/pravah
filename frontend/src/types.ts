@@ -32,7 +32,7 @@ export type Goal = {
 export type Log = {
   id: number;
   habitId: number;
-  date: number;
+  date: string;
   goalLevel?: string;
   actualValue: number;
   createdAt: string;

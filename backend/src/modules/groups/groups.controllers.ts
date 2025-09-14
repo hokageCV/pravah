@@ -1,6 +1,14 @@
 import { createDb } from '@/db';
-import { groupMembers, groups, insertGroupSchema } from '@/db/schema';
-import { and, eq } from 'drizzle-orm';
+import {
+  groupHabits,
+  groupMembers,
+  groups,
+  habitLogs,
+  habits,
+  insertGroupSchema,
+  users,
+} from '@/db/schema';
+import { and, eq, gte, lte, sql } from 'drizzle-orm';
 import type { Context } from 'hono';
 import * as HttpStatusCodes from 'stoker/http-status-codes';
 
@@ -136,6 +144,87 @@ export async function destroy(c: Context) {
           error instanceof Error
             ? error.message
             : 'Some error while deleting group',
+      },
+      HttpStatusCodes.INTERNAL_SERVER_ERROR,
+    );
+  }
+}
+
+export async function getGrades(c: Context) {
+  let db = createDb(c.env);
+  let groupId = Number(c.req.param('groupId'));
+  let month = Number(c.req.param('month'));
+  let year = Number(c.req.param('year'));
+
+  if (
+    !groupId ||
+    Number.isNaN(groupId) ||
+    !month ||
+    Number.isNaN(month) ||
+    !year ||
+    Number.isNaN(year)
+  ) {
+    return c.json(
+      { error: 'Invalid or missing group ID, month, or year' },
+      HttpStatusCodes.BAD_REQUEST,
+    );
+  }
+
+  let startDate = new Date(year, month - 1, 1).toISOString().split('T')[0];
+  let endDate = new Date(year, month, 0).toISOString().split('T')[0];
+
+  try {
+    let grades = await db
+      .select({
+        userId: users.id,
+        username: users.username,
+        // Use COALESCE to handle NULL values from LEFT JOIN
+        grade: sql<number>`
+          COALESCE(
+            SUM(
+              CASE ${habitLogs.goalLevel}
+                WHEN 'A' THEN 3
+                WHEN 'B' THEN 2
+                WHEN 'C' THEN 1
+                ELSE 0
+              END
+            ),
+            0
+          )`.as('grade'),
+      })
+      .from(groupMembers)
+      .innerJoin(users, eq(users.id, groupMembers.userId))
+      .leftJoin(groupHabits, eq(groupHabits.groupId, groupMembers.groupId))
+      .leftJoin(
+        habits,
+        and(
+          eq(habits.id, groupHabits.habitId),
+          eq(habits.userId, groupMembers.userId),
+        ),
+      )
+      // LEFT JOIN habitLogs to include members even if they have no logs in the date range
+      .leftJoin(
+        habitLogs,
+        and(
+          eq(habitLogs.habitId, habits.id),
+          gte(habitLogs.date, startDate),
+          lte(habitLogs.date, endDate),
+        ),
+      )
+      .where(eq(groupMembers.groupId, groupId))
+      .groupBy(users.id, users.username)
+      .orderBy(sql`grade DESC`)
+      .all();
+
+    return c.json({ data: grades }, HttpStatusCodes.OK);
+  } catch (error) {
+    console.error('Error fetching grades:', error);
+    return c.json(
+      {
+        error:
+          error instanceof Error
+            ? error.message
+            : 'Some error while fetching grades',
       },
       HttpStatusCodes.INTERNAL_SERVER_ERROR,
     );

@@ -3,7 +3,7 @@ import { createMiddleware } from 'hono/factory';
 
 const handleCors = createMiddleware(async (c, next) => {
   const allowedOrigins: string[] =
-    c.env.FRONTEND_URLS?.split(',').map((o: string) => o.trim()) || []
+    c.env.FRONTEND_URLS?.split(',').map((o: string) => o.trim()) || [];
 
   const middleware = cors({
     origin: allowedOrigins,

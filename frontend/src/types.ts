@@ -97,3 +97,9 @@ export type NotificationPermissionStatus =
   | 'denied'
   | 'default'
   | 'unsupported';
+
+export type Grade = {
+  userId: number;
+  username: string;
+  grade: number;
+};

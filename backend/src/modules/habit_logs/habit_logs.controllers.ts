@@ -50,7 +50,7 @@ export async function create(c: Context) {
       .values({
         habitId,
         goalLevel,
-        ...(date && { date }) // Only include date if provided
+        ...(date && { date }), // Only include date if provided
       })
       .returning();
 
@@ -110,7 +110,10 @@ export async function index(c: Context) {
       .all();
     let streakInfo = calculateStreaks(allHabitLogs);
 
-    return c.json({ data: {logs: allHabitLogs, streakInfo } }, HttpStatusCodes.OK);
+    return c.json(
+      { data: { logs: allHabitLogs, streakInfo } },
+      HttpStatusCodes.OK,
+    );
   } catch (error) {
     return c.json(
       {
@@ -334,6 +337,14 @@ export async function getStreaks(c: Context) {
 
     return c.json({ data: streakInfo }, HttpStatusCodes.OK);
   } catch (error) {
-    return c.json( { error: error instanceof Error ? error.message : 'Some error while calculating streaks', }, HttpStatusCodes.INTERNAL_SERVER_ERROR,);
+    return c.json(
+      {
+        error:
+          error instanceof Error
+            ? error.message
+            : 'Some error while calculating streaks',
+      },
+      HttpStatusCodes.INTERNAL_SERVER_ERROR,
+    );
   }
 }

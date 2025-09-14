@@ -12,12 +12,12 @@ const envSchema = z.object({
     .refine((val) => {
       return val.split(',').every((url) => {
         try {
-          new URL(url.trim())
-          return true
+          new URL(url.trim());
+          return true;
         } catch {
-          return false
+          return false;
         }
-      })
+      });
     }, 'FRONTEND_URLS must be a comma-separated list of valid URLs'),
   JWT_SECRET: z.string().min(1, 'JWT_SECRET is required').optional(),
   PORT: z

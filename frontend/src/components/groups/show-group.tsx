@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { useParams } from '@tanstack/react-router';
 import { capitalize } from '../../utils/text';
+import { GroupLeaderboard } from './group-leaderboard';
 import { GroupLogGraph } from './group-log-graph';
 import { useGroupStore } from './group.store';
 import { fetchMembersWithHabits } from './group_members.api';
@@ -26,6 +27,7 @@ export function ShowGroup() {
           {capitalize(group?.name)}
         </h2>
       </div>
+      <GroupLeaderboard groupId={id} />
       <GroupLogGraph groupId={id} usersData={data} />
     </div>
   );

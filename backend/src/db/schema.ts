@@ -7,7 +7,7 @@ import {
   unique,
 } from 'drizzle-orm/sqlite-core';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
-import { z } from 'zod'
+import { z } from 'zod';
 
 const timestamps = {
   createdAt: text().default(sql`CURRENT_TIMESTAMP`),
@@ -124,18 +124,24 @@ export const insertHabitLogSchema = createInsertSchema(habitLogs)
   .required({ habitId: true, goalLevel: true })
   .omit({ createdAt: true, updatedAt: true })
   .extend({
-    date: z.string()
+    date: z
+      .string()
       .regex(/^\d{4}-\d{2}-\d{2}$/)
-      .refine((date) => {
-        const [year, month, day] = date.split('-').map(Number);
-        const d = new Date(year, month - 1, day);
-        return d.getFullYear() === year &&
-               d.getMonth() === month - 1 &&
-               d.getDate() === day;
-      }, {
-        message: 'Invalid date'
-      })
-      .optional()
+      .refine(
+        (date) => {
+          const [year, month, day] = date.split('-').map(Number);
+          const d = new Date(year, month - 1, day);
+          return (
+            d.getFullYear() === year &&
+            d.getMonth() === month - 1 &&
+            d.getDate() === day
+          );
+        },
+        {
+          message: 'Invalid date',
+        },
+      )
+      .optional(),
   });
 
 export const patchHabitLogSchema = insertHabitLogSchema.partial();

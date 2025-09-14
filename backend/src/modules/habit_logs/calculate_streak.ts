@@ -1,13 +1,13 @@
 export type StreakResult = {
   currentStreak: number;
   longestStreak: number;
-}
+};
 
 export function calculateStreaks(logs: { date: string }[]): StreakResult {
-  if (logs.length === 0) return { currentStreak: 0, longestStreak: 0 }
+  if (logs.length === 0) return { currentStreak: 0, longestStreak: 0 };
 
   const sortedLogs = [...logs].sort((a, b) => a.date.localeCompare(b.date));
-  const loggedDates = new Set(sortedLogs.map(log => log.date));
+  const loggedDates = new Set(sortedLogs.map((log) => log.date));
 
   let currentStreak = 0;
   let longestStreak = 0;
@@ -21,7 +21,8 @@ export function calculateStreaks(logs: { date: string }[]): StreakResult {
     } else {
       const prevDate = new Date(allDates[i - 1]);
       const currDate = new Date(allDates[i]);
-      const diffDays = (currDate.getTime() - prevDate.getTime()) / (1000 * 60 * 60 * 24);
+      const diffDays =
+        (currDate.getTime() - prevDate.getTime()) / (1000 * 60 * 60 * 24);
 
       if (diffDays === 1) tempStreak++;
       else if (diffDays > 1) {
@@ -37,7 +38,8 @@ export function calculateStreaks(logs: { date: string }[]): StreakResult {
   checkDate.setUTCHours(0, 0, 0, 0);
 
   const todayISO = checkDate.toISOString().split('T')[0];
-  if (!loggedDates.has(todayISO)) checkDate.setUTCDate(checkDate.getUTCDate() - 1);
+  if (!loggedDates.has(todayISO))
+    checkDate.setUTCDate(checkDate.getUTCDate() - 1);
 
   while (true) {
     const currentDayISO = checkDate.toISOString().split('T')[0];

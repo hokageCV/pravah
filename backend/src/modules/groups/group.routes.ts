@@ -13,7 +13,13 @@ import {
   search as membershipSearch,
   membersWithHabits,
 } from './group_member.controllers';
-import { create, destroy, index, joined } from './groups.controllers';
+import {
+  create,
+  destroy,
+  getGrades,
+  index,
+  joined,
+} from './groups.controllers';
 
 const groupRoutes = new Hono();
 
@@ -33,5 +39,7 @@ groupRoutes.get('/:groupId/habits/:userId', habitsShow);
 groupRoutes.get('/:groupId/habits', habitsIndex);
 groupRoutes.post('/:groupId/habits', habitsCreate);
 groupRoutes.delete('/:groupId/habits/:habitId', habitsDestroy);
+
+groupRoutes.get('/:groupId/grades/:year/:month', getGrades);
 
 export default groupRoutes;

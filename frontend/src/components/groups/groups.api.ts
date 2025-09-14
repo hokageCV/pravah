@@ -1,5 +1,5 @@
 import { BASE_URL } from '../../constants';
-import type { Group } from '../../types';
+import type { Grade, Group } from '../../types';
 import { safeFetch } from '../../utils/api';
 
 export async function fetchGroups(): Promise<Group[]> {
@@ -28,6 +28,18 @@ export async function deleteGroup(id: number): Promise<Group> {
   let result = await safeFetch({
     url: `${BASE_URL}/groups/${id}`,
     method: 'DELETE',
+  });
+  return result.data;
+}
+
+export async function fetchGroupGrades(
+  groupId: number,
+  year: number,
+  month: number,
+): Promise<Grade[]> {
+  let result = await safeFetch({
+    url: `${BASE_URL}/groups/${groupId}/grades/${year}/${month}`,
+    method: 'GET',
   });
   return result.data;
 }

@@ -54,7 +54,7 @@ export function DayCell({
   return (
     <div
       key={index}
-      className={`p-1 rounded rounded-xs text-center ${highlightClass}`}
+      className={`p-1 rounded text-center ${highlightClass} ${isGoalMiss ? 'scale-25 rounded-4xl' : 'rounded-xs'}`}
     >
       <span
         className={` ${opacityClass} ${dayDateStr === today ? '' : 'invisible select-none'}`}

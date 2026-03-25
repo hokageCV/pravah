@@ -56,8 +56,8 @@ export function LogModal({ habit, onClose, showDate = false }: LogModalProps) {
 
   return createPortal(
     <div className='fixed inset-0 z-50 flex items-center justify-center bg-[rgba(0,0,0,0.50)]'>
-      <div className='bg-white p-6 rounded-xl shadow-xl w-full max-w-md'>
-        <h2 className='text-xl font-semibold mb-4'>
+      <div className='bg-c-surface p-6 rounded-xl shadow-xl w-full max-w-md'>
+        <h2 className='text-xl font-semibold mb-4 text-c-text'>
           Add Progress for
           <span className='text-c-primary'> {habit.name}</span>
         </h2>
@@ -86,8 +86,8 @@ export function LogModal({ habit, onClose, showDate = false }: LogModalProps) {
                     onChange={() => setGoalLevel(goal.level)}
                     className='radio radio-lg bg-c-surface checked:bg-c-accent-subtle'
                   />
-                  <div className='font-medium text-sm'>{goal.level}</div>
-                  <div className='text-sm pl-3'>
+                  <div className='font-medium text-sm text-c-text'>{goal.level}</div>
+                  <div className='text-sm pl-3 text-c-text-muted'>
                     {capitalize(goal.description)}
                   </div>
                 </li>
@@ -105,17 +105,17 @@ export function LogModal({ habit, onClose, showDate = false }: LogModalProps) {
             <button
               type='button'
               onClick={onClose}
-              className='bg-gray-300 text-black px-4 py-2 rounded-md hover:bg-gray-400 cursor-pointer'
+              className='bg-c-surface-muted text-c-text px-4 py-2 rounded-md hover:bg-c-border cursor-pointer'
             >
               Cancel
             </button>
           </div>
 
           {status === 'pending' && (
-            <p className='text-sm text-gray-500'>Creating...</p>
+            <p className='text-sm text-c-text-muted'>Creating...</p>
           )}
           {status === 'error' && (
-            <p className='text-sm text-red-600'>{(error as Error).message}</p>
+            <p className='text-sm text-red-500'>{(error as Error).message}</p>
           )}
         </form>
       </div>
@@ -143,7 +143,7 @@ function DateSelector({
 
   return (
     <div className='mb-4'>
-      <label className='block text-sm font-medium text-gray-700 mb-2'>
+      <label className='block text-sm font-medium text-c-text mb-2'>
         Date
       </label>
       <div className='flex gap-2'>
@@ -155,7 +155,7 @@ function DateSelector({
             className={`px-3 py-2 rounded-md text-sm font-medium cursor-pointer ${
               selectedDate === option.value
                 ? 'bg-c-accent text-white'
-                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                : 'bg-c-surface-muted text-c-text hover:bg-c-border'
             }`}
           >
             {option.label}

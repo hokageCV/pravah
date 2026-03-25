@@ -15,7 +15,7 @@ function HomeComponent() {
       <div className='mb-6'>
         <Link
           to='/habits/create'
-          className='inline-block bg-c-text text-white font-semibold px-5 py-2 rounded-md shadow hover:bg-c-text-muted transition-colors'
+          className='inline-block bg-c-accent text-white font-semibold px-5 py-2 rounded-md shadow hover:bg-c-accent-hover transition-colors'
         >
           + Create Habit
         </Link>

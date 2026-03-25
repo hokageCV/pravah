@@ -30,7 +30,7 @@ export function PasswordInput({
         {label}
       </label>
 
-      <div className='flex items-center border border-c-border rounded-lg bg-white px-3 py-2 focus-within:ring-2 focus-within:ring-c-accent/40 focus-within:border-c-accent'>
+      <div className='flex items-center border border-c-border rounded-lg bg-c-surface px-3 py-2 focus-within:ring-2 focus-within:ring-c-accent/40 focus-within:border-c-accent'>
         <input
           type={showPassword ? 'text' : 'password'}
           id={id}
@@ -65,6 +65,8 @@ function EyeIcon() {
       fill='none'
       viewBox='0 0 24 24'
       stroke='currentColor'
+      role='img'
+      aria-label='Show password'
     >
       <path
         strokeLinecap='round'
@@ -90,6 +92,8 @@ function EyeOffIcon() {
       fill='none'
       viewBox='0 0 24 24'
       stroke='currentColor'
+      role='img'
+      aria-label='Hide password'
     >
       <path
         strokeLinecap='round'

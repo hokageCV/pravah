@@ -1,6 +1,7 @@
 import { Link, useNavigate } from '@tanstack/react-router';
 import { useState } from 'react';
 import { useAuthStore } from '../auth/auth.store';
+import { ThemeToggle } from '../theme-toggle';
 
 export function Navbar() {
   let user = useAuthStore((state) => state.user);
@@ -61,6 +62,7 @@ function DesktopNavbar() {
       <ul className='menu menu-horizontal gap-2'>
         <NavLinks />
       </ul>
+      <ThemeToggle />
     </div>
   );
 }
@@ -164,6 +166,9 @@ function MobileDrawer({
         <ul className='menu p-4 gap-4'>
           <NavLinks onItemClick={onClose} />
         </ul>
+        <div className='p-4 border-t border-c-border'>
+          <ThemeToggle />
+        </div>
       </div>
     </div>
   );

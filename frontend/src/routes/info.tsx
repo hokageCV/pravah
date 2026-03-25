@@ -200,7 +200,7 @@ function CTASection() {
         <div className='mt-6 flex justify-center gap-3'>
           <Link
             to='/auth/signup'
-            className='btn btn-secondary px-8 py-3 text-base font-medium text-c-text bg-white hover:bg-opacity-90 sm:px-10 border-none'
+            className='btn btn-secondary px-8 py-3 text-base font-medium text-white bg-c-surface hover:bg-c-surface-muted sm:px-10 border-none'
           >
             Launch Your Habits 🚀
           </Link>

@@ -54,7 +54,7 @@ export function GoalForm({ initialValue, onSubmit, habitId }: GoalFormProps) {
               onChange={handleChange}
               required
               disabled={!!initialValue.level}
-              className='select w-full px-3 py-2 border border-c-border rounded-lg bg-white text-sm text-c-text focus:outline-none focus:ring-2 focus:ring-c-accent/40 focus:border-c-accent disabled:bg-slate-300 disabled:text-c-text'
+              className='select w-full px-3 py-2 border border-c-border rounded-lg bg-c-surface text-sm text-c-text focus:outline-none focus:ring-2 focus:ring-c-accent/40 focus:border-c-accent disabled:bg-c-surface-muted disabled:text-c-text'
             >
               <option value='' disabled={true} className='text-c-text-muted'>
                 Select one
@@ -75,7 +75,7 @@ export function GoalForm({ initialValue, onSubmit, habitId }: GoalFormProps) {
               value={formData.description ?? ''}
               onChange={handleChange}
               required
-              className='w-full px-3 py-2 border border-c-border rounded-lg bg-white text-sm text-c-text focus:outline-none focus:ring-2 focus:ring-c-accent/40 focus:border-c-accent'
+              className='w-full px-3 py-2 border border-c-border rounded-lg bg-c-surface text-sm text-c-text focus:outline-none focus:ring-2 focus:ring-c-accent/40 focus:border-c-accent'
             ></textarea>
           </fieldset>
 

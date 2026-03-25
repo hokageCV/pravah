@@ -69,8 +69,8 @@ export function AddMembersModal({ group, close }: AddMembersProps) {
 
   return (
     <div className='fixed inset-0 z-50 flex items-center justify-center bg-[rgba(0,0,0,0.50)]'>
-      <div className='bg-white p-6 rounded-xl shadow-xl w-full max-w-md'>
-        <h2 className='text-xl font-semibold mb-4'>
+      <div className='bg-c-surface p-6 rounded-xl shadow-xl w-full max-w-md'>
+        <h2 className='text-xl font-semibold mb-4 text-c-text'>
           Add members to {group.name}
         </h2>
 
@@ -84,22 +84,22 @@ export function AddMembersModal({ group, close }: AddMembersProps) {
                 setShowDropdown(true);
               }}
               placeholder='Search by username'
-              className='w-full border px-3 py-2 rounded-md'
+              className='w-full border border-c-border px-3 py-2 rounded-md bg-c-surface text-c-text'
             />
             {showDropdown && query.length >= 3 && (
-              <ul className='absolute z-10 w-full bg-white border mt-1 rounded-md shadow max-h-60 overflow-y-auto'>
+              <ul className='absolute z-10 w-full bg-c-surface border border-c-border mt-1 rounded-md shadow max-h-60 overflow-y-auto'>
                 {results.map((user) => (
                   <li
                     key={user.id}
                     onClick={() => handleSelect(user)}
-                    className='p-2 hover:bg-gray-100 cursor-pointer'
+                    className='p-2 hover:bg-c-surface-muted cursor-pointer text-c-text'
                   >
                     {user.username}
                   </li>
                 ))}
 
                 {results.length === 0 && (
-                  <li className='p-2 text-gray-500 cursor-default'>
+                  <li className='p-2 text-c-text-muted cursor-default'>
                     No results found
                   </li>
                 )}
@@ -118,7 +118,7 @@ export function AddMembersModal({ group, close }: AddMembersProps) {
             <button
               type='button'
               onClick={close}
-              className='bg-gray-300 text-black px-4 py-2 rounded-md hover:bg-gray-400 cursor-pointer'
+              className='bg-c-surface-muted text-c-text px-4 py-2 rounded-md hover:bg-c-border cursor-pointer'
             >
               Cancel
             </button>

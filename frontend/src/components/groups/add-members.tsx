@@ -14,8 +14,9 @@ export function AddMembers({ group }: AddMembersProp) {
   return (
     <div>
       <button
+        type='button'
         onClick={() => setShowModal(true)}
-        className='px-4 py-2 rounded-md cursor-pointer'
+        className='px-4 py-2 rounded-md cursor-pointer text-c-text'
       >
         <AddSvg className='w-4 h-4' />
       </button>

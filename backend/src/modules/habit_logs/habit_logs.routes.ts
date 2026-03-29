@@ -3,6 +3,7 @@ import {
   create,
   destroy,
   getStreaks,
+  getWeeklyLogs,
   groupLogs,
   index,
   show,
@@ -13,6 +14,7 @@ const habitLogRoutes = new Hono();
 
 habitLogRoutes.get('/grouped-logs', groupLogs);
 habitLogRoutes.get('/streaks', getStreaks);
+habitLogRoutes.get('/weekly', getWeeklyLogs);
 habitLogRoutes.get('/', index);
 habitLogRoutes.get('/:id', show);
 habitLogRoutes.post('/', create);

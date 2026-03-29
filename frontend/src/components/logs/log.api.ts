@@ -59,3 +59,11 @@ export async function fetchStreaks(habitId: number): Promise<StreakInfo> {
   });
   return result.data;
 }
+
+export async function fetchWeeklyLogs(habitIds: number[]): Promise<Log[]> {
+  let result = await safeFetch({
+    url: `${BASE_URL}/habit_logs/weekly?habit_ids=${habitIds.join(',')}`,
+    method: 'GET',
+  });
+  return result.data;
+}

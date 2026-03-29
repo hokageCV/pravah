@@ -5,6 +5,8 @@ import { capitalize } from '../../utils/text';
 import { useAuthStore } from '../auth/auth.store';
 import { useGoalStore } from '../goals/goal.store';
 import { CreateLog } from '../logs/create-log';
+import { fetchWeeklyLogs } from '../logs/log.api';
+import { WeeklyMiniGrid } from '../logs/weekly-mini-grid';
 import { useHabitStore } from './habit.store';
 import { fetchHabits } from './habits.api';
 
@@ -26,7 +28,16 @@ export function HabitList() {
 
   useEffect(() => {
     if (data) setHabits(data);
-  }, [data]);
+  }, [data, setHabits]);
+
+  let habitIds = data?.map((h) => h.id) ?? [];
+
+  let { data: weeklyLogs } = useQuery({
+    queryKey: ['habits', 'weekly-logs', habitIds],
+    queryFn: () => fetchWeeklyLogs(habitIds),
+    enabled: habitIds.length > 0,
+    staleTime: 5 * 60 * 1000,
+  });
 
   if (isError) return <div>Error: {(error as Error).message}</div>;
   if (!data?.length) return <div>No habits found</div>;
@@ -55,6 +66,13 @@ export function HabitList() {
                     {capitalize(habit.description)}
                   </p>
                 )}
+                <div className='mt-2'>
+                  <WeeklyMiniGrid
+                    logs={weeklyLogs ?? []}
+                    habitId={habit.id}
+                    habitCreatedAt={habit.createdAt}
+                  />
+                </div>
               </Link>
               {hasGoal && (
                 <div className='flex sm:justify-end font-semibold shrink-0'>

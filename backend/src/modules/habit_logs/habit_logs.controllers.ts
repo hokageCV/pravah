@@ -348,3 +348,64 @@ export async function getStreaks(c: Context) {
     );
   }
 }
+
+export async function getWeeklyLogs(c: Context) {
+  let db = createDb(c.env);
+  let userId = c.get('currentUser').id;
+
+  let url = new URL(c.req.url);
+  let habitIdsParam = url.searchParams.get('habit_ids');
+  if (!habitIdsParam)
+    return c.json({ error: 'Missing habit_ids' }, HttpStatusCodes.BAD_REQUEST);
+
+  let habitIds = habitIdsParam
+    .split(',')
+    .map(Number)
+    .filter((id) => !Number.isNaN(id));
+  if (habitIds.length === 0)
+    return c.json({ error: 'Invalid habit_ids' }, HttpStatusCodes.BAD_REQUEST);
+
+  let now = new Date();
+  let weekAgo = new Date(now);
+  weekAgo.setDate(weekAgo.getDate() - 6);
+  let startStr = weekAgo.toISOString().split('T')[0];
+  let endStr = now.toISOString().split('T')[0];
+
+  try {
+    let userHabits = await db
+      .select({ id: habits.id })
+      .from(habits)
+      .where(eq(habits.userId, userId))
+      .all();
+
+    let userHabitIds = new Set(userHabits.map((h) => h.id));
+    let authorizedIds = habitIds.filter((id) => userHabitIds.has(id));
+
+    if (authorizedIds.length === 0)
+      return c.json({ data: [] }, HttpStatusCodes.OK);
+
+    let logs = await db
+      .select()
+      .from(habitLogs)
+      .where(
+        and(
+          inArray(habitLogs.habitId, authorizedIds),
+          gte(habitLogs.date, startStr),
+          lte(habitLogs.date, endStr),
+        ),
+      )
+      .orderBy(habitLogs.habitId, habitLogs.date);
+
+    return c.json({ data: logs }, HttpStatusCodes.OK);
+  } catch (error) {
+    return c.json(
+      {
+        error:
+          error instanceof Error
+            ? error.message
+            : 'Some error while fetching weekly logs',
+      },
+      HttpStatusCodes.INTERNAL_SERVER_ERROR,
+    );
+  }
+}

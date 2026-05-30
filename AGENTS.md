@@ -1,65 +1,25 @@
-# Agent Guidelines for Pravah
+# Pravah — Agent Guidelines
 
-This document provides guidelines for agents working on the Pravah codebase.
+## Stack
+- **Frontend:** React 19 + Vite + TanStack Router + Zustand + Tailwind CSS 4
+- **Backend:** Hono + Drizzle ORM + SQLite (Cloudflare Workers)
+- **Package manager:** pnpm
 
-## Project Overview
+## Commands
 
-Pravah is a habit tracking application with:
-- Frontend: React 19 + Vite + TanStack Router + Zustand + Tailwind CSS 4
-- Backend: Hono + Drizzle ORM + SQLite (Cloudflare Workers)
-- Package Manager: pnpm
+**Frontend:** `pnpm dev` (port 3001), `pnpm build`, `pnpm lint`, `pnpm format`, `pnpm typecheck`
+**Backend:** `pnpm dev` (wrangler), `pnpm deploy`, `pnpm lint`, `pnpm format`
 
-## Build/Lint/Test Commands
+## Conventions
 
-### Frontend (`/frontend`)
-```bash
-pnpm dev          # Start dev server on port 3001
-pnpm build        # Production build
-pnpm serve        # Preview production build
-pnpm lint         # Lint with Biome (fixes issues)
-pnpm format       # Format with Biome
-pnpm typecheck    # TypeScript type checking
-```
+- **Biome** (v2.0.6): single quotes, 2 spaces, run `pnpm lint && pnpm format` before commit
+- **TypeScript:** strict mode, explicit return types helpful
+- **Imports:** `@/` alias for source root, order: external → internal → utils
+- **Naming:** files kebab-case, components PascalCase, functions camelCase, DB snake_case
+- **API:** routes in `*.routes.ts`, controllers in `*.controllers.ts`, group in `modules/`
 
-### Backend (`/backend`)
-```bash
-pnpm dev          # Start dev server (wrangler)
-pnpm deploy       # Deploy to Cloudflare Workers
-pnpm lint         # Lint with Biome (fixes issues)
-pnpm format       # Format with Biome
-```
+## Error Handling
 
-### Running a Single Test
-There are currently no tests in this project. Tests are not required but can be added using Vitest if needed.
-
-## Code Style Guidelines
-
-### Formatting & Linting
-- Tool: Biome (v2.0.6)
-- Quotes: Single quotes for both JavaScript and JSX
-- Indentation: 2 spaces
-- Run before commit: Always run `pnpm lint && pnpm format` before committing
-- Config locations: `frontend/biome.json` and `backend/biome.json`
-
-### TypeScript
-- All code must be written in TypeScript
-- Enable strict type checking
-- Use explicit return types for functions when helpful
-
-### Import Conventions
-- Use path aliases: `@/` for source root (e.g., `@/db`, `@/modules/auth`)
-- Order imports: external libs → internal modules → local utils
-- Run Biome's import organization: `biome check --write --organize-imports-enabled=true`
-
-### Naming Conventions
-- Files: kebab-case (e.g., `auth.controllers.ts`, `habit-list.tsx`)
-- Components: PascalCase (e.g., `HabitList`, `PathNotFound`)
-- Functions/variables: camelCase
-- Database tables/schemas: snake_case (e.g., `users`, `habit_logs`)
-
-### Error Handling
-
-Backend (Hono):
 ```typescript
 try {
   // operation
@@ -70,77 +30,34 @@ try {
   );
 }
 ```
-- Always check for `error instanceof Error` before accessing `error.message`
-- Use `stoker` library for HTTP status codes: `import * as HttpStatusCodes from 'stoker/http-status-codes'`
+Always check `error instanceof Error`. Use `stoker/http-status-codes` for HTTP codes.
 
-Frontend:
-- Use error boundaries for component errors
-- Leverage Sentry for error tracking (already configured in `main.tsx`)
-- Use React Query's error handling for API failures
+## Key Paths
+- Schema: `backend/src/db/schema.ts`
+- Routes: `backend/src/modules/*/`
+- Components: `frontend/src/components/`
+- Migrations: `pnpm drizzle-kit migrate`
 
-### Database & ORM
-- Use Drizzle ORM for all database operations
-- Use Zod schemas for validation (`@hono/zod-openapi`)
-- Schema files in `backend/src/db/schema.ts`
-- Run migrations with `pnpm drizzle-kit migrate`
+## Code Navigation & File Reading
 
-### API Design
-- Use OpenAPI with Zod openapi (`@hono/zod-openapi`)
-- Define routes in `*.routes.ts` files
-- Define controllers in `*.controllers.ts` files
-- Group related functionality in `modules/` directory
+**Primary principle: minimize context consumption.** Read outlines first, then targeted sections. Be surgical.
 
-### React/Frontend Patterns
-- Use TanStack Router with file-based routing (`createFileRoute`)
-- Use Zustand for global state management
-- Use React Query (`@tanstack/react-query`) for server state
-- Use Tailwind CSS for styling (v4 with `@tailwindcss/vite`)
-- Components go in `src/components/`, routes in `src/routes/`
+### Tool Hierarchy
+| Need | Primary Tool | Approach |
+|------|--------------|----------|
+| Directory overview | grepika | `toc` |
+| Find code (NL/regex) | grepika | `search` (requires index) |
+| File structure | grepika | `outline` → `get` with line range |
+| Symbol definitions | tilth | `search` — definition-first |
+| What calls X? | tilth | `search kind:callers` |
 
-### Environment Variables
-- Never commit secrets to `.env` files
-- Use `.env.example` for required variables
-- Frontend variables: `VITE_*` prefix
-- Backend variables: defined in `wrangler.toml` and accessed via `c.env`
+### Quick Decision
+- "Find files about X topic" → **grepika** (NL search)
+- "Where is Y defined?" → **tilth** (structural)
+- "What calls Z?" → **tilth** (callers)
+- Regex/text pattern → **grepika** (grep mode)
 
-## Key Files & Directories
-
-```
-pravah/
-├── frontend/
-│   ├── src/
-│   │   ├── components/     # React components
-│   │   ├── routes/         # TanStack Router routes
-│   │   ├── utils/          # Utility functions
-│   │   └── main.tsx        # App entry point
-│   ├── package.json
-│   ├── vite.config.ts
-│   └── biome.json
-├── backend/
-│   ├── src/
-│   │   ├── db/             # Drizzle schema & migrations
-│   │   ├── lib/            # App setup & types
-│   │   ├── middlewares/    # Custom middleware
-│   │   ├── modules/        # Feature modules (auth, habits, groups, etc.)
-│   │   └── index.ts        # Entry point
-│   ├── package.json
-│   ├── wrangler.toml
-│   └── biome.json
-└── README.md
-```
-
-## Development Workflow
-
-1. Make changes in appropriate `frontend/` or `backend/` directory
-2. Run typecheck: `pnpm typecheck` (frontend) or check TS manually
-3. Run linter: `pnpm lint`
-4. Run formatter: `pnpm format`
-5. Test locally with `pnpm dev`
-6. Build to verify: `pnpm build`
-
-## Important Notes
-
-- Backend runs on Cloudflare Workers (Edge runtime)
-- No test framework is currently set up
-- The project uses pnpm workspaces implicitly via separate directories
-- PostHog and Sentry are already integrated for analytics/error tracking
+## Notes
+- Edge runtime (Cloudflare Workers)
+- Sentry + PostHog integrated (no setup needed)
+- No test framework (Vitest optional)

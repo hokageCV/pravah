@@ -23,7 +23,8 @@ export function HabitList() {
       return Promise.reject(new Error('User is not logged in.'));
     },
     initialData: habits.length ? habits : undefined,
-    staleTime: 30 * 60 * 1000,
+    staleTime: 5 * 60 * 1000,
+    refetchInterval: 30 * 1000,
   });
 
   useEffect(() => {

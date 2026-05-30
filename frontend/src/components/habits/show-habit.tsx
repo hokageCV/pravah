@@ -1,6 +1,8 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Link, useNavigate, useParams } from '@tanstack/react-router';
 import { capitalize } from '../../utils/text';
+import type { Habit } from '../../types';
+import { useAuthStore } from '../auth/auth.store';
 import { GoalList } from '../goals/goal-list';
 import { useGoalStore } from '../goals/goal.store';
 import { CreateLog } from '../logs/create-log';
@@ -13,29 +15,38 @@ import { deleteHabit } from './habits.api';
 
 export default function ShowHabit() {
   let queryClient = useQueryClient();
-
   let { habitId } = useParams({ strict: false }) as { habitId: string };
   let id = Number(habitId);
+  let navigate = useNavigate();
 
   let habit = useHabitStore((state) => state.habits.find((h) => h.id === id));
-  if (!habit) return <p>Habit not found.</p>;
-
-  let navigate = useNavigate();
-  let handleEditClick = () => navigate({ to: `/habits/${habit.id}/edit` });
+  let goals = useGoalStore((state) => state.goals);
+  let user = useAuthStore((state) => state.user);
 
   let { mutate: deleteMutate } = useMutation({
     mutationFn: deleteHabit,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['habits'] });
+      let cacheKey = ['habits', user?.id];
+      let cached = queryClient.getQueryData<Habit[]>(cacheKey);
+      if (cached) {
+        queryClient.setQueryData(cacheKey, cached.filter((h) => h.id !== id));
+      }
+      useHabitStore.getState().removeHabit(id);
+      useGoalStore.getState().setGoals(goals.filter((g) => g.habitId !== id));
+      queryClient.removeQueries({ queryKey: ['goals', id] });
       navigate({ to: '/' });
     },
   });
+
+  if (!habit) return <p>Habit not found.</p>;
+
+  let handleEditClick = () => navigate({ to: `/habits/${habit.id}/edit` });
+
   let handleDeleteClick = () => {
     if (confirm(`Are you sure you want to delete "${habit.name}"?`))
       deleteMutate(habit.id);
   };
 
-  let goals = useGoalStore((state) => state.goals);
   let habitGoals = goals.filter((goal) => goal.habitId === habit.id);
   let showCreateGoal = habitGoals.length < 3;
 
